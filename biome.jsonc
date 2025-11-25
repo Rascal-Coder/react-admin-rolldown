@@ -4,7 +4,11 @@
   "linter": {
     "rules": {
       "style": {
-        "useConsistentTypeDefinitions": "off"
+        "useConsistentTypeDefinitions": "off",
+        "noEnum": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
       }
     }
   }

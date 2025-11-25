@@ -1,13 +1,16 @@
+import "./global.css";
+import "./theme/theme.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import registerLocalIcons from "@/components/ui/icon/register-icons.ts";
 import { initCopyRight } from "@/utils";
 import App from "./app.tsx";
-import registerLocalIcons from "./components/icon/register-icons.ts";
 
 const container = document.getElementById("root");
+
 function setupApp() {
-  initCopyRight();
   registerLocalIcons();
+  initCopyRight();
   if (!container) {
     return;
   }

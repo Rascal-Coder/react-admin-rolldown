@@ -1,4 +1,6 @@
 import path from "node:path";
+import tailwindcss from "@tailwindcss/vite";
+import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react from "@vitejs/plugin-react";
 import { visualizer as viteVisualizerPlugin } from "rollup-plugin-visualizer";
 import { defineConfig, loadEnv, type PluginOption } from "vite";
@@ -8,7 +10,8 @@ import removeConsole from "vite-plugin-remove-console";
 import { viteArchiverPlugin } from "./src/vite-plugins/archiver";
 
 const vendorcoreReg = /[\\/]node_modules[\\/](react|react-dom)(?:[\\/]|$)/;
-const vendorutilsReg = /[\\/]node_modules[\\/](@iconify[\\/]react)(?:[\\/]|$)/;
+const vendorutilsReg =
+  /[\\/]node_modules[\\/](zustand|@iconify[\\/]react)(?:[\\/]|$)/;
 
 const initViteCompressPlugin = (compressTypes: string[]) => {
   const compressPlugins: PluginOption[] = [];
@@ -45,12 +48,18 @@ export default defineConfig(({ mode }) => {
           plugins: [["babel-plugin-react-compiler"]],
         },
       }),
+      vanillaExtractPlugin({
+        identifiers: ({ debugId }) => `${debugId}`,
+      }),
+      tailwindcss(),
       removeConsole(),
       visualizer &&
         viteVisualizerPlugin({
           filename: "./node_modules/.cache/visualizer/stats.html",
           gzipSize: true,
           open: true,
+          brotliSize: true,
+          template: "treemap",
         }),
       html &&
         viteHtmlPlugin({
@@ -72,6 +81,7 @@ export default defineConfig(({ mode }) => {
       target: "esnext",
       minify: "oxc",
       sourcemap: !isProduction,
+      cssMinify: "esbuild",
       cssCodeSplit: true,
       chunkSizeWarningLimit: 1500,
       rollupOptions: {
@@ -90,6 +100,10 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
+    },
+    optimizeDeps: {
+      include: ["react", "react-dom"],
+      exclude: ["@iconify/react"],
     },
   };
 });

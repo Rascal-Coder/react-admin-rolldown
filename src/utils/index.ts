@@ -24,3 +24,7 @@ _______/  ______/  ____$$ |
   `;
   console.info(`%c${charAt}`, "color: #5BE49B");
 };
+
+export function sleep(ms = 1000) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

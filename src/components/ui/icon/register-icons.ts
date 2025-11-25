@@ -96,17 +96,19 @@ function processSVGIcon(
  * import { Icon } from "@/components/icon/icon";
  * <Icon icon="local:icon-name" />
  */
+
 export default function registerLocalIcons() {
   // 如果图标已注册，提前返回
   if (iconCollection) {
     return;
   }
 
-  const svgModules = import.meta.glob("../../assets/icons/*.svg", {
+  const svgModules = import.meta.glob("@/assets/icons/*.svg", {
     query: "?raw",
     eager: true,
     import: "default",
   });
+
   const icons: Record<string, IconifyIcon> = {};
 
   for (const [path, svgContent] of Object.entries(svgModules)) {
