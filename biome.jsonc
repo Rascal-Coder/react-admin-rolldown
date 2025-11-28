@@ -8,7 +8,12 @@
         "noEnum": "off"
       },
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noEmptyBlockStatements": "off",
+        "noDocumentCookie": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off"
       }
     }
   }

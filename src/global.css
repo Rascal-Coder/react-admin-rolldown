@@ -75,7 +75,7 @@
   --secondary-foreground: var(--colors-palette-gray-600);
   --muted: var(--colors-palette-gray-200);
   --muted-foreground: var(--colors-palette-gray-500);
-  --accent: var(--colors-palette-gray-200);
+  --accent: var(--colors-palette-gray-300);
   --accent-foreground: var(--colors-palette-gray-600);
   --destructive: var(--colors-palette-error-default);
   --border: rgba(var(--colors-palette-gray-500Channel) / var(--opacity-border));
@@ -86,13 +86,13 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: var(--colors-palette-gray-200);
+  --sidebar: var(--background);
   --sidebar-foreground: var(--colors-palette-gray-800);
   --sidebar-primary: var(--colors-palette-primary-default);
   --sidebar-primary-foreground: var(--colors-palette-primary-lighter);
-  --sidebar-accent: var(--colors-palette-gray-200);
+  --sidebar-accent: var(--colors-palette-gray-300);
   --sidebar-accent-foreground: var(--colors-palette-gray-800);
-  --sidebar-border: var(--colors-palette-gray-200);
+  --sidebar-border: var(--colors-palette-gray-300);
   --sidebar-ring: var(--colors-palette-primary-default);
 }
 
@@ -141,4 +141,71 @@
   --layout-nav-height-horizontal: 48px;
   --layout-header-height: 64px;
   --layout-multi-tabs-height: 48px;
+}
+
+@layer components {
+  .dot-badge {
+    @apply aspect-square rounded-md align-middle bg-center bg-no-repeat w-2 h-2 shadow-sm inline-block;
+    background-image: radial-gradient(
+      circle at 35% 30%,
+      oklch(1 0 0 / calc(var(--depth) * 0.5)),
+      #0000
+    );
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-y-center {
+    @apply flex items-center;
+  }
+
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .outline-box {
+    @apply outline-border relative cursor-pointer rounded-xl p-1 outline-1;
+  }
+
+  .outline-box::after {
+    @apply absolute left-1/2 top-1/2 z-20 h-0 w-[1px] rounded-xl opacity-0 outline-2 outline-transparent transition-all duration-300 content-[""];
+  }
+
+  .outline-box.outline-box-active {
+    @apply outline-primary outline-2;
+  }
+
+  .outline-box.outline-box-active::after {
+    display: none;
+  }
+
+  .outline-box:not(.outline-box-active):hover::after {
+    @apply outline-primary left-0 top-0 h-full w-full p-1 opacity-100;
+  }
+}
+
+/* Gray Mode - 灰色模式 */
+html.grayscale-mode {
+  filter: grayscale(1);
+  transition: filter 0.3s ease;
+}
+
+/* Color Weak Mode - 色弱模式 */
+html.color-weak-mode {
+  /* 增强对比度，提高亮度，调整饱和度以帮助色弱用户 */
+  filter: contrast(1.2) brightness(1.1) saturate(1.3);
+  transition: filter 0.3s ease;
+}
+
+/* Combined modes - 组合模式 */
+html.grayscale-mode.color-weak-mode {
+  filter: grayscale(1) contrast(1.2) brightness(1.1);
+  transition: filter 0.3s ease;
+}
+
+/* 保留原有的 invert-mode，可能在其他地方使用 */
+html.invert-mode {
+  @apply invert;
 }
