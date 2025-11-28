@@ -6,7 +6,6 @@ import { Button } from "@/components/base/button";
 import { Input } from "@/components/base/input";
 import { Separator } from "@/components/base/separator";
 import { Sheet, SheetContent } from "@/components/base/sheet";
-import { Skeleton } from "@/components/base/skeleton";
 import {
   Tooltip,
   TooltipContent,
@@ -399,7 +398,7 @@ const SidebarInset = ({ className, ref, ...props }: SidebarInsetProps) => (
   <main
     className={cn(
       "relative flex min-h-svh flex-1 flex-col bg-background",
-      "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(4)))] md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm",
+      "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(4)))] md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-md",
       className
     )}
     ref={ref}
@@ -678,171 +677,6 @@ const SidebarMenuButton = ({
   );
 };
 
-type SidebarMenuActionProps = React.ComponentPropsWithoutRef<"button"> & {
-  asChild?: boolean;
-  showOnHover?: boolean;
-  ref?: React.Ref<HTMLButtonElement>;
-};
-
-const SidebarMenuAction = ({
-  className,
-  asChild = false,
-  showOnHover = false,
-  ref,
-  ...props
-}: SidebarMenuActionProps) => {
-  const Comp = asChild ? Slot : "button";
-
-  return (
-    <Comp
-      className={cn(
-        "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0",
-        "after:-inset-2 after:absolute md:after:hidden",
-        "peer-data-[size=sm]/menu-button:top-1",
-        "peer-data-[size=default]/menu-button:top-1.5",
-        "peer-data-[size=lg]/menu-button:top-2.5",
-        "group-data-[collapsible=icon]:hidden",
-        showOnHover &&
-          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
-        className
-      )}
-      data-sidebar="menu-action"
-      ref={ref}
-      {...props}
-    />
-  );
-};
-
-type SidebarMenuBadgeProps = React.ComponentPropsWithoutRef<"div"> & {
-  ref?: React.Ref<HTMLDivElement>;
-};
-
-const SidebarMenuBadge = ({
-  className,
-  ref,
-  ...props
-}: SidebarMenuBadgeProps) => (
-  <div
-    className={cn(
-      "pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 font-medium text-sidebar-foreground text-xs tabular-nums",
-      "peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground",
-      "peer-data-[size=sm]/menu-button:top-1",
-      "peer-data-[size=default]/menu-button:top-1.5",
-      "peer-data-[size=lg]/menu-button:top-2.5",
-      "group-data-[collapsible=icon]:hidden",
-      className
-    )}
-    data-sidebar="menu-badge"
-    ref={ref}
-    {...props}
-  />
-);
-
-type SidebarMenuSkeletonProps = React.ComponentPropsWithoutRef<"div"> & {
-  showIcon?: boolean;
-  ref?: React.Ref<HTMLDivElement>;
-};
-
-const SidebarMenuSkeleton = ({
-  className,
-  showIcon = false,
-  ref,
-  ...props
-}: SidebarMenuSkeletonProps) => {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(
-    () => `${Math.floor(Math.random() * 40) + 50}%`,
-    []
-  );
-
-  return (
-    <div
-      className={cn("flex h-8 items-center gap-2 rounded-md px-2", className)}
-      data-sidebar="menu-skeleton"
-      ref={ref}
-      {...props}
-    >
-      {showIcon && (
-        <Skeleton
-          className="size-4 rounded-md"
-          data-sidebar="menu-skeleton-icon"
-        />
-      )}
-      <Skeleton
-        className="h-4 max-w-(--skeleton-width) flex-1"
-        data-sidebar="menu-skeleton-text"
-        style={
-          {
-            "--skeleton-width": width,
-          } as React.CSSProperties
-        }
-      />
-    </div>
-  );
-};
-
-type SidebarMenuSubProps = React.ComponentPropsWithoutRef<"ul"> & {
-  ref?: React.Ref<HTMLUListElement>;
-};
-
-const SidebarMenuSub = ({ className, ref, ...props }: SidebarMenuSubProps) => (
-  <ul
-    className={cn(
-      "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-sidebar-border border-l px-2.5 py-0.5",
-      "group-data-[collapsible=icon]:hidden",
-      className
-    )}
-    data-sidebar="menu-sub"
-    ref={ref}
-    {...props}
-  />
-);
-
-type SidebarMenuSubItemProps = React.ComponentPropsWithoutRef<"li"> & {
-  ref?: React.Ref<HTMLLIElement>;
-};
-
-const SidebarMenuSubItem = (props: SidebarMenuSubItemProps) => {
-  const { ref, ...rest } = props;
-  return <li ref={ref} {...rest} />;
-};
-
-type SidebarMenuSubButtonProps = React.ComponentPropsWithoutRef<"a"> & {
-  asChild?: boolean;
-  size?: "sm" | "md";
-  isActive?: boolean;
-  ref?: React.Ref<HTMLAnchorElement>;
-};
-
-const SidebarMenuSubButton = ({
-  asChild = false,
-  size = "md",
-  isActive,
-  className,
-  ref,
-  ...props
-}: SidebarMenuSubButtonProps) => {
-  const Comp = asChild ? Slot : "a";
-
-  return (
-    <Comp
-      className={cn(
-        "-translate-x-px flex h-7 min-w-0 items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-hidden ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
-        "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
-        size === "sm" && "text-xs",
-        size === "md" && "text-sm",
-        "group-data-[collapsible=icon]:hidden",
-        className
-      )}
-      data-active={isActive}
-      data-sidebar="menu-sub-button"
-      data-size={size}
-      ref={ref}
-      {...props}
-    />
-  );
-};
-
 export {
   Sidebar,
   SidebarContent,
@@ -855,14 +689,8 @@ export {
   SidebarInput,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSkeleton,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarProvider,
   SidebarRail,
   SidebarSeparator,

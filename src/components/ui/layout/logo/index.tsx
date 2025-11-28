@@ -39,7 +39,11 @@ const Logo = ({
 
   return (
     <button
-      className={cn("flex items-center justify-center gap-2", className)}
+      className={cn(
+        "flex items-center justify-center",
+        isTitleVisible && "gap-2",
+        className
+      )}
       onClick={onClick}
       type="button"
     >
