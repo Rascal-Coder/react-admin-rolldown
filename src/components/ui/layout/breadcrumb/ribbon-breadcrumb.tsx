@@ -18,13 +18,13 @@ export function RibbonBreadcrumb({
         {list.map((item, index) => (
           <BreadcrumbItem key={item.href}>
             {index === list.length - 1 ? (
-              <BreadcrumbPage className="ribbon-breadcrumb-last inline-flex items-center gap-0.5 bg-layout-breadcrumb px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-layout-breadcrumb-accent">
+              <BreadcrumbPage className="ribbon-breadcrumb-last inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent">
                 {item.label}
               </BreadcrumbPage>
             ) : (
               <BreadcrumbLink
                 className={cn(
-                  "ribbon-breadcrumb mr-[calc(-1*10px+-8px)] inline-flex items-center gap-0.5 bg-layout-breadcrumb px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-layout-breadcrumb-accent",
+                  "ribbon-breadcrumb mr-[calc(-1*10px+-8px)] inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent",
                   {
                     "ribbon-breadcrumb-first": index === 0,
                   }

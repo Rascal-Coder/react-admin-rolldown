@@ -48,7 +48,7 @@ function ChromeTabBackground() {
 }
 export function ChromeLikeTabItem({
   tab,
-  active,
+  // active,
   onClose,
   ...props
 }: LayoutTabItemProps & React.HTMLAttributes<HTMLDivElement>) {
@@ -59,23 +59,23 @@ export function ChromeLikeTabItem({
     >
       <div
         className={cn(
-          "absolute top-1/2 left-0 w-px h-3.5 -translate-y-1/2 bg-layout-tabs-border group-[.active]:opacity-0 group-first:opacity-0",
+          "absolute top-1/2 left-0 w-px h-3.5 -translate-y-1/2 bg-border",
           {
             "layout-tabs-chrome-tab-item-divider": true,
           }
         )}
       />
-      <div className="absolute top-1 -left-2.5 -right-2.5 bottom-0 group-[.active]:text-layout-tabs-primary text-layout-tabs opacity-0 group-[.active]:opacity-100 overflow-hidden pointer-events-none transition-opacity duration-20">
+      <div className="absolute top-1 -left-2.5 -right-2.5 bottom-0 group-[.active]:text-background  opacity-0 group-[.active]:opacity-100 overflow-hidden pointer-events-none transition-opacity duration-20">
         <ChromeTabBackground />
       </div>
       <div className="relative w-full h-full p-1">
-        <div className="flex-y-center h-full px-1 text-layout-tabs-foreground hover:text-layout-tabs-primary-foreground hover:bg-layout-tabs-accent group-[.active]:text-layout-tabs-primary-foreground group-[.active]:hover:text-layout-tabs-primary-foreground group-[.active]:hover:bg-layout-tabs-primary leading-none overflow-hidden rounded-md">
+        <div className="flex-y-center h-full px-1 text-foreground hover:text-foreground/70 hover:bg-accent group-[.active]:text-primary group-[.active]:hover:text-primary group-[.active]:hover:bg-background leading-none overflow-hidden rounded-md">
           <span className="flex-1 truncate text-sm" title={tab.title || ""}>
             {tab.title}
           </span>
           {onClose && (
             <button
-              className="flex-center size-4 hover:bg-layout-tabs-close-accent rounded-full cursor-pointer transition-all duration-20"
+              className="flex-center size-4 text-muted-foreground hover:text-base hover:bg-muted rounded-full cursor-pointer transition-all duration-20"
               onClick={(e) => {
                 e.stopPropagation();
                 onClose(tab.key);

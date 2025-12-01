@@ -8,25 +8,26 @@ export function CardTabItem({ tab, active, onClose }: LayoutTabItemProps) {
       <div
         className={cn(
           "relative flex h-full cursor-pointer items-center justify-between px-2",
-          "rounded border border-layout-tabs-border bg-layout-tabs text-layout-tabs-foreground",
+          "rounded border border-border bg-background text-foreground hover:bg-accent hover:text-foreground/70 group-[.active]:text-primary group-[.active]:hover:bg-primary/focus group-[.active]:hover:text-primary",
           "transition-all duration-200 ease-in-out",
           {
-            "border-layout-tabs-primary bg-layout-tabs-primary text-layout-tabs-primary-foreground":
-              active,
-            "hover:bg-layout-tabs-accent": !active,
+            "border-primary/hover bg-primary/focus": active,
+            "hover:bg-accent": !active,
           }
         )}
         role="tab"
         tabIndex={0}
       >
         <span
-          className="flex-1 truncate pr-4 text-left"
+          className={cn("flex-1 truncate pr-4 text-left text-sm", {
+            "text-primary": active,
+          })}
           title={tab.title || ""}
         >
           {tab.title}
         </span>
         <button
-          className="size-4 flex-center cursor-pointer rounded-full transition-all duration-20 hover:bg-layout-tabs-close-accent"
+          className="size-4 flex-center cursor-pointer rounded-full text-muted-foreground transition-all duration-20 hover:bg-muted hover:text-base"
           onClick={(e) => {
             e.stopPropagation();
             onClose?.(tab.key);

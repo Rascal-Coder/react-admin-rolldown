@@ -75,8 +75,8 @@ export function LayoutTabs({
 
   return (
     <div
-      className={cn("relative flex h-10 bg-layout-tabs", {
-        "border-b border-b-layout-tabs-border": tabType === "card",
+      className={cn("relative flex h-10 bg-muted", {
+        "border-b border-b-border": tabType === "card",
       })}
     >
       <ScrollButton

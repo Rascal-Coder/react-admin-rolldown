@@ -46,9 +46,9 @@ export function Header({
 
     return "";
   }, [isFixed, state, variant]);
-
+  // transition-[margin-left] duration-200 ease-linear
   const fixedClass = isFixed
-    ? "transition-[margin-left] bg-background/80 backdrop-blur-md duration-200 ease-linear fixed top-0 right-0 left-0 z-50 shadow-md"
+    ? " bg-background/80 backdrop-blur-md fixed top-0 right-0 left-0 z-50 shadow-md"
     : "bg-background";
 
   return (

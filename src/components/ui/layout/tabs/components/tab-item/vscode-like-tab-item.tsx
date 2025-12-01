@@ -10,21 +10,21 @@ export function VscodeLikeTabItem({
   return (
     <div
       className={cn(
-        "relative h-full flex-y-center cursor-pointer justify-between border-r border-r-layout-tabs-borderpy-1 pr-2 pl-3 text-layout-tabs-primary-foreground hover:not-[.active]:bg-layout-tabs-accent",
+        "relative h-full flex-y-center cursor-pointer justify-between border-r border-r-border pr-2 pl-3 text-foreground hover:bg-accent hover:text-foreground/70 group-[.active]:text-primary group-[.active]:hover:bg-background group-[.active]:hover:text-primary",
         {
           "before:druation-200 before:absolute before:top-0 before:left-0 before:h-px before:w-full before:origin-left before:scale-x-0 before:bg-primary before:transition before:ease-in-out hover:before:scale-x-100": true,
-          "active border-b-transparent! bg-layout-tabs-primary text-layout-tabs-primary-foreground before:scale-x-100!":
+          "active border-b-transparent! bg-background text-primary before:scale-x-100!":
             active,
         }
       )}
       role="tab"
       tabIndex={0}
     >
-      <span className="flex-1 truncate pr-4" title={tab.title || ""}>
+      <span className="flex-1 truncate pr-4 text-sm" title={tab.title || ""}>
         {tab.title}
       </span>
       <button
-        className="size-4 flex-center cursor-pointer rounded-full transition-all duration-20 hover:bg-layout-tabs-close-accent"
+        className="size-4 flex-center cursor-pointer rounded-full text-muted-foreground transition-all duration-20 hover:bg-muted hover:text-base"
         onClick={(e) => {
           e.stopPropagation();
           onClose?.(tab.key);

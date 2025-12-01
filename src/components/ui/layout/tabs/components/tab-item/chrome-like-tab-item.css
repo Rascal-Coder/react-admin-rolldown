@@ -9,7 +9,7 @@
       bottom: 0;
       width: 1px;
       height: calc(var(--spacing) * 3.5);
-      background-color: var(--layout-tabs-border);
+      background-color: var(--border);
       transition: background-color 0.2s ease-in-out;
     }
   }
