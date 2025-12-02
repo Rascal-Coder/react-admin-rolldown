@@ -27,13 +27,12 @@ export function ScrollButton({
   return (
     <button
       className={cn(
-        "h-full flex-y-center cursor-pointer bg-layout-tabs/90 px-2 transition-all duration-200 hover:bg-layout-tabs",
+        "h-full flex-y-center cursor-pointer bg-background px-2 text-foreground transition-all duration-200 hover:bg-layout-tabs",
         {
           "cursor-not-allowed opacity-50": !canScroll,
           "shadow-md hover:shadow-lg": canScroll, // 只有可滚动时才有阴影
-          "justify-end border-l border-l-layout-tabs-border":
-            direction === "right",
-          "border-r border-r-layout-tabs-border": direction === "left",
+          "justify-end border-l border-l-border": direction === "right",
+          "border-r border-r-border": direction === "left",
         },
         className
       )}

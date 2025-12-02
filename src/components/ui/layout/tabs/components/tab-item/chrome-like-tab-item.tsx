@@ -48,7 +48,7 @@ function ChromeTabBackground() {
 }
 export function ChromeLikeTabItem({
   tab,
-  // active,
+  active,
   onClose,
   ...props
 }: LayoutTabItemProps & React.HTMLAttributes<HTMLDivElement>) {
@@ -69,7 +69,7 @@ export function ChromeLikeTabItem({
         <ChromeTabBackground />
       </div>
       <div className="relative w-full h-full p-1">
-        <div className="flex-y-center h-full px-1 text-foreground hover:text-foreground/70 hover:bg-accent group-[.active]:text-primary group-[.active]:hover:text-primary group-[.active]:hover:bg-background leading-none overflow-hidden rounded-md">
+        <div className="flex-y-center h-full px-1 text-foreground hover:text-foreground/70 hover:bg-background group-[.active]:text-primary group-[.active]:hover:text-primary group-[.active]:hover:bg-background leading-none overflow-hidden rounded-md">
           <span className="flex-1 truncate text-sm" title={tab.title || ""}>
             {tab.title}
           </span>

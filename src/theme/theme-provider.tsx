@@ -1,6 +1,7 @@
-import { useEffect, useLayoutEffect } from "react";
-import { HtmlDataAttribute } from "#/enum";
+import { useLayoutEffect } from "react";
+import { HtmlDataAttribute, ThemeMode } from "#/enum";
 import { useAppSettings } from "@/store/setting-store";
+import { useSystemTheme } from "./hooks/use-system-theme";
 import type { UILibraryAdapter } from "./type";
 
 interface ThemeProviderProps {
@@ -11,14 +12,17 @@ interface ThemeProviderProps {
 export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
   const { themeMode, themeColorPresets, fontFamily, fontSize } =
     useAppSettings();
-
+  const systemTheme = useSystemTheme();
   // 同步设置主题属性，避免闪烁
   useLayoutEffect(() => {
     const root = window.document.documentElement;
     const body = window.document.body;
 
-    // 设置主题模式
-    root.setAttribute(HtmlDataAttribute.ThemeMode, themeMode);
+    if (themeMode === ThemeMode.System) {
+      root.setAttribute(HtmlDataAttribute.ThemeMode, systemTheme);
+    } else {
+      root.setAttribute(HtmlDataAttribute.ThemeMode, themeMode);
+    }
 
     // 设置颜色预设
     root.setAttribute(HtmlDataAttribute.ColorPalette, themeColorPresets);
@@ -30,28 +34,7 @@ export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
       // 设置字体族
       body.style.fontFamily = fontFamily;
     }
-  }, [themeMode, themeColorPresets, fontFamily, fontSize]);
-
-  // 监听设置变化并更新
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.setAttribute(HtmlDataAttribute.ThemeMode, themeMode);
-  }, [themeMode]);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.setAttribute(HtmlDataAttribute.ColorPalette, themeColorPresets);
-  }, [themeColorPresets]);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.style.fontSize = `${fontSize}px`;
-
-    const body = window.document.body;
-    if (body) {
-      body.style.fontFamily = fontFamily;
-    }
-  }, [fontFamily, fontSize]);
+  }, [themeMode, themeColorPresets, fontFamily, fontSize, systemTheme]);
 
   // Wrap children with adapters
   const wrappedWithAdapters = adapters.reduce(

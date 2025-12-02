@@ -12,13 +12,14 @@ export enum ResultStatus {
 export enum StorageEnum {
   UserInfo = "userInfo",
   UserToken = "userToken",
-  Settings = "settings",
+  Settings = "appSettings",
   I18N = "i18nextLng",
 }
 
 export enum ThemeMode {
   Light = "light",
   Dark = "dark",
+  System = "system",
 }
 
 export enum ThemeLayout {

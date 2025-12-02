@@ -606,7 +606,10 @@ const SidebarMenuItem = ({
   ...props
 }: SidebarMenuItemProps) => (
   <li
-    className={cn("group/menu-item relative", className)}
+    className={cn(
+      "group/menu-item relative flex items-center justify-center",
+      className
+    )}
     data-sidebar="menu-item"
     ref={ref}
     {...props}

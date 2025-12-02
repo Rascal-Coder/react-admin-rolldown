@@ -52,10 +52,7 @@ export function Header({
     : "bg-background";
 
   return (
-    <header
-      className={cn("py-1.5", fixedClass, marginLeftClass, className)}
-      {...props}
-    >
+    <header className={cn(fixedClass, marginLeftClass, className)} {...props}>
       {children}
     </header>
   );

@@ -1,14 +1,19 @@
 import { useState } from "react";
+import avatar from "@/assets/images/user/avatar.jpg";
 import {
   SidebarInset,
   SidebarProvider,
+  SidebarTrigger,
 } from "@/components/ui/layout/resizable-sidebar";
+import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { Button } from "./components/base/button";
 import { Breadcrumb } from "./components/ui/layout/breadcrumb";
 import { Footer } from "./components/ui/layout/footer";
 import { Header } from "./components/ui/layout/header";
+import { ProfileDropdown } from "./components/ui/layout/profile-dropdown";
 import { Sidebar } from "./components/ui/layout/sidebar";
 import { LayoutTabs } from "./components/ui/layout/tabs";
+import type { TabType } from "./components/ui/layout/tabs/types";
 import { ThemeProvider } from "./theme/theme-provider";
 import { cn } from "./utils";
 
@@ -19,7 +24,7 @@ function App() {
   const [sidebarVariant, setSidebarVariant] = useState<
     "sidebar" | "floating" | "inset"
   >("sidebar");
-  const [tabType, setTabType] = useState("chrome");
+  const [tabType, setTabType] = useState<TabType>("chrome");
   return (
     <ThemeProvider>
       <SidebarProvider>
@@ -35,8 +40,22 @@ function App() {
             isFixed={headerFixed}
             variant={sidebarVariant}
           >
-            <LayoutTabs tabType={tabType as any} />
-            <Breadcrumb />
+            <LayoutTabs tabType={tabType} />
+            <div className="flex justify-between gap-2 px-2 py-1.5">
+              <div className="flex items-center gap-2">
+                <SidebarTrigger
+                  className="cursor-pointer max-md:scale-125"
+                  variant="outline"
+                />
+                <Breadcrumb />
+              </div>
+              <div className="flex items-center gap-2">
+                <ThemeSwitch />
+                <ProfileDropdown
+                  user={{ name: "Bug", email: "bug@bug.com", avatar }}
+                />
+              </div>
+            </div>
           </Header>
 
           <main
@@ -46,7 +65,7 @@ function App() {
               "mx-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6",
               footerFixed && showFooter && "mb-8",
               headerFixed && "mt-23",
-              showFooter && "py-0!"
+              showFooter && "pb-0!"
             )}
             data-layout="bug-admin-layout"
           >

@@ -92,7 +92,7 @@ export function useTabs(defaultActiveTab?: string) {
       console.warn("Failed to get active tab from cache:", error);
     }
 
-    return "settings";
+    return "overview";
   }, [defaultActiveTab]);
 
   const [activeTab, setActiveTab] = useState(getInitialActiveTab());
