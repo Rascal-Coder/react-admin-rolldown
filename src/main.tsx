@@ -1,6 +1,5 @@
 import "./styles/global.css";
 import "./theme/theme.css";
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import registerLocalIcons from "@/components/ui/icon/register-icons.ts";
 import { initCopyRight } from "@/utils";
@@ -15,11 +14,7 @@ function setupApp() {
     return;
   }
 
-  createRoot(container).render(
-    <StrictMode>
-      <App />
-    </StrictMode>
-  );
+  createRoot(container).render(<App />);
 }
 
 setupApp();
