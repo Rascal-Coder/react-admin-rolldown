@@ -1,8 +1,7 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import Layout from "./layouts";
 import { ThemeProvider } from "./theme/theme-provider";
 
-function App() {
+function App({ children }: { children: React.ReactNode }) {
   return (
     <HelmetProvider>
       <ThemeProvider>
@@ -10,7 +9,8 @@ function App() {
           <title>Bug Admin</title>
           <link href="/logo.svg" rel="icon" />
         </Helmet>
-        <Layout />
+        {/* <Layout /> */}
+        {children}
       </ThemeProvider>
     </HelmetProvider>
   );

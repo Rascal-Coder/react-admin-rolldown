@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { Outlet } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
-import { Button } from "@/components/base/button";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import { Footer } from "@/components/ui/layout/footer";
 import { Header } from "@/components/ui/layout/header";
@@ -12,33 +11,28 @@ import {
 } from "@/components/ui/layout/resizable-sidebar";
 import { Sidebar } from "@/components/ui/layout/sidebar";
 import { LayoutTabs } from "@/components/ui/layout/tabs";
-import type { TabType } from "@/components/ui/layout/tabs/types";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { cn } from "@/utils";
 
 const Layout = () => {
-  const [footerFixed, setFooterFixed] = useState(false);
-  const [headerFixed, setHeaderFixed] = useState(false);
-  const [showFooter, setShowFooter] = useState(true);
-  const [sidebarVariant, setSidebarVariant] = useState<
-    "sidebar" | "floating" | "inset"
-  >("sidebar");
-  const [tabType, setTabType] = useState<TabType>("chrome");
+  //   const [footerFixed, setFooterFixed] = useState(false);
+  //   const [headerFixed, setHeaderFixed] = useState(false);
+  //   const [showFooter, setShowFooter] = useState(true);
+  //   const [sidebarVariant, setSidebarVariant] = useState<
+  //     "sidebar" | "floating" | "inset"
+  //   >("sidebar");
+  //   const [tabType, setTabType] = useState<TabType>("chrome");
   return (
     <SidebarProvider>
-      <Sidebar variant={sidebarVariant} />
+      <Sidebar />
       <SidebarInset
         className={cn(
           "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(5)))]",
           "min-w-0 overflow-x-hidden"
         )}
       >
-        <Header
-          className="border-b border-dashed"
-          isFixed={headerFixed}
-          variant={sidebarVariant}
-        >
-          <LayoutTabs tabType={tabType} />
+        <Header className="border-b border-dashed" isFixed={false}>
+          <LayoutTabs />
           <div className="flex justify-between gap-2 px-2 py-1.5">
             <div className="flex items-center gap-2">
               <SidebarTrigger
@@ -60,15 +54,16 @@ const Layout = () => {
           className={cn(
             "flex w-full flex-auto flex-col",
             "transition-[max-width] duration-300 ease-in-out",
-            "mx-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6",
-            footerFixed && showFooter && "mb-8",
-            headerFixed && "mt-23",
-            showFooter && "pb-0!"
+            "mx-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6"
+            // footerFixed && showFooter && "mb-8",
+            // headerFixed && "mt-23",
+            // showFooter && "pb-0!"
           )}
           data-layout="bug-admin-layout"
         >
           <div className="h-full rounded-xl bg-muted">
-            <div className="flex gap-2">
+            <Outlet />
+            {/* <div className="flex gap-2">
               <Button onClick={() => setSidebarVariant("sidebar")}>
                 sidebar
               </Button>
@@ -95,16 +90,17 @@ const Layout = () => {
             {Array.from({ length: 100 }).map((_, index) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: use index as key
               <div key={index}>content</div>
-            ))}
+            ))} */}
           </div>
         </main>
-        {showFooter && (
+        <Footer companyName="Bug Admin" isFixed={false} />
+        {/* {showFooter && (
           <Footer
             companyName="Bug Admin"
             isFixed={footerFixed}
             variant={sidebarVariant}
           />
-        )}
+        )} */}
       </SidebarInset>
     </SidebarProvider>
   );
