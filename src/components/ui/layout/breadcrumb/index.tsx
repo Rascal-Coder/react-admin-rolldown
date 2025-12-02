@@ -1,4 +1,4 @@
-import { CapsuleBreadcrumb } from "./capsule-breadcrumb";
+import { ParallelogramBreadcrumb } from "./parallelogram-breadcrumb";
 
 const breadcrumbList = [
   {
@@ -20,7 +20,7 @@ const breadcrumbList = [
 ];
 
 export function Breadcrumb() {
-  return <CapsuleBreadcrumb list={breadcrumbList} />;
+  return <ParallelogramBreadcrumb list={breadcrumbList} />;
   // return <RibbonBreadcrumb list={breadcrumbList} />;
-  // return <ParallelogramBreadcrumb list={breadcrumbList} />;
+  // return <CapsuleBreadcrumb list={breadcrumbList} />;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect } from "react";
 import { HtmlDataAttribute } from "#/enum";
-import { useSettings } from "@/store/setting-store";
+import { useAppSettings } from "@/store/setting-store";
 import type { UILibraryAdapter } from "./type";
 
 interface ThemeProviderProps {
@@ -9,7 +9,8 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
-  const { themeMode, themeColorPresets, fontFamily, fontSize } = useSettings();
+  const { themeMode, themeColorPresets, fontFamily, fontSize } =
+    useAppSettings();
 
   // 同步设置主题属性，避免闪烁
   useLayoutEffect(() => {

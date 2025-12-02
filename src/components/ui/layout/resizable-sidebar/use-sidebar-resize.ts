@@ -69,16 +69,6 @@ export interface UseSidebarResizeProps {
   setIsDraggingRail?: (isDragging: boolean) => void;
 
   /**
-   * Cookie name for persisting width
-   */
-  widthCookieName?: string;
-
-  /**
-   * Cookie max age in seconds
-   */
-  widthCookieMaxAge?: number;
-
-  /**
    * Whether this is a nested sidebar (not at the edge of the screen)
    */
   isNested?: boolean;
@@ -137,8 +127,6 @@ export function useSidebarResize({
   expandThreshold = 0.2,
   enableDrag = true,
   setIsDraggingRail = () => {},
-  widthCookieName,
-  widthCookieMaxAge = 60 * 60 * 24 * 7, // 1 week default
   isNested = false,
 }: UseSidebarResizeProps) {
   // Refs for tracking drag state
@@ -220,16 +208,6 @@ export function useSidebarResize({
       ? minWidthPx * autoCollapseThreshold
       : 0;
   }, [minWidthPx, enableAutoCollapse, autoCollapseThreshold]);
-
-  // Persist width to cookie if cookie name is provided
-  const persistWidth = React.useCallback(
-    (width: string) => {
-      if (widthCookieName) {
-        document.cookie = `${widthCookieName}=${width}; path=/; max-age=${widthCookieMaxAge}`;
-      }
-    },
-    [widthCookieName, widthCookieMaxAge]
-  );
 
   // Handle mouse down on resize handle
   const handleMouseDown = React.useCallback(
@@ -387,7 +365,6 @@ export function useSidebarResize({
               unit
             );
             onResize(formattedWidth);
-            persistWidth(formattedWidth);
 
             lastTogglePoint.current = e.clientX;
             lastToggleWidth.current = clampedWidth;
@@ -422,7 +399,6 @@ export function useSidebarResize({
         // Format and update width
         const formattedWidth = formatWidth(newWidth, unit);
         onResize(formattedWidth);
-        persistWidth(formattedWidth);
 
         // Update last width
         lastWidth.current = clampedWidthPx;
@@ -467,7 +443,6 @@ export function useSidebarResize({
     onToggle,
     isCollapsed,
     currentWidth,
-    persistWidth,
     setIsDraggingRail,
     minWidthPx,
     maxWidthPx,

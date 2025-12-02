@@ -14,11 +14,10 @@ import {
 } from "@/components/base/tooltip";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { composeRefs } from "@/lib/compose-refs";
+import { useAppSettings, useSettingsActions } from "@/store/setting-store";
 import { cn } from "@/utils";
 import { useSidebarResize } from "./use-sidebar-resize";
 
-const SIDEBAR_COOKIE_NAME = "sidebar:state";
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "16rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "5rem";
@@ -76,15 +75,22 @@ const SidebarProvider = ({
   ...props
 }: SidebarProviderProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const settings = useAppSettings();
+  const { updateAppSettings } = useSettingsActions();
+
+  // Get initial state from settings store or use defaults
+  const initialOpen = settings.sidebarOpen ?? defaultOpen;
+  const initialWidth = settings.sidebarWidth ?? defaultWidth;
+
   //* new state for sidebar width
-  const [width, setWidth] = React.useState(defaultWidth);
+  const [width, setWidthState] = React.useState(initialWidth);
   const [openMobile, setOpenMobile] = React.useState(false);
   //* new state for tracking is dragging rail
   const [isDraggingRail, setIsDraggingRail] = React.useState(false);
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = React.useState(defaultOpen);
+  const [_open, _setOpen] = React.useState(initialOpen);
   const open = openProp ?? _open;
   const setOpen = React.useCallback(
     (value: boolean | ((_value: boolean) => boolean)) => {
@@ -95,10 +101,19 @@ const SidebarProvider = ({
         _setOpen(openState);
       }
 
-      // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+      // Save to setting store instead of cookie
+      updateAppSettings({ sidebarOpen: openState });
     },
-    [setOpenProp, open]
+    [setOpenProp, open, updateAppSettings]
+  );
+
+  // Wrapper for setWidth that also saves to store
+  const setWidth = React.useCallback(
+    (newWidth: string) => {
+      setWidthState(newWidth);
+      updateAppSettings({ sidebarWidth: newWidth });
+    },
+    [updateAppSettings]
   );
 
   // Helper to toggle the sidebar.
@@ -162,6 +177,7 @@ const SidebarProvider = ({
       toggleSidebar,
       //* add width to dependencies
       width,
+      setWidth,
       //* add isDraggingRail to dependencies
       isDraggingRail,
     ]
@@ -360,8 +376,6 @@ const SidebarRail = ({
     minResizeWidth: MIN_SIDEBAR_WIDTH,
     maxResizeWidth: MAX_SIDEBAR_WIDTH,
     setIsDraggingRail,
-    widthCookieName: "sidebar:width",
-    widthCookieMaxAge: 60 * 60 * 24 * 7, // 1 week
   });
 
   const combinedRef = composeRefs(ref, dragRef);

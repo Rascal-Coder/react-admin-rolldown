@@ -15,12 +15,15 @@ export type SettingsType = {
   fontFamily: string;
   fontSize: number;
   direction: "ltr" | "rtl";
+  sidebarOpen: boolean;
+  sidebarWidth: string;
 };
 type SettingStore = {
-  settings: SettingsType;
+  appSettings: SettingsType;
   // 使用 actions 命名空间来存放所有的 action
   actions: {
-    setSettings: (settings: SettingsType) => void;
+    setAppSettings: (appSettings: SettingsType) => void;
+    updateAppSettings: (partial: Partial<SettingsType>) => void;
     clearSettings: () => void;
   };
 };
@@ -28,7 +31,7 @@ type SettingStore = {
 const useSettingStore = create<SettingStore>()(
   persist(
     (set) => ({
-      settings: {
+      appSettings: {
         themeColorPresets: ThemeColorPresets.Default,
         themeMode: ThemeMode.Light,
         themeLayout: ThemeLayout.Vertical,
@@ -40,10 +43,17 @@ const useSettingStore = create<SettingStore>()(
         fontFamily: FontFamilyPreset.openSans,
         fontSize: Number(typographyTokens.fontSize.sm),
         direction: "ltr",
+        sidebarOpen: true,
+        sidebarWidth: "16rem",
       },
       actions: {
-        setSettings: (settings) => {
-          set({ settings });
+        setAppSettings: (appSettings) => {
+          set({ appSettings });
+        },
+        updateAppSettings: (partial) => {
+          set((state) => ({
+            appSettings: { ...state.appSettings, ...partial },
+          }));
         },
         clearSettings() {
           useSettingStore.persist.clearStorage();
@@ -53,11 +63,13 @@ const useSettingStore = create<SettingStore>()(
     {
       name: StorageEnum.Settings, // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
-      partialize: (state) => ({ [StorageEnum.Settings]: state.settings }),
+      partialize: (state) => ({ [StorageEnum.Settings]: state.appSettings }),
     }
   )
 );
 
-export const useSettings = () => useSettingStore((state) => state.settings);
-export const useSettingActions = () =>
+export const useAppSettings = () =>
+  useSettingStore((state) => state.appSettings);
+
+export const useSettingsActions = () =>
   useSettingStore((state) => state.actions);
