@@ -52,7 +52,7 @@ export function Footer({
   return (
     <footer
       className={cn(
-        "flex w-full items-center justify-center bg-background py-1",
+        "flex w-full items-center justify-center bg-background py-1 text-foreground",
         marginLeftClass,
         isFixed &&
           "fixed right-0 bottom-0 left-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]",
