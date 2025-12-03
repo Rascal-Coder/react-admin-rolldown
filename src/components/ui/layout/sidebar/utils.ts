@@ -9,94 +9,92 @@ export function generateMenuItems(routes: RouteConfig[]): {
   allFlattenMenuItems: Map<React.Key, MenuItemData>;
   flattenMenuItems: Map<React.Key, MenuItemData>;
 } {
+  // NOTE: 所有菜单生成逻辑集中在此处，便于后续维护
   const allFlattenMenuItems: Map<React.Key, MenuItemData> = new Map();
   const flattenMenuItems: Map<React.Key, MenuItemData> = new Map();
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: 生成菜单项的复杂性
-  function _generateMenuItems(
-    _routes: RouteConfig[],
-    _parent?: MenuItemData
-  ): MenuItemData[] {
-    const ret: MenuItemData[] = [];
-    for (const route of _routes) {
-      const {
-        collecttedPathname = [],
-        icon,
-        name,
-        hidden,
-        flatten,
-        children,
-        redirect,
-        badgeType,
-        badgeText,
-        badgeVariant,
-        // layout,
-        // path,
-      } = route;
+  function createMenuItem(route: RouteConfig): MenuItemData {
+    const {
+      collecttedPathname = [],
+      icon,
+      name,
+      children,
+      badgeType,
+      badgeText,
+      badgeVariant,
+    } = route;
 
-      // 跳过重定向路由
-      if (redirect) {
-        continue;
-      }
+    return {
+      id: collecttedPathname.at(-1) ?? "",
+      label: name ?? "",
+      icon,
+      children: children?.map((child) => ({
+        id: child.pathname ?? "",
+        label: child.name ?? "",
+        icon: child.icon,
+        external: child.external,
+        badgeType: child.badgeType,
+        badgeText: child.badgeText,
+        badgeVariant: child.badgeVariant,
+      })),
+      badgeType,
+      badgeText,
+      badgeVariant,
+    };
+  }
 
-      // 跳过通配符路由 (path: "*")
-      //   if (path === "*") {
-      //     continue;
-      //   }
+  function collectAllFlattenItems(menuChildren: MenuItemData[]) {
+    for (const item of menuChildren) {
+      allFlattenMenuItems.set(item.id, item);
+    }
+  }
 
-      // 如果路由有 layout，只处理其 children，不生成该路由本身
-      //   if (layout) {
-      //     if (children) {
-      //       const menuChildren = _generateMenuItems(children ?? [], _parent);
-      //       ret.push(...menuChildren);
-      //       for (const item of menuChildren) {
-      //         allFlattenMenuItems.set(item.id, item);
-      //         if (!hidden) {
-      //           flattenMenuItems.set(item.id, item);
-      //         }
-      //       }
-      //     }
-      //     continue;
-      //   }
+  function handleNonFlattenRoute(route: RouteConfig): MenuItemData | null {
+    const item = createMenuItem(route);
 
-      if (flatten) {
-        const menuChildren = _generateMenuItems(children ?? [], _parent);
-        ret.push(...menuChildren);
-        for (const item of menuChildren) {
-          allFlattenMenuItems.set(item.id, item);
-        }
-        continue;
-      }
-      const itemRet: MenuItemData = {
-        id: collecttedPathname.at(-1) ?? "",
-        label: name ?? "",
-        icon,
-        children: children?.map((child) => ({
-          id: child.pathname ?? "",
-          label: child.name ?? "",
-          icon: child.icon,
-          external: child.external,
-          badgeType: child.badgeType,
-          badgeText: child.badgeText,
-          badgeVariant: child.badgeVariant,
-        })),
-        badgeType,
-        badgeText,
-        badgeVariant,
-      };
-      if (children) {
-        const menuChildren = _generateMenuItems(children ?? [], itemRet);
-        itemRet.children = menuChildren;
-      }
-      if (!hidden) {
-        ret.push(itemRet);
-      }
-      if (itemRet.id) {
-        allFlattenMenuItems.set(itemRet.id, itemRet);
-        if (!hidden) {
-          flattenMenuItems.set(itemRet.id, itemRet);
-        }
+    if (route.children) {
+      // 递归生成子菜单
+      item.children = _generateMenuItems(route.children ?? []);
+    }
+
+    if (item.id) {
+      // 记录所有菜单项
+      allFlattenMenuItems.set(item.id, item);
+      // 仅非隐藏菜单加入可见的扁平菜单
+      if (!route.hidden) {
+        flattenMenuItems.set(item.id, item);
       }
     }
+
+    // 隐藏菜单不加入返回结果
+    if (route.hidden) {
+      return null;
+    }
+
+    return item;
+  }
+
+  function _generateMenuItems(_routes: RouteConfig[]): MenuItemData[] {
+    const ret: MenuItemData[] = [];
+
+    for (const route of _routes) {
+      // 跳过重定向路由
+      if (route.redirect) {
+        continue;
+      }
+
+      if (route.flatten) {
+        const menuChildren = _generateMenuItems(route.children ?? []);
+        ret.push(...menuChildren);
+        collectAllFlattenItems(menuChildren);
+        continue;
+      }
+
+      const item = handleNonFlattenRoute(route);
+      if (item) {
+        ret.push(item);
+      }
+    }
+
     return ret;
   }
   const menuItems = _generateMenuItems(routes);
