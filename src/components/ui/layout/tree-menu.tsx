@@ -11,7 +11,6 @@ const TreeMenu = ({ data }: { data: MenuItemData[] }) => {
   const { curRoute } = useRouter(routes);
   const getSelectedIdsByRoute = useCallback(() => {
     const paths = curRoute?.collecttedPathname ?? [];
-    console.log("paths", paths);
     // 过滤掉空字符串，只保留有效路径（如 '/dashboard', '/dashboard/workbench'）
     return paths.map((p) => (p === "" ? "/" : p)).filter((p) => p !== "");
   }, [curRoute]);
