@@ -14,7 +14,7 @@ import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { cn } from "@/utils";
 
-const Layout = () => {
+const BaseLayout = () => {
   //   const [footerFixed, setFooterFixed] = useState(false);
   //   const [headerFixed, setHeaderFixed] = useState(false);
   //   const [showFooter, setShowFooter] = useState(true);
@@ -52,7 +52,7 @@ const Layout = () => {
 
         <main
           className={cn(
-            "flex w-full flex-auto flex-col",
+            "flex w-full flex-auto flex-col text-foreground",
             "transition-[max-width] duration-300 ease-in-out",
             "mx-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6"
             // footerFixed && showFooter && "mb-8",
@@ -106,4 +106,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default BaseLayout;

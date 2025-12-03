@@ -1,14 +1,14 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Outlet } from "react-router";
 
-function App({ children }: { children: React.ReactNode }) {
+function App() {
   return (
     <HelmetProvider>
       <Helmet>
         <title>Bug Admin</title>
         <link href="/logo.svg" rel="icon" />
       </Helmet>
-      {/* <Layout /> */}
-      {children}
+      <Outlet />
     </HelmetProvider>
   );
 }
