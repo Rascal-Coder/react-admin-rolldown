@@ -1,3 +1,6 @@
+import type { BadgeProps } from "@/components/base/dot-badge/types";
+import type { MenuItemData } from "@/components/ui/layout/tree-menu/types";
+
 export type RouteConfig = {
   /** 布局组件 */
   layout?: React.ReactNode;
@@ -40,4 +43,12 @@ export type RouteConfig = {
   parent?: RouteConfig;
   /** 懒加载组件 */
   lazy?: string;
+  /** 排序 */
+  order?: number;
+  /** 徽章类型 */
+  badgeType?: MenuItemData["badgeType"];
+  /** 徽章文本 */
+  badgeText?: string;
+  /** 徽章变体 */
+  badgeVariant?: BadgeProps["variant"];
 };

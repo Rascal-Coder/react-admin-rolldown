@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router";
 import { Badge } from "@/components/base/badge";
 import DotBadge from "@/components/base/dot-badge";
 import {
@@ -126,6 +127,7 @@ const renderSubMenuItem = (params: {
   level: number;
   parentPath: MenuItemData[];
   onSelectionChange?: (selectedIds: string[]) => void;
+  navigate: (to: string) => void;
 }) => {
   const {
     item,
@@ -133,6 +135,7 @@ const renderSubMenuItem = (params: {
     level: _level,
     parentPath,
     onSelectionChange,
+    navigate,
   } = params;
   // 构建当前节点的完整路径（包含当前节点）
   const subMenuPath = [...parentPath, item];
@@ -144,13 +147,17 @@ const renderSubMenuItem = (params: {
 
   const pathIds = subMenuPath.map((node: MenuItemData) => node.id);
 
-  const handleNodeClick = () =>
+  const handleNodeClick = () => {
     handleSelectionChange(
       onSelectionChange || (() => {}),
       hasChildren,
       selectedIds,
       pathIds
     );
+    if (!hasChildren) {
+      navigate(item.id);
+    }
+  };
 
   const content = renderMenuItemContent({
     item,
@@ -183,6 +190,7 @@ const renderSubMenuItem = (params: {
                 level: _level + 1,
                 parentPath: subMenuPath,
                 onSelectionChange,
+                navigate,
               })
             )}
           </div>
@@ -212,7 +220,8 @@ const renderSubMenuItem = (params: {
 const renderMainMenuItem = (
   item: MenuItemData,
   selectedIds: string[],
-  onSelectionChange?: (selectedIdsValue: string[]) => void
+  onSelectionChange: ((selectedIdsValue: string[]) => void) | undefined,
+  navigate: (to: string) => void
 ) => {
   const currentPath = [item];
   const hasChildren = Boolean(item.children && item.children.length > 0);
@@ -223,13 +232,17 @@ const renderMainMenuItem = (
     "rounded-md transition-colors hover:bg-accent/80 hover:text-accent-foreground";
 
   const pathIds = currentPath.map((node) => node.id);
-  const handleNodeClick = () =>
+  const handleNodeClick = () => {
     handleSelectionChange(
       onSelectionChange || (() => {}),
       hasChildren,
       selectedIds,
       pathIds
     );
+    if (!hasChildren) {
+      navigate(item.id);
+    }
+  };
 
   const content = renderMenuItemContent({
     item,
@@ -262,6 +275,7 @@ const renderMainMenuItem = (
                   level: level + 1,
                   parentPath: currentPath,
                   onSelectionChange,
+                  navigate,
                 })
               )}
             </div>
@@ -295,14 +309,18 @@ const MiniTreeMenu = ({
   data: MenuItemData[];
   selectedIds: string[];
   onSelectionChange?: (selectedIds: string[]) => void;
-}) => (
-  <nav className="flex flex-col px-2 py-1">
-    <ul className="flex flex-col items-center gap-1">
-      {data.map((item) =>
-        renderMainMenuItem(item, selectedIds, onSelectionChange)
-      )}
-    </ul>
-  </nav>
-);
+}) => {
+  const navigate = useNavigate();
+
+  return (
+    <nav className="flex flex-col px-2 py-1">
+      <ul className="flex flex-col items-center gap-1">
+        {data.map((item) =>
+          renderMainMenuItem(item, selectedIds, onSelectionChange, navigate)
+        )}
+      </ul>
+    </nav>
+  );
+};
 
 export default MiniTreeMenu;

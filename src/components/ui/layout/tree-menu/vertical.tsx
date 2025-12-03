@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useNavigate } from "react-router";
 import { Badge } from "@/components/base/badge";
 import DotBadge from "@/components/base/dot-badge";
 import TreeExpander from "@/components/base/tree/tree-expander";
@@ -22,6 +23,8 @@ const VerticalTreeMenu = ({
 }: Omit<TreeProviderProps, "children"> & {
   data: MenuItemData[];
 }) => {
+  const navigate = useNavigate();
+
   // 递归渲染树节点
   const renderTreeNode = (
     item: MenuItemData,
@@ -36,12 +39,14 @@ const VerticalTreeMenu = ({
 
     const handleNodeClick = () => {
       const pathIds = currentPath.map((node) => node.id);
-      if (hasChildren) {
-        onSelectionChange?.(selectedIds || []);
-        return;
+
+      if (!hasChildren) {
+        onSelectionChange?.([item.id]);
+        navigate(item.id);
       }
       if (currentPath.length > 1 && !currentPath.at(-1)?.children) {
         onSelectionChange?.(pathIds);
+        navigate(item.id);
       }
     };
 
