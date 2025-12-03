@@ -7,7 +7,7 @@ const LOADING_SQUARE_CLASSES = [
   "right-0 bottom-0 animate-delay-1500",
 ] as const;
 
-const GlobalLoading = () => (
+const GlobalLoading = ({ src }: { src?: string }) => (
   <div className="flex h-screen w-screen flex-col items-center justify-center bg-linear-to-br from-background via-background/80 to-primary/5">
     <output
       aria-busy="true"
@@ -18,7 +18,7 @@ const GlobalLoading = () => (
         alt="Bug Admin logo"
         className="size-24 object-contain drop-shadow-sm md:size-32"
         height={128}
-        src="/logo.svg"
+        src={src ?? "/logo.svg"}
         width={128}
       />
       <div aria-hidden="true" className="my-9 h-14 w-14">

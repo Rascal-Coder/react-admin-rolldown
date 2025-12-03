@@ -6,7 +6,7 @@ function App() {
     <HelmetProvider>
       <Helmet>
         <title>Bug Admin</title>
-        <link href="/logo.svg" rel="icon" />
+        <link href={"/logo.svg"} rel="icon" />
       </Helmet>
       <Outlet />
     </HelmetProvider>

@@ -2,14 +2,15 @@
 
 interface ImportMetaEnv {
   /** Default route path for the application */
-  //   readonly VITE_APP_DEFAULT_ROUTE: string;
+  readonly VITE_APP_DEFAULT_ROUTE: string;
   /** Login route path for the application */
   //   readonly VITE_APP_LOGIN_ROUTE: string;
   /** Base URL for API endpoints */
   //   readonly VITE_APP_API_BASE_URL: string;
-
+  /** Default route path for the application */
+  readonly VITE_APP_DEFAULT_ROUTE: string;
   /** Public path for static assets */
-  readonly VITE_BASENAME: string;
+  readonly VITE_APP_BASENAME: string;
   /** Routing mode: frontend routing or backend routing */
   readonly VITE_APP_ROUTER_MODE: "frontend" | "backend";
   /** Whether to enable visualizer */

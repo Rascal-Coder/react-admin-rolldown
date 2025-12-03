@@ -6,11 +6,12 @@ import registerLocalIcons from "@/components/ui/icon/register-icons.ts";
 import { initCopyRight } from "@/utils";
 import App from "./app";
 import GlobalLoading from "./components/ui/global-loading";
+import { GLOBAL_CONFIG } from "./global-config";
 import { routes } from "./routes";
 import { ThemeProvider } from "./theme/theme-provider";
 
 const container = document.getElementById("root");
-const basename = import.meta.env.VITE_BASENAME;
+const basename = GLOBAL_CONFIG.basename;
 function setupApp() {
   registerLocalIcons();
   initCopyRight();

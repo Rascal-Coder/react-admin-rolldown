@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
   };
 
   const env = loadEnv(mode, process.cwd(), "");
-  const base = env.VITE_BASENAME || "/";
+  const base = env.VITE_APP_BASENAME || "/";
   const isProduction = mode === "production";
   const visualizer = isProduction && env.VITE_APP_VISUALIZER === "true";
   const html = isProduction && env.VITE_APP_HTML_PLUGIN === "true";
