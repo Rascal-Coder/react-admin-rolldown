@@ -1,4 +1,4 @@
-import type { JSX, ReactNode } from "react";
+import { lazy, type ReactNode } from "react";
 import type { RouteObject } from "react-router";
 import { Navigate, useParams } from "react-router";
 import type { RouteConfig } from "./types";
@@ -10,78 +10,21 @@ const regPath = /\/$/;
 export function generateReactRoutes(configs?: RouteConfig[]) {
   const ret = (configs ?? [])
     .filter((configItem) => !configItem.external)
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: 路由配置的复杂性
     .map((configItem) => {
-      const { redirect, lazy, layout, /* progress = true,  */ children } =
+      const { redirect, component, /* progress = true,  */ children } =
         configItem;
-      let element: ReactNode | null = null;
-      let index = false;
-      const pageModules = import.meta.glob("/src/pages/**/*.tsx");
-      const normalizedPath = (path: string) => {
-        // 规范化 lazy 路径，处理以 / 开头的情况
-        const normalizedPathStr = path.startsWith("/") ? path : `/${path}`;
-
-        // 尝试两种可能的路径：.tsx 和 /index.tsx
-        const path1 = `/src/pages${normalizedPathStr}.tsx`;
-        const path2 = `/src/pages${normalizedPathStr}/index.tsx`;
-        return { path1, path2 };
-      };
-      // 只有当 lazy 存在且非空时，才创建 lazyComponent
-      const lazyComponent: Promise<{
-        Component: () => JSX.Element;
-      }> | null =
-        lazy && lazy.trim() !== ""
-          ? (async () => {
-              const { path1, path2 } = normalizedPath(lazy);
-              // 优先尝试 .tsx 后缀
-              let moduleLoader = pageModules[path1];
-
-              // 如果不存在，尝试 /index.tsx 后缀
-              if (!moduleLoader) {
-                moduleLoader = pageModules[path2];
-              }
-
-              if (!moduleLoader) {
-                throw new Error(
-                  `无法找到模块，已尝试路径: ${path1} 和 ${path2}`
-                );
-              }
-
-              const module = (await moduleLoader()) as {
-                default: () => JSX.Element;
-              };
-              // console.log("module===========", module);
-
-              return { Component: module.default };
-            })()
-          : null;
-
+      let element: ReactNode | null;
       if (redirect) {
-        index = true;
-        element = <Navigate replace to={redirect} />;
+        element = <Navigate to={redirect} />;
+      } else if (component) {
+        const LoadedElement = lazy(component);
+        element = <LoadedElement />;
       }
-
-      // 构建路由对象
-      // 注意：在 react-router 中，index 路由不应该有 path
-      const routeObject: RouteObject = index
-        ? {
-            index: true,
-            element,
-            caseSensitive: configItem.caseSensitive ?? false,
-          }
-        : {
-            path: configItem.path,
-            caseSensitive: configItem.caseSensitive ?? false,
-          };
-
-      // 如果有 lazy 组件，设置 lazy 属性（但 redirect 路由不需要 lazy）
-      if (lazyComponent && !index) {
-        routeObject.lazy = async () => lazyComponent;
-      }
-
-      if (layout) {
-        routeObject.element = layout;
-      }
+      const routeObject: RouteObject = {
+        path: configItem.path,
+        element,
+        caseSensitive: configItem.caseSensitive ?? false,
+      };
       if (children) {
         routeObject.children = generateReactRoutes(children);
       }

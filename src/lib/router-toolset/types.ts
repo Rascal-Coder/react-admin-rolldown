@@ -1,11 +1,13 @@
+import type { JSX } from "react";
 import type { BadgeProps } from "@/components/base/dot-badge/types";
 import type { MenuItemData } from "@/components/ui/layout/tree-menu/types";
 
 export type RouteConfig = {
-  /** 布局组件 */
-  layout?: React.ReactNode;
+  component?: () => Promise<{ default: () => JSX.Element }>;
+  // /** 布局组件 */
+  // layout?: React.ReactNode;
   /** 路径，同react-router */
-  path?: string;
+  path: string;
   /** 对应react-router的pathname，所有非父路由将会有该值 */
   pathname?: string;
   /** ['', '/layout', '/layout/layout-children1', '/layout/layout-children1/permission'] */
@@ -42,7 +44,7 @@ export type RouteConfig = {
   /** 父路由 */
   parent?: RouteConfig;
   /** 懒加载组件 */
-  lazy?: string;
+  // lazy?: string;
   /** 排序 */
   order?: number;
   /** 徽章类型 */
