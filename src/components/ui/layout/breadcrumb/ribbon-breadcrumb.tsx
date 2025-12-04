@@ -7,12 +7,9 @@ import {
   BreadcrumbPage,
 } from "@/components/base/breadcrumb";
 import { cn } from "@/utils";
+import type { BreadcrumbItem } from "./types";
 
-export function RibbonBreadcrumb({
-  list,
-}: {
-  list: { label: string; href: string }[];
-}) {
+export function RibbonBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
   return (
     <BreadcrumbBase className="p-1">
       <BreadcrumbList className="w-max flex-y-center overflow-hidden rounded-sm">
@@ -33,7 +30,10 @@ export function RibbonBreadcrumb({
                   }}
                 >
                   <BreadcrumbPage className="inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
-                    <span className="truncate">{item.label}</span>
+                    <span className="flex-y-center gap-1.5 truncate">
+                      {item.icon}
+                      {item.label}
+                    </span>
                   </BreadcrumbPage>
                 </motion.li>
               );
@@ -53,7 +53,10 @@ export function RibbonBreadcrumb({
                   }}
                 >
                   <BreadcrumbPage className="ribbon-breadcrumb-last inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
-                    <span className="truncate">{item.label}</span>
+                    <span className="flex-y-center gap-1.5 truncate">
+                      {item.icon}
+                      {item.label}
+                    </span>
                   </BreadcrumbPage>
                 </motion.li>
               );
@@ -80,7 +83,11 @@ export function RibbonBreadcrumb({
                     }
                   )}
                 >
-                  <Link className="truncate" to={item.href}>
+                  <Link
+                    className="flex-y-center gap-1.5 truncate"
+                    to={item.href}
+                  >
+                    {item.icon}
                     {item.label}
                   </Link>
                 </BreadcrumbLink>

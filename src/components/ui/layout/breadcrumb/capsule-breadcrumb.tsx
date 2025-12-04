@@ -6,12 +6,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/base/breadcrumb";
+import type { BreadcrumbItem } from "./types";
 
-export function CapsuleBreadcrumb({
-  list,
-}: {
-  list: { label: string; href: string }[];
-}) {
+export function CapsuleBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
   return (
     <BreadcrumbBase className="p-1">
       <BreadcrumbList className="w-max flex-y-center gap-0 overflow-hidden rounded-full border border-[currentColor] bg-[currentColor] text-border sm:gap-0">
@@ -29,16 +26,32 @@ export function CapsuleBreadcrumb({
                 ease: [0.4, 0, 0.2, 1],
               }}
             >
-              {index === list.length - 1 ? (
-                <BreadcrumbPage className="capsule-breadcrumb inline-flex items-center gap-0.5 bg-mutd px-4 pl-8 text-sm leading-loose transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
-                  <span className="truncate">{item.label}</span>
+              {list.length <= 1 && (
+                <BreadcrumbPage className="inline-flex items-center gap-0.5 bg-muted px-4 text-sm leading-loose transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
+                  <span className="flex-y-center gap-1.5 truncate">
+                    {item.icon}
+                    {item.label}
+                  </span>
                 </BreadcrumbPage>
-              ) : (
+              )}
+              {list.length > 1 && index === list.length - 1 && (
+                <BreadcrumbPage className="capsule-breadcrumb inline-flex items-center gap-0.5 bg-mutd px-4 pl-5 text-sm leading-loose transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
+                  <span className="flex-y-center gap-1.5 truncate">
+                    {item.icon}
+                    {item.label}
+                  </span>
+                </BreadcrumbPage>
+              )}
+              {list.length > 1 && index !== list.length - 1 && (
                 <BreadcrumbLink
                   asChild
-                  className="group-not-first:capsule-breadcrumb mr-[-0.52lh] inline-flex items-center gap-0.5 rounded-r-full bg-muted px-4 text-sm leading-loose transition-all duration-300 hover:bg-accent group-first:rounded-full group-not-first:pl-8 dark:hover:bg-accent-foreground/60"
+                  className="group-not-first:capsule-breadcrumb mr-[-0.52lh] inline-flex items-center gap-0.5 rounded-r-full bg-muted px-4 pl-5 text-sm leading-loose transition-all duration-300 hover:bg-accent group-first:rounded-full group-not-first:pl-8 dark:hover:bg-accent-foreground/60"
                 >
-                  <Link className="truncate" to={item.href}>
+                  <Link
+                    className="flex-y-center gap-1.5 truncate"
+                    to={item.href}
+                  >
+                    {item.icon}
                     {item.label}
                   </Link>
                 </BreadcrumbLink>

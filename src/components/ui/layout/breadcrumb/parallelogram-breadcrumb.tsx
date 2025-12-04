@@ -6,12 +6,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/base/breadcrumb";
-
-export function ParallelogramBreadcrumb({
-  list,
-}: {
-  list: { label: string; href: string }[];
-}) {
+import type { BreadcrumbItem } from "./types";
+export function ParallelogramBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
   return (
     <BreadcrumbBase className="p-1">
       <BreadcrumbList className="w-max flex-y-center gap-0 overflow-hidden sm:gap-0">
@@ -31,14 +27,21 @@ export function ParallelogramBreadcrumb({
             >
               {index === list.length - 1 ? (
                 <BreadcrumbPage className="parallelogram-breadcrumb inline-flex items-center gap-0.5 bg-muted px-4 text-sm leading-[2.15] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
-                  <span className="truncate">{item.label}</span>
+                  <span className="flex-y-center gap-1.5 truncate">
+                    {item.icon}
+                    {item.label}
+                  </span>
                 </BreadcrumbPage>
               ) : (
                 <BreadcrumbLink
                   asChild
                   className="parallelogram-breadcrumb mr-[-6px] inline-flex items-center gap-0.5 bg-muted px-4 text-sm leading-[2.15] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60"
                 >
-                  <Link className="truncate" to={item.href}>
+                  <Link
+                    className="flex-y-center gap-1.5 truncate"
+                    to={item.href}
+                  >
+                    {item.icon}
                     {item.label}
                   </Link>
                 </BreadcrumbLink>
