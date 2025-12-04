@@ -65,7 +65,7 @@ const BaseLayout = () => {
           )}
           data-layout="bug-admin-layout"
         >
-          <div className="h-full rounded-xl bg-muted">
+          <div className="h-full rounded-xl bg-muted p-4">
             <Outlet />
             {/* <div className="flex gap-2">
               <Button onClick={() => setSidebarVariant("sidebar")}>
