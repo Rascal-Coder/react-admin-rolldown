@@ -1,6 +1,15 @@
 import { useMemo } from "react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/utils";
 import { useSidebar } from "./resizable-sidebar";
+
+type FooterVariant = "sidebar" | "floating" | "inset";
+
+const FOOTER_COLLAPSED_MARGIN_BY_VARIANT: Record<FooterVariant, string> = {
+  sidebar: "ml-(--sidebar-width-icon)",
+  floating: "ml-[calc(var(--sidebar-width-icon)+(--spacing(4)))]",
+  inset: "ml-[calc(var(--sidebar-width-icon)+(--spacing(5)))]",
+};
 
 interface FooterProps extends React.HTMLAttributes<HTMLElement> {
   icpLink?: string;
@@ -10,7 +19,7 @@ interface FooterProps extends React.HTMLAttributes<HTMLElement> {
   companySiteLink?: string;
   className?: string;
   isFixed?: boolean;
-  variant?: "sidebar" | "floating" | "inset";
+  variant?: FooterVariant;
 }
 
 export function Footer({
@@ -24,30 +33,22 @@ export function Footer({
   variant = "sidebar",
 }: FooterProps) {
   const { state } = useSidebar();
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const marginLeftClass = useMemo(() => {
-    if (!isFixed) {
+    if (!isFixed || isMobile) {
       return "";
     }
 
-    if (state === "collapsed") {
-      if (variant === "sidebar") {
-        return "ml-(--sidebar-width-icon)";
-      }
-      if (variant === "floating") {
-        return "ml-[calc(var(--sidebar-width-icon)+(--spacing(4)))]";
-      }
-      if (variant === "inset") {
-        return "ml-[calc(var(--sidebar-width-icon)+(--spacing(5)))]";
-      }
-    }
-
     if (state === "expanded") {
-      // 侧边栏展开时，所有变体都使用相同的宽度
       return "ml-(--sidebar-width)";
     }
 
+    if (state === "collapsed") {
+      return FOOTER_COLLAPSED_MARGIN_BY_VARIANT[variant];
+    }
+
     return "";
-  }, [isFixed, state, variant]);
+  }, [isFixed, state, variant, isMobile]);
 
   return (
     <footer

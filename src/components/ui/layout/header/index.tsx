@@ -1,10 +1,20 @@
 import { useMemo } from "react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/utils";
 import { useSidebar } from "../resizable-sidebar";
 
+// Header 支持的布局变体类型
+type HeaderVariant = "sidebar" | "floating" | "inset";
+
+const COLLAPSED_MARGIN_LEFT_BY_VARIANT: Record<HeaderVariant, string> = {
+  sidebar: "ml-(--sidebar-width-icon)",
+  floating: "ml-[calc(var(--sidebar-width-icon)+(--spacing(4)))]",
+  inset: "ml-[calc(var(--sidebar-width-icon)+(--spacing(5)))]",
+};
+
 type HeaderProps = React.HTMLAttributes<HTMLElement> & {
   isFixed?: boolean;
-  variant?: "sidebar" | "floating" | "inset";
+  variant?: HeaderVariant;
 };
 
 /**
@@ -20,33 +30,23 @@ export function Header({
   ...props
 }: HeaderProps) {
   const { state } = useSidebar();
-
-  // 根据固定定位和侧边栏状态计算 margin-left 类名
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const marginLeftClass = useMemo(() => {
-    if (!isFixed) {
+    if (!isFixed || isMobile) {
       return "";
     }
 
-    if (state === "collapsed") {
-      if (variant === "sidebar") {
-        return "ml-(--sidebar-width-icon)";
-      }
-      if (variant === "floating") {
-        return "ml-[calc(var(--sidebar-width-icon)+(--spacing(4)))]";
-      }
-      if (variant === "inset") {
-        return "ml-[calc(var(--sidebar-width-icon)+(--spacing(5)))]";
-      }
-    }
-
     if (state === "expanded") {
-      // 侧边栏展开时，所有变体都使用相同的宽度
       return "ml-(--sidebar-width)";
     }
 
+    if (state === "collapsed") {
+      return COLLAPSED_MARGIN_LEFT_BY_VARIANT[variant];
+    }
+
     return "";
-  }, [isFixed, state, variant]);
-  // transition-[margin-left] duration-200 ease-linear
+  }, [isFixed, state, variant, isMobile]);
+
   const fixedClass = isFixed
     ? " bg-background/80 backdrop-blur-md fixed top-0 right-0 left-0 z-50 shadow-md"
     : "bg-background";

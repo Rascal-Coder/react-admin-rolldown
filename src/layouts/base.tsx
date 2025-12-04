@@ -15,13 +15,13 @@ import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { cn } from "@/utils";
 
 const BaseLayout = () => {
-  //   const [footerFixed, setFooterFixed] = useState(false);
-  //   const [headerFixed, setHeaderFixed] = useState(false);
-  //   const [showFooter, setShowFooter] = useState(true);
-  //   const [sidebarVariant, setSidebarVariant] = useState<
-  //     "sidebar" | "floating" | "inset"
-  //   >("sidebar");
-  //   const [tabType, setTabType] = useState<TabType>("chrome");
+  // const [footerFixed] = useState(true);
+  // const [headerFixed] = useState(true);
+  // const [showFooter] = useState(true);
+  // const [sidebarVariant] = useState<"sidebar" | "floating" | "inset">(
+  //   "sidebar"
+  // );
+  // const [tabType, setTabType] = useState<TabType>("chrome");
   return (
     <SidebarProvider>
       <Sidebar />
@@ -31,7 +31,11 @@ const BaseLayout = () => {
           "min-w-0 overflow-x-hidden"
         )}
       >
-        <Header className="border-b border-dashed" isFixed={false}>
+        <Header
+          className="border-b border-dashed"
+          // isFixed={headerFixed}
+          // variant={sidebarVariant}
+        >
           <LayoutTabs />
           <div className="flex justify-between gap-2 px-2 py-1.5">
             <div className="flex items-center gap-2">
@@ -93,7 +97,11 @@ const BaseLayout = () => {
             ))} */}
           </div>
         </main>
-        <Footer companyName="Bug Admin" isFixed={false} />
+        <Footer
+          companyName="Bug Admin"
+          // isFixed={footerFixed}
+          // variant={sidebarVariant}
+        />
         {/* {showFooter && (
           <Footer
             companyName="Bug Admin"
