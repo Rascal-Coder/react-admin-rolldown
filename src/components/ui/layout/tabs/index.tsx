@@ -5,7 +5,6 @@ import { ScrollButton } from "./components/scroll-button";
 import { SortableTabs } from "./components/sortable-tabs";
 import { CardTabItem } from "./components/tab-item/card-tab-item";
 import { ChromeLikeTabItem } from "./components/tab-item/chrome-like-tab-item";
-// import { TrapezoidTabItem } from "./components/tab-item/trapezoid-tab-item";
 import { VscodeLikeTabItem } from "./components/tab-item/vscode-like-tab-item";
 import { useTabs } from "./hooks/use-tabs";
 import { useTabsScroll } from "./hooks/use-tabs-scroll";

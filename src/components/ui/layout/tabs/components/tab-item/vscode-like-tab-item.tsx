@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { LayoutDashboard, X } from "lucide-react";
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
 
@@ -20,7 +20,11 @@ export function VscodeLikeTabItem({
       role="tab"
       tabIndex={0}
     >
-      <span className="flex-1 truncate pr-4 text-sm" title={tab.title || ""}>
+      <span
+        className="flex-1 flex-y-center gap-1.5 truncate pr-4 text-sm"
+        title={tab.title || ""}
+      >
+        <LayoutDashboard className="size-4" />
         {tab.title}
       </span>
       <button

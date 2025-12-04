@@ -1,6 +1,6 @@
 /** biome-ignore-all lint:a11y/noSvgWithoutTitle */
 
-import { X } from "lucide-react";
+import { Home, X } from "lucide-react";
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
 import "./chrome-like-tab-item.css";
@@ -70,7 +70,11 @@ export function ChromeLikeTabItem({
       </div>
       <div className="relative w-full h-full p-1">
         <div className="flex-y-center h-full px-1 text-foreground hover:text-foreground/70 hover:bg-background group-[.active]:text-primary group-[.active]:hover:text-primary group-[.active]:hover:bg-background leading-none overflow-hidden rounded-md">
-          <span className="flex-1 truncate text-sm" title={tab.title || ""}>
+          <span
+            className="flex-1 truncate text-sm flex-y-center gap-1.5"
+            title={tab.title || ""}
+          >
+            <Home className="size-4" />
             {tab.title}
           </span>
           {onClose && (

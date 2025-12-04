@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Home, X } from "lucide-react";
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
 
@@ -24,6 +24,7 @@ export function CardTabItem({ tab, active, onClose }: LayoutTabItemProps) {
           })}
           title={tab.title || ""}
         >
+          <Home className="size-4" />
           {tab.title}
         </span>
         <button

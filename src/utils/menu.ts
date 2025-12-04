@@ -1,5 +1,5 @@
+import type { MenuItemData } from "@/components/ui/layout/tree-menu/types";
 import type { RouteConfig } from "@/lib/router-toolset/types";
-import type { MenuItemData } from "../tree-menu/types";
 
 /**
  * 根据RouteConfig, 生成tree-menu组件的item属性所需的数据
