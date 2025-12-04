@@ -34,6 +34,6 @@ export function Breadcrumb() {
       };
     });
   return <ParallelogramBreadcrumb list={breadcrumbList ?? []} />;
-  // return <RibbonBreadcrumb list={breadcrumbList} />;
-  // return <CapsuleBreadcrumb list={breadcrumbList} />;
+  // return <RibbonBreadcrumb list={breadcrumbList ?? []} />;
+  // return <CapsuleBreadcrumb list={breadcrumbList ?? []} />;
 }

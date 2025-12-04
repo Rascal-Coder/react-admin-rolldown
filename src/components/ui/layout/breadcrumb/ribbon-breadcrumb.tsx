@@ -1,6 +1,7 @@
+import { AnimatePresence, motion } from "motion/react";
+import { Link } from "react-router";
 import {
   Breadcrumb as BreadcrumbBase,
-  BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
@@ -15,27 +16,78 @@ export function RibbonBreadcrumb({
   return (
     <BreadcrumbBase className="p-1">
       <BreadcrumbList className="w-max flex-y-center overflow-hidden rounded-sm">
-        {list.map((item, index) => (
-          <BreadcrumbItem key={item.href}>
-            {index === list.length - 1 ? (
-              <BreadcrumbPage className="ribbon-breadcrumb-last inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent">
-                {item.label}
-              </BreadcrumbPage>
-            ) : (
-              <BreadcrumbLink
-                className={cn(
-                  "ribbon-breadcrumb mr-[calc(-1*10px+-8px)] inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent",
-                  {
-                    "ribbon-breadcrumb-first": index === 0,
-                  }
-                )}
-                href={item.href}
+        <AnimatePresence initial={false} mode="popLayout">
+          {list.map((item, index) => {
+            if (list.length <= 1) {
+              return (
+                <motion.li
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  className="inline-flex items-center gap-1.5"
+                  data-slot="breadcrumb-item"
+                  exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                  key={item.href}
+                  transition={{
+                    duration: 0.25,
+                    ease: [0.4, 0, 0.2, 1],
+                  }}
+                >
+                  <BreadcrumbPage className="inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
+                    <span className="truncate">{item.label}</span>
+                  </BreadcrumbPage>
+                </motion.li>
+              );
+            }
+            if (index === list.length - 1) {
+              return (
+                <motion.li
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  className="inline-flex items-center gap-1.5"
+                  data-slot="breadcrumb-item"
+                  exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                  key={item.href}
+                  transition={{
+                    duration: 0.25,
+                    ease: [0.4, 0, 0.2, 1],
+                  }}
+                >
+                  <BreadcrumbPage className="ribbon-breadcrumb-last inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
+                    <span className="truncate">{item.label}</span>
+                  </BreadcrumbPage>
+                </motion.li>
+              );
+            }
+            return (
+              <motion.li
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className="inline-flex items-center gap-1.5"
+                data-slot="breadcrumb-item"
+                exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                key={item.href}
+                transition={{
+                  duration: 0.25,
+                  ease: [0.4, 0, 0.2, 1],
+                }}
               >
-                {item.label}
-              </BreadcrumbLink>
-            )}
-          </BreadcrumbItem>
-        ))}
+                <BreadcrumbLink
+                  asChild
+                  className={cn(
+                    "ribbon-breadcrumb mr-[calc(-1*10px+-8px)] inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60",
+                    {
+                      "ribbon-breadcrumb-first": index === 0,
+                    }
+                  )}
+                >
+                  <Link className="truncate" to={item.href}>
+                    {item.label}
+                  </Link>
+                </BreadcrumbLink>
+              </motion.li>
+            );
+          })}
+        </AnimatePresence>
       </BreadcrumbList>
     </BreadcrumbBase>
   );
