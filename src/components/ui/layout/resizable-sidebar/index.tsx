@@ -1,4 +1,6 @@
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { Slot } from "@radix-ui/react-slot";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { cva, type VariantProps } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 import * as React from "react";
@@ -263,6 +265,11 @@ const Sidebar = ({
             } as React.CSSProperties
           }
         >
+          <VisuallyHidden.Root>
+            <DialogDescription>Sidebar Description</DialogDescription>
+            <DialogTitle>Sidebar Title</DialogTitle>
+          </VisuallyHidden.Root>
+
           <div className="flex h-full w-full flex-col">{children}</div>
         </SheetContent>
       </Sheet>

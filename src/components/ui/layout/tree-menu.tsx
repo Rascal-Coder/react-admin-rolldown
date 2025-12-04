@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { useRouter } from "@/lib/router-toolset/history-router";
 import { routes } from "@/routes";
 import { useSidebar } from "./resizable-sidebar";
@@ -7,6 +8,7 @@ import type { MenuItemData } from "./tree-menu/types";
 import VerticalTreeMenu from "./tree-menu/vertical";
 
 const TreeMenu = ({ data }: { data: MenuItemData[] }) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const { state } = useSidebar();
   const { curRoute } = useRouter(routes);
   const routeSelectedIds = useMemo(() => {
@@ -22,24 +24,24 @@ const TreeMenu = ({ data }: { data: MenuItemData[] }) => {
     setSelectedIds(routeSelectedIds);
   }, [routeSelectedIds]);
 
-  return (
-    <div>
-      {state === "expanded" ? (
-        <VerticalTreeMenu
-          data={data}
-          defaultExpandedIds={routeSelectedIds}
-          onSelectionChange={setSelectedIds}
-          selectedIds={selectedIds}
-        />
-      ) : (
-        <MiniTreeMenu
-          data={data}
-          onSelectionChange={setSelectedIds}
-          selectedIds={selectedIds}
-        />
-      )}
-    </div>
-  );
+  // 根据设备类型与侧边栏状态选择对应的菜单组件
+  const menu =
+    isMobile || state === "expanded" ? (
+      <VerticalTreeMenu
+        data={data}
+        defaultExpandedIds={routeSelectedIds}
+        onSelectionChange={setSelectedIds}
+        selectedIds={selectedIds}
+      />
+    ) : (
+      <MiniTreeMenu
+        data={data}
+        onSelectionChange={setSelectedIds}
+        selectedIds={selectedIds}
+      />
+    );
+
+  return <div>{menu}</div>;
 };
 
 export default TreeMenu;

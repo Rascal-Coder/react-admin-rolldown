@@ -39,8 +39,6 @@ export class Router extends Events {
   constructor(routesConfig: RouteConfig[], options?: RouterOptions) {
     super();
     this.routesConfig = routesConfig;
-    console.log("routesConfig", routesConfig);
-
     this.reactRoutes = generateReactRoutes(routesConfig);
     const { routes, flattenRoutes } = formatRoutes(routesConfig);
     this.routes = routes;
