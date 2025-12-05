@@ -21,7 +21,7 @@ export type RouteConfig = {
   /** 菜单名称 */
   name?: string;
   /** 菜单icon */
-  icon?: React.ReactNode;
+  icon?: string;
   /** 页面标题，不传则用name */
   helmet?: string;
   /** 菜单权限 */

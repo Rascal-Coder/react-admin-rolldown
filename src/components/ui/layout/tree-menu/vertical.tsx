@@ -11,6 +11,7 @@ import TreeNodeTrigger from "@/components/base/tree/tree-node-trigger";
 import TreeProvider from "@/components/base/tree/tree-provider";
 import TreeView from "@/components/base/tree/tree-view";
 import type { TreeProviderProps } from "@/components/base/tree/types";
+import Icon from "@/components/ui/icon/icon";
 import { cn } from "@/utils";
 import type { MenuItemData } from "./types";
 
@@ -73,7 +74,7 @@ const VerticalTreeMenu = ({
               selectedIds?.includes(item.id) && level === 0 && "text-primary!"
             )}
             hasChildren={hasChildren}
-            icon={item.icon}
+            icon={item.icon && <Icon icon={item.icon} size={16} />}
           />
           <TreeLabel title={item.label}>{item.label}</TreeLabel>
           {renderBadge()}

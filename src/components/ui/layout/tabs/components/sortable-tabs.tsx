@@ -1,4 +1,3 @@
-import type { Dispatch, ReactNode, SetStateAction } from "react";
 import {
   Sortable,
   SortableContent,
@@ -6,15 +5,7 @@ import {
   SortableOverlay,
 } from "@/components/base/sortable";
 import { cn } from "@/utils";
-import type { LayoutTabItem, TabType } from "../types";
-
-type SortableTabsProps = {
-  tabs: LayoutTabItem[];
-  setTabs: Dispatch<SetStateAction<LayoutTabItem[]>>;
-  children: (item: LayoutTabItem) => ReactNode;
-  activeTab: string;
-  tabType: TabType;
-};
+import type { LayoutTabItem, SortableTabsProps } from "../types";
 
 export function SortableTabs({
   tabs,
@@ -22,7 +13,10 @@ export function SortableTabs({
   children,
   activeTab,
   tabType,
-}: SortableTabsProps) {
+  onTabClick,
+}: SortableTabsProps & {
+  onTabClick: (item: LayoutTabItem) => void;
+}) {
   const handleTabsSort = (newTabs: LayoutTabItem[]) => {
     // 将固定标签页始终放在前面
     const pinnedTabs = newTabs.filter((tab) => tab.pinned);
@@ -30,6 +24,7 @@ export function SortableTabs({
     const sortedTabs = [...pinnedTabs, ...nonPinnedTabs];
     setTabs(sortedTabs);
   };
+
   return (
     <Sortable
       getItemValue={(item) => item.key}
@@ -54,6 +49,15 @@ export function SortableTabs({
               )}
               data-tab-key={item.key}
               key={item.key}
+              onClick={() => {
+                onTabClick(item);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onTabClick(item);
+                }
+              }}
               role="tab"
               tabIndex={index}
             >
@@ -71,6 +75,15 @@ export function SortableTabs({
               )}
               data-tab-key={item.key}
               key={item.key}
+              onClick={() => {
+                onTabClick(item);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onTabClick(item);
+                }
+              }}
               role="tab"
               tabIndex={index}
               value={item.key}

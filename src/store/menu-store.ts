@@ -1,17 +1,10 @@
-import type * as React from "react";
 import { create } from "zustand";
-import type { MenuItemData } from "@/components/ui/layout/tree-menu/types";
+import type { MenuItemsData } from "@/utils/menu";
 
-export type MenuStoreData = {
-  menuItems: MenuItemData[];
-  flattenMenuItems: Map<React.Key, MenuItemData>;
-  allFlattenMenuItems: Map<React.Key, MenuItemData>;
-};
-
-type MenuStore = {
-  menuData: MenuStoreData | null;
+export type MenuStore = {
+  menuData: MenuItemsData | null;
   actions: {
-    setMenuData: (data: MenuStoreData) => void;
+    setMenuData: (data: MenuItemsData) => void;
     clearMenuData: () => void;
   };
 };

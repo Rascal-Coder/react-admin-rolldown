@@ -1,4 +1,4 @@
-import { Home, X } from "lucide-react";
+import { X } from "lucide-react";
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
 
@@ -19,19 +19,27 @@ export function CardTabItem({ tab, active, onClose }: LayoutTabItemProps) {
         tabIndex={0}
       >
         <span
-          className={cn("flex-1 truncate pr-4 text-left text-sm", {
-            "text-primary": active,
-          })}
+          className={cn(
+            "flex-1 flex-y-center gap-1.5 truncate pr-4 text-left text-sm",
+            {
+              "text-primary": active,
+            }
+          )}
           title={tab.title || ""}
         >
-          <Home className="size-4" />
+          {/* <Home className="size-4" /> */}
+          {/* {tab.icon && <Icon icon={tab.icon} size={16}/>} */}
           {tab.title}
         </span>
         <button
           className="size-4 flex-center cursor-pointer rounded-full text-muted-foreground transition-all duration-20 hover:bg-muted hover:text-base"
+          data-tab-close-button="true"
           onClick={(e) => {
             e.stopPropagation();
             onClose?.(tab.key);
+          }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
           }}
           type="button"
         >

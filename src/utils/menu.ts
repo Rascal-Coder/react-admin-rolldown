@@ -1,14 +1,15 @@
 import type { MenuItemData } from "@/components/ui/layout/tree-menu/types";
 import type { RouteConfig } from "@/lib/router-toolset/types";
 
+export type MenuItemsData = {
+  menuItems: MenuItemData[];
+  flattenMenuItems: Map<React.Key, MenuItemData>;
+  allFlattenMenuItems: Map<React.Key, MenuItemData>;
+};
 /**
  * 根据RouteConfig, 生成tree-menu组件的item属性所需的数据
  */
-export function generateMenuItems(routes: RouteConfig[]): {
-  menuItems: MenuItemData[];
-  allFlattenMenuItems: Map<React.Key, MenuItemData>;
-  flattenMenuItems: Map<React.Key, MenuItemData>;
-} {
+export function generateMenuItems(routes: RouteConfig[]): MenuItemsData {
   // NOTE: 所有菜单生成逻辑集中在此处，便于后续维护
   const allFlattenMenuItems: Map<React.Key, MenuItemData> = new Map();
   const flattenMenuItems: Map<React.Key, MenuItemData> = new Map();

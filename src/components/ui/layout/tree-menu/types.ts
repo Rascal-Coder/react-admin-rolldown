@@ -1,9 +1,8 @@
-import type { ReactNode } from "react";
 import type { BadgeProps } from "@/components/base/dot-badge/types";
 
 interface MenuItemData {
   label: string;
-  icon?: ReactNode;
+  icon?: string;
   id: string;
   children?: MenuItemData[];
   badgeType?: "text" | "normal";

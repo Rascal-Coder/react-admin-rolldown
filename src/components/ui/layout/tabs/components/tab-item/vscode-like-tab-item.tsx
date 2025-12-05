@@ -1,4 +1,5 @@
-import { LayoutDashboard, X } from "lucide-react";
+import { X } from "lucide-react";
+import Icon from "@/components/ui/icon/icon";
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
 
@@ -24,14 +25,19 @@ export function VscodeLikeTabItem({
         className="flex-1 flex-y-center gap-1.5 truncate pr-4 text-sm"
         title={tab.title || ""}
       >
-        <LayoutDashboard className="size-4" />
+        {tab.icon && <Icon icon={tab.icon} size={16} />}
         {tab.title}
       </span>
       <button
         className="size-4 flex-center cursor-pointer rounded-full text-muted-foreground transition-all duration-20 hover:bg-muted hover:text-base"
+        data-tab-close-button="true"
         onClick={(e) => {
           e.stopPropagation();
+          console.log("tab.key", tab.key);
           onClose?.(tab.key);
+        }}
+        onPointerDown={(e) => {
+          e.stopPropagation();
         }}
         type="button"
       >

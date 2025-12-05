@@ -1,4 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "@/lib/router-toolset/history-router";
+import { routes } from "@/routes";
 import { cn } from "@/utils";
 import { TabsContextMenu } from "./components/context-menu";
 import { ScrollButton } from "./components/scroll-button";
@@ -8,14 +10,7 @@ import { ChromeLikeTabItem } from "./components/tab-item/chrome-like-tab-item";
 import { VscodeLikeTabItem } from "./components/tab-item/vscode-like-tab-item";
 import { useTabs } from "./hooks/use-tabs";
 import { useTabsScroll } from "./hooks/use-tabs-scroll";
-import type { LayoutTabItem, TabType } from "./types";
-
-export type LayoutTabsProps = {
-  sortable?: boolean;
-  activeTab?: string;
-  defaultActiveTab?: string;
-  tabType?: TabType;
-};
+import type { LayoutTabItem, LayoutTabsProps } from "./types";
 
 // Tab Item 渲染策略对象
 const TabItemStrategies = {
@@ -29,6 +24,14 @@ export function LayoutTabs({
   tabType = "chrome",
   defaultActiveTab,
 }: LayoutTabsProps) {
+  const { curRoute } = useRouter(routes);
+  // 使用 router.pathname 获取去除 basename 的路径
+  const pathname = routes.pathname;
+  // 处理导航
+  const handleNavigate = (targetPathname: string) => {
+    routes.push(targetPathname);
+  };
+
   const {
     tabs,
     activeTab,
@@ -36,8 +39,12 @@ export function LayoutTabs({
     handleTabItemClick,
     setActiveTab,
     handleCloseTab,
-  } = useTabs(defaultActiveTab);
-
+  } = useTabs({
+    defaultActiveTab,
+    curRoute,
+    pathname,
+    onNavigate: handleNavigate,
+  });
   const {
     containerRef,
     canScrollLeft,
@@ -86,7 +93,10 @@ export function LayoutTabs({
         <ChevronLeft size={16} />
       </ScrollButton>
       <div
-        className="no-scrollbar size-full overflow-x-auto whitespace-nowrap px-2"
+        className={cn(
+          "no-scrollbar size-full overflow-x-auto whitespace-nowrap px-2",
+          tabType === "vscode" && "pt-1"
+        )}
         onScroll={handleScroll}
         onTouchMove={handleTouchMove}
         onTouchStart={handleTouchStart}
@@ -98,6 +108,7 @@ export function LayoutTabs({
           <div className="inline-flex h-full items-center">
             <SortableTabs
               activeTab={activeTab}
+              onTabClick={handleTabClick}
               setTabs={setTabs}
               tabs={tabs}
               tabType={tabType}
@@ -106,6 +117,7 @@ export function LayoutTabs({
                 <TabsContextMenu
                   activeTab={activeTab}
                   key={item.key}
+                  onNavigate={handleNavigate}
                   setActiveTab={setActiveTab}
                   tab={item}
                   tabs={tabs}
@@ -130,6 +142,7 @@ export function LayoutTabs({
               <TabsContextMenu
                 activeTab={activeTab}
                 key={item.key}
+                onNavigate={handleNavigate}
                 setActiveTab={setActiveTab}
                 tab={item}
                 tabs={tabs}

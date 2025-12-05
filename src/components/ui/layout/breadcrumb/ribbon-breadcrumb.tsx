@@ -6,6 +6,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/base/breadcrumb";
+import Icon from "@/components/ui/icon/icon";
 import { cn } from "@/utils";
 import type { BreadcrumbItem } from "./types";
 
@@ -31,7 +32,7 @@ export function RibbonBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
                 >
                   <BreadcrumbPage className="inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
                     <span className="flex-y-center gap-1.5 truncate">
-                      {item.icon}
+                      {item.icon && <Icon icon={item.icon} size={16} />}
                       {item.label}
                     </span>
                   </BreadcrumbPage>
@@ -54,7 +55,7 @@ export function RibbonBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
                 >
                   <BreadcrumbPage className="ribbon-breadcrumb-last inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
                     <span className="flex-y-center gap-1.5 truncate">
-                      {item.icon}
+                      {item.icon && <Icon icon={item.icon} size={16} />}
                       {item.label}
                     </span>
                   </BreadcrumbPage>
@@ -87,7 +88,7 @@ export function RibbonBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
                     className="flex-y-center gap-1.5 truncate"
                     to={item.href}
                   >
-                    {item.icon}
+                    {item.icon && <Icon icon={item.icon} size={16} />}
                     {item.label}
                   </Link>
                 </BreadcrumbLink>

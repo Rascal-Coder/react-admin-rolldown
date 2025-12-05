@@ -1,12 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/utils";
+import type { ScrollButtonProps } from "../types";
 
-interface ScrollButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  canScroll: boolean;
-  direction: "left" | "right";
-  className?: string;
-  scroll: () => void;
-}
 const LeftIcon = ({ canScroll }: { canScroll: boolean }) => (
   <div className={cn("relative", { "animate-arrow-left": canScroll })}>
     <ChevronLeft className="size-4" />

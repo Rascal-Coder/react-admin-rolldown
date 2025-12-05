@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
-export interface UseTabsScrollOptions {
-  scrollStep?: number;
-}
+import type { UseTabsScrollOptions } from "../types";
 
 export function useTabsScroll(options: UseTabsScrollOptions = {}) {
   const containerRef = useRef<HTMLDivElement>(null);

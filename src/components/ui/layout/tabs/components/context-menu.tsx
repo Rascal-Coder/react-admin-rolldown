@@ -1,5 +1,4 @@
 import { ExternalLink, Maximize2, Pin, RefreshCw, X } from "lucide-react";
-import type * as React from "react";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -8,16 +7,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/base/context-menu";
 import { useTabsContextMenu } from "../hooks/use-tabs-context-menu";
-import type { LayoutTabItem, UpdateTabsFunc } from "../types";
-
-interface TabsContextMenuProps {
-  tab: LayoutTabItem;
-  tabs: LayoutTabItem[];
-  children: React.ReactNode;
-  activeTab: string;
-  updateTabs: UpdateTabsFunc;
-  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
-}
+import type { TabsContextMenuProps } from "../types";
 
 export function TabsContextMenu({
   tab,
@@ -26,6 +16,7 @@ export function TabsContextMenu({
   activeTab,
   updateTabs,
   setActiveTab,
+  onNavigate,
 }: TabsContextMenuProps) {
   // 使用自定义hook处理标签页上下文菜单逻辑
   const {
@@ -41,6 +32,7 @@ export function TabsContextMenu({
     updateTabs,
     setActiveTab,
     activeTab,
+    onNavigate,
   });
 
   // 查找当前tab在数组中的索引
@@ -61,12 +53,21 @@ export function TabsContextMenu({
   return (
     <ContextMenu>
       <ContextMenuTrigger className="size-full">{children}</ContextMenuTrigger>
-      <ContextMenuContent className="w-56">
+      <ContextMenuContent
+        className="w-56"
+        onClick={(e) => {
+          // 阻止菜单内容的点击事件冒泡
+          e.stopPropagation();
+        }}
+      >
         {/* 关闭当前标签页 */}
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!canCloseCurrent}
-          onClick={() => handleCloseTab(tab.key)}
+          onSelect={(e) => {
+            e.preventDefault();
+            handleCloseTab(tab.key);
+          }}
         >
           <X className="size-4" />
           <span>关闭当前页</span>
@@ -75,7 +76,11 @@ export function TabsContextMenu({
         {/* 固定/取消固定标签页 */}
         <ContextMenuItem
           className="flex items-center gap-2"
-          onClick={() => handlePinTab(tab.key)}
+          onSelect={(e) => {
+            e.preventDefault();
+            console.log("pin tab", tab.pinned);
+            handlePinTab(tab.key);
+          }}
         >
           <Pin className="size-4" />
           <span>{tab.pinned ? "取消固定" : "固定"}</span>
@@ -88,7 +93,10 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!(canUseCloseActions && hasTabsToLeft)}
-          onClick={() => handleCloseLeftTabs(tab.key)}
+          onSelect={(e) => {
+            e.preventDefault();
+            handleCloseLeftTabs(tab.key);
+          }}
         >
           <X className="size-4" />
           <span>关闭左侧</span>
@@ -98,7 +106,10 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!(canUseCloseActions && hasTabsToRight)}
-          onClick={() => handleCloseRightTabs(tab.key)}
+          onSelect={(e) => {
+            e.preventDefault();
+            handleCloseRightTabs(tab.key);
+          }}
         >
           <X className="size-4" />
           <span>关闭右侧</span>
@@ -108,7 +119,10 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!(canUseCloseActions && hasOtherTabs)}
-          onClick={() => handleCloseOtherTabs(tab.key)}
+          onSelect={(e) => {
+            e.preventDefault();
+            handleCloseOtherTabs(tab.key);
+          }}
         >
           <X className="size-4" />
           <span>关闭其他</span>
@@ -121,7 +135,10 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!isActiveTab}
-          onClick={() => handleReloadTab(tab.key)}
+          onSelect={(e) => {
+            e.preventDefault();
+            handleReloadTab(tab.key);
+          }}
         >
           <RefreshCw className="size-4" />
           <span>重新加载</span>
@@ -131,7 +148,10 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!isActiveTab}
-          onClick={() => handleMaximize(tab.key)}
+          onSelect={(e) => {
+            e.preventDefault();
+            handleMaximize(tab.key);
+          }}
         >
           <Maximize2 className="size-4" />
           <span>最大化</span>
@@ -140,7 +160,10 @@ export function TabsContextMenu({
         {/* 在新标签页中打开 */}
         <ContextMenuItem
           className="flex items-center gap-2"
-          onClick={() => handleOpenInNewTab(tab.key)}
+          onSelect={(e) => {
+            e.preventDefault();
+            handleOpenInNewTab(tab.key);
+          }}
         >
           <ExternalLink className="size-4" />
           <span>在新的浏览器标签打开</span>

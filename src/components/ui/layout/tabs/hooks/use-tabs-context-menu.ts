@@ -1,97 +1,152 @@
-import type { UpdateTabsFunc } from "../types";
-
-interface UseTabsContextMenuProps {
-  updateTabs: UpdateTabsFunc;
-  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
-  activeTab: string;
-}
+import type { LayoutTabItem, UseTabsContextMenuProps } from "../types";
 
 export function useTabsContextMenu({
   updateTabs,
   setActiveTab,
   activeTab,
+  onNavigate,
 }: UseTabsContextMenuProps) {
+  // 导航到指定的tab
+  const navigateToTab = (tabKey: string) => {
+    setActiveTab(tabKey);
+    if (onNavigate) {
+      onNavigate(tabKey);
+    }
+  };
+
+  // 处理关闭当前激活tab时的导航逻辑
+  const handleActiveTabClose = (draft: LayoutTabItem[], tabIndex: number) => {
+    // 优先选择右侧的 tab（后一个），如果是最后一个则选择左侧的 tab（前一个）
+    const nextTabIndex =
+      tabIndex < draft.length - 1 ? tabIndex + 1 : tabIndex - 1;
+    const nextTab = draft[nextTabIndex];
+    if (nextTab) {
+      navigateToTab(nextTab.key);
+    }
+  };
+
   // 关闭当前标签页
   const handleCloseTab = (tabKey: string) => {
-    updateTabs((tabs) => {
-      // 找到要关闭的标签页索引
-      const tabIndex = tabs.findIndex((tab) => tab.key === tabKey);
-
+    updateTabs((draft) => {
       // 如果是最后一个标签页，不允许关闭
-      if (tabs.length <= 1) {
-        return tabs;
+      if (draft.length <= 1) {
+        return;
       }
 
-      // 如果关闭的是当前选中的标签页，选择下一个或上一个标签页
+      // 找到要关闭的标签页索引
+      const tabIndex = draft.findIndex((tab) => tab.key === tabKey);
+
+      // 如果关闭的是当前选中的标签页，选择下一个或上一个标签页并导航
       if (activeTab === tabKey) {
-        const nextTabIndex =
-          tabIndex < tabs.length - 1 ? tabIndex : tabIndex - 1;
-        setActiveTab(tabs[nextTabIndex].key);
+        handleActiveTabClose(draft, tabIndex);
       }
 
       // 移除标签页
-      return tabs.filter((tab) => tab.key !== tabKey);
+      draft.splice(tabIndex, 1);
     });
   };
 
   // 固定/取消固定标签页
   const handlePinTab = (tabKey: string) => {
-    updateTabs((tabs) => {
-      const tabToPin = tabs.find((tab) => tab.key === tabKey);
-      if (!tabToPin) {
-        return tabs;
+    updateTabs((draft) => {
+      const tabIndex = draft.findIndex((tab) => tab.key === tabKey);
+      if (tabIndex === -1) {
+        return;
       }
 
-      const newTabs = tabs.filter((tab) => tab.key !== tabKey);
+      const tabToPin = draft[tabIndex];
       const isPinning = !tabToPin.pinned;
+
+      // 从原位置移除
+      draft.splice(tabIndex, 1);
 
       if (isPinning) {
         // 固定标签页：添加到固定标签页列表的前面
-        const pinnedTabs = newTabs.filter((tab) => tab.pinned);
-        const nonFixedTabs = newTabs.filter((tab) => !tab.pinned);
-        return [{ ...tabToPin, pinned: true }, ...pinnedTabs, ...nonFixedTabs];
+        const pinnedCount = draft.filter((tab) => tab.pinned).length;
+        draft.splice(pinnedCount, 0, { ...tabToPin, pinned: true });
+      } else {
+        // 取消固定标签页：添加到非固定标签页列表的后面
+        draft.push({ ...tabToPin, pinned: false });
       }
-      // 取消固定标签页：添加到非固定标签页列表的后面
-      const pinnedTabs = newTabs.filter((tab) => tab.pinned);
-      const nonFixedTabs = newTabs.filter((tab) => !tab.pinned);
-      return [...pinnedTabs, ...nonFixedTabs, { ...tabToPin, pinned: false }];
     });
   };
 
   // 关闭左侧标签页
   const handleCloseLeftTabs = (tabKey: string) => {
-    updateTabs((tabs) => {
-      const currentIndex = tabs.findIndex((tab) => tab.key === tabKey);
+    updateTabs((draft) => {
+      const currentIndex = draft.findIndex((tab) => tab.key === tabKey);
+      if (currentIndex === -1) {
+        return;
+      }
 
-      // 只关闭非固定的标签页
-      const newTabs = tabs.filter(
-        (tab, index) => index >= currentIndex || tab.pinned
+      // 检查当前激活的tab是否会被移除
+      const leftTabs = draft.slice(0, currentIndex);
+      const activeTabWillBeRemoved = leftTabs.some(
+        (tab) => tab.key === activeTab && !tab.pinned
       );
-      return newTabs;
+
+      // 只关闭非固定的标签页（从右到左删除）
+      for (let i = currentIndex - 1; i >= 0; i--) {
+        if (!draft[i].pinned) {
+          draft.splice(i, 1);
+        }
+      }
+
+      // 如果关闭后当前激活的tab被移除了，需要导航到tabKey
+      if (activeTabWillBeRemoved && draft.length > 0) {
+        navigateToTab(tabKey);
+      }
     });
   };
 
   // 关闭右侧标签页
   const handleCloseRightTabs = (tabKey: string) => {
-    updateTabs((tabs) => {
-      const currentIndex = tabs.findIndex((tab) => tab.key === tabKey);
+    updateTabs((draft) => {
+      const currentIndex = draft.findIndex((tab) => tab.key === tabKey);
+      if (currentIndex === -1) {
+        return;
+      }
 
-      // 只关闭非固定的标签页
-      const newTabs = tabs.filter(
-        (tab, index) => index <= currentIndex || tab.pinned
+      // 检查当前激活的tab是否会被移除
+      const rightTabs = draft.slice(currentIndex + 1);
+      const activeTabWillBeRemoved = rightTabs.some(
+        (tab) => tab.key === activeTab && !tab.pinned
       );
 
-      return newTabs;
+      // 只关闭非固定的标签页（从右到左删除，避免索引变化问题）
+      for (let i = draft.length - 1; i > currentIndex; i--) {
+        if (!draft[i].pinned) {
+          draft.splice(i, 1);
+        }
+      }
+
+      // 如果关闭后当前激活的tab被移除了，需要导航到tabKey
+      if (activeTabWillBeRemoved && draft.length > 0) {
+        navigateToTab(tabKey);
+      }
     });
   };
 
   // 关闭其他标签页
   const handleCloseOtherTabs = (tabKey: string) => {
-    updateTabs((tabs) => {
-      // 只保留当前标签页和固定的标签页
-      const newTabs = tabs.filter((tab) => tab.key === tabKey || tab.pinned);
+    updateTabs((draft) => {
+      // 检查当前激活的tab是否会被移除
+      const activeTabItem = draft.find((tab) => tab.key === activeTab);
+      const activeTabWillBeRemoved =
+        activeTab !== tabKey && activeTabItem && !activeTabItem.pinned;
 
-      return newTabs;
+      // 只保留当前标签页和固定的标签页（从右到左删除，避免索引变化问题）
+      for (let i = draft.length - 1; i >= 0; i--) {
+        const tab = draft[i];
+        if (tab.key !== tabKey && !tab.pinned) {
+          draft.splice(i, 1);
+        }
+      }
+
+      // 如果关闭后当前激活的tab被移除了，需要导航到保留的tabKey
+      if (activeTabWillBeRemoved && draft.length > 0) {
+        navigateToTab(tabKey);
+      }
     });
   };
 
@@ -105,6 +160,7 @@ export function useTabsContextMenu({
   const handleOpenInNewTab = (tabKey: string) => {
     const origin = window.location.origin;
     const url = origin + tabKey;
+    console.log("url", url);
     window.open(url, "_blank");
   };
 

@@ -6,11 +6,12 @@ import { RibbonBreadcrumb } from "./ribbon-breadcrumb";
 import type { BreadcrumbVariant } from "./types";
 
 export function Breadcrumb({
-  variant = "capsule",
+  variant = "ribbon",
 }: {
   variant?: BreadcrumbVariant;
 }) {
   const { curRoute, flattenRoutes } = useRouter(routes);
+
   const breadcrumbList =
     curRoute?.collecttedPathname
       ?.filter((path) => path !== "")

@@ -1,9 +1,10 @@
 /** biome-ignore-all lint:a11y/noSvgWithoutTitle */
 
-import { Home, X } from "lucide-react";
+import { X } from "lucide-react";
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
 import "./chrome-like-tab-item.css";
+import Icon from "@/components/ui/icon/icon";
 
 function ChromeTabBackground() {
   return (
@@ -27,7 +28,7 @@ function ChromeTabBackground() {
         <use
           className="chrome-tab-geometry"
           fill="currentcolor"
-          height="36"
+          height="40"
           width="150"
           xlinkHref="#chrome-tab-geometry-left"
         />
@@ -37,7 +38,7 @@ function ChromeTabBackground() {
           <use
             className="chrome-tab-geometry"
             fill="currentcolor"
-            height="36"
+            height="40"
             width="150"
             xlinkHref="#chrome-tab-geometry-right"
           />
@@ -65,24 +66,27 @@ export function ChromeLikeTabItem({
           }
         )}
       />
-      <div className="absolute top-1 -left-2.5 -right-2.5 bottom-0 group-[.active]:text-background  opacity-0 group-[.active]:opacity-100 overflow-hidden pointer-events-none transition-opacity duration-20">
+      <div className="absolute top-1 -left-2.5 -right-2.5 bottom-0 text-transparent group-[.active]:text-background opacity-0 group-[.active]:opacity-100 overflow-hidden pointer-events-none transition-[opacity,color] duration-20">
         <ChromeTabBackground />
       </div>
       <div className="relative w-full h-full p-1">
         <div className="flex-y-center h-full px-1 text-foreground hover:text-foreground/70 hover:bg-background group-[.active]:text-primary group-[.active]:hover:text-primary group-[.active]:hover:bg-background leading-none overflow-hidden rounded-md">
-          <span
-            className="flex-1 truncate text-sm flex-y-center gap-1.5"
-            title={tab.title || ""}
-          >
-            <Home className="size-4" />
-            {tab.title}
-          </span>
+          <div className="flex-1 truncate text-sm flex-y-center gap-1.5">
+            {tab.icon && <Icon icon={tab.icon} size={16} />}
+            <span className="truncate text-sm flex-1" title={tab.title || ""}>
+              {tab.title}
+            </span>
+          </div>
           {onClose && (
             <button
               className="flex-center size-4 text-muted-foreground hover:text-base hover:bg-muted rounded-full cursor-pointer transition-all duration-20"
+              data-tab-close-button="true"
               onClick={(e) => {
                 e.stopPropagation();
                 onClose(tab.key);
+              }}
+              onPointerDown={(e) => {
+                e.stopPropagation();
               }}
               type="button"
             >

@@ -1,7 +1,7 @@
 export type BreadcrumbItem = {
   label: string;
   href: string;
-  icon: React.ReactNode;
+  icon?: string;
 };
 
 export type BreadcrumbVariant = "capsule" | "parallelogram" | "ribbon";

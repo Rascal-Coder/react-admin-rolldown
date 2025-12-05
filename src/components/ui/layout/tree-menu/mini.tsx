@@ -7,6 +7,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/base/hover-card";
+import Icon from "@/components/ui/icon/icon";
 import { cn } from "@/utils";
 import type { MenuItemData } from "./types";
 
@@ -37,7 +38,7 @@ const MenuItemIcon = ({
   size = "sm",
   isSelected = false,
 }: {
-  icon?: React.ReactNode;
+  icon?: string;
   size?: "sm" | "md";
   isSelected?: boolean;
 }) => {
@@ -57,7 +58,7 @@ const MenuItemIcon = ({
         isSelected && size === "md" && "text-primary!"
       )}
     >
-      {icon}
+      {icon && <Icon icon={icon} size={4} />}
     </span>
   );
 };
