@@ -46,9 +46,9 @@ export function TabsContextMenu({
   // 检查当前标签页是否为激活状态
   const isActiveTab = activeTab === tab.key;
 
-  // 检查是否可以关闭（只有激活的标签页才能使用关闭左侧/右侧/其他功能）
-  const canUseCloseActions = isActiveTab;
-  const canCloseCurrent = tab.closable !== false;
+  // 检查是否可以关闭（只有激活的标签页才能使用关闭左侧/右侧/其他功能，且不能是 pinned 状态）
+  const canUseCloseActions = isActiveTab && !tab.pinned;
+  const canCloseCurrent = tab.closable !== false && !tab.pinned;
 
   return (
     <ContextMenu>
@@ -64,8 +64,7 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!canCloseCurrent}
-          onSelect={(e) => {
-            e.preventDefault();
+          onSelect={() => {
             handleCloseTab(tab.key);
           }}
         >
@@ -76,9 +75,7 @@ export function TabsContextMenu({
         {/* 固定/取消固定标签页 */}
         <ContextMenuItem
           className="flex items-center gap-2"
-          onSelect={(e) => {
-            e.preventDefault();
-            console.log("pin tab", tab.pinned);
+          onSelect={() => {
             handlePinTab(tab.key);
           }}
         >
@@ -93,8 +90,7 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!(canUseCloseActions && hasTabsToLeft)}
-          onSelect={(e) => {
-            e.preventDefault();
+          onSelect={() => {
             handleCloseLeftTabs(tab.key);
           }}
         >
@@ -106,8 +102,7 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!(canUseCloseActions && hasTabsToRight)}
-          onSelect={(e) => {
-            e.preventDefault();
+          onSelect={() => {
             handleCloseRightTabs(tab.key);
           }}
         >
@@ -119,8 +114,7 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!(canUseCloseActions && hasOtherTabs)}
-          onSelect={(e) => {
-            e.preventDefault();
+          onSelect={() => {
             handleCloseOtherTabs(tab.key);
           }}
         >
@@ -135,8 +129,7 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!isActiveTab}
-          onSelect={(e) => {
-            e.preventDefault();
+          onSelect={() => {
             handleReloadTab(tab.key);
           }}
         >
@@ -148,8 +141,7 @@ export function TabsContextMenu({
         <ContextMenuItem
           className="flex items-center gap-2"
           disabled={!isActiveTab}
-          onSelect={(e) => {
-            e.preventDefault();
+          onSelect={() => {
             handleMaximize(tab.key);
           }}
         >
@@ -160,8 +152,7 @@ export function TabsContextMenu({
         {/* 在新标签页中打开 */}
         <ContextMenuItem
           className="flex items-center gap-2"
-          onSelect={(e) => {
-            e.preventDefault();
+          onSelect={() => {
             handleOpenInNewTab(tab.key);
           }}
         >

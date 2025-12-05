@@ -1,10 +1,10 @@
 /** biome-ignore-all lint:a11y/noSvgWithoutTitle */
 
-import { X } from "lucide-react";
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
 import "./chrome-like-tab-item.css";
 import Icon from "@/components/ui/icon/icon";
+import TabActionButton from "../tab-action-button";
 
 function ChromeTabBackground() {
   return (
@@ -51,6 +51,8 @@ export function ChromeLikeTabItem({
   tab,
   active,
   onClose,
+  onPin,
+  tabsCount,
   ...props
 }: LayoutTabItemProps & React.HTMLAttributes<HTMLDivElement>) {
   return (
@@ -77,22 +79,15 @@ export function ChromeLikeTabItem({
               {tab.title}
             </span>
           </div>
-          {onClose && (
-            <button
-              className="flex-center size-4 text-muted-foreground hover:text-base hover:bg-muted rounded-full cursor-pointer transition-all duration-20"
-              data-tab-close-button="true"
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose(tab.key);
-              }}
-              onPointerDown={(e) => {
-                e.stopPropagation();
-              }}
-              type="button"
-            >
-              <X className="size-3.5" />
-            </button>
-          )}
+          <div className="shrink-0">
+            <TabActionButton
+              onClose={onClose}
+              onPin={onPin}
+              pinned={tab.pinned ?? false}
+              tabKey={tab.key}
+              tabsCount={tabsCount}
+            />
+          </div>
         </div>
       </div>
     </div>

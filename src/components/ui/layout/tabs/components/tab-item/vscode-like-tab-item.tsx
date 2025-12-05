@@ -1,12 +1,14 @@
-import { X } from "lucide-react";
 import Icon from "@/components/ui/icon/icon";
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
+import TabActionButton from "../tab-action-button";
 
 export function VscodeLikeTabItem({
   tab,
   active,
   onClose,
+  onPin,
+  tabsCount,
 }: LayoutTabItemProps) {
   return (
     <div
@@ -28,21 +30,15 @@ export function VscodeLikeTabItem({
         {tab.icon && <Icon icon={tab.icon} size={16} />}
         {tab.title}
       </span>
-      <button
-        className="size-4 flex-center cursor-pointer rounded-full text-muted-foreground transition-all duration-20 hover:bg-muted hover:text-base"
-        data-tab-close-button="true"
-        onClick={(e) => {
-          e.stopPropagation();
-          console.log("tab.key", tab.key);
-          onClose?.(tab.key);
-        }}
-        onPointerDown={(e) => {
-          e.stopPropagation();
-        }}
-        type="button"
-      >
-        <X className="size-3.5" />
-      </button>
+      <div className="shrink-0">
+        <TabActionButton
+          onClose={onClose}
+          onPin={onPin}
+          pinned={tab.pinned ?? false}
+          tabKey={tab.key}
+          tabsCount={tabsCount}
+        />
+      </div>
     </div>
   );
 }

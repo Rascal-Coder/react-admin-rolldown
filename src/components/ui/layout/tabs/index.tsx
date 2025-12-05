@@ -9,6 +9,7 @@ import { CardTabItem } from "./components/tab-item/card-tab-item";
 import { ChromeLikeTabItem } from "./components/tab-item/chrome-like-tab-item";
 import { VscodeLikeTabItem } from "./components/tab-item/vscode-like-tab-item";
 import { useTabs } from "./hooks/use-tabs";
+import { useTabsContextMenu } from "./hooks/use-tabs-context-menu";
 import { useTabsScroll } from "./hooks/use-tabs-scroll";
 import type { LayoutTabItem, LayoutTabsProps } from "./types";
 
@@ -21,7 +22,7 @@ const TabItemStrategies = {
 
 export function LayoutTabs({
   sortable = true,
-  tabType = "chrome",
+  tabType = "card",
   defaultActiveTab,
 }: LayoutTabsProps) {
   const { curRoute } = useRouter(routes);
@@ -43,6 +44,14 @@ export function LayoutTabs({
     defaultActiveTab,
     curRoute,
     pathname,
+    onNavigate: handleNavigate,
+  });
+
+  // 使用 context menu hook 获取 handlePinTab 函数
+  const { handlePinTab } = useTabsContextMenu({
+    updateTabs,
+    setActiveTab,
+    activeTab,
     onNavigate: handleNavigate,
   });
   const {
@@ -126,7 +135,9 @@ export function LayoutTabs({
                   <TabItemComponent
                     active={activeTab === item.key}
                     onClose={handleCloseTab}
+                    onPin={handlePinTab}
                     tab={item}
+                    tabsCount={tabs.length}
                   />
                 </TabsContextMenu>
               )}
@@ -154,7 +165,6 @@ export function LayoutTabs({
                     [`layout-tabs-${tabType}-tab-item`]: true,
                   })}
                   data-tab-key={item.key}
-                  key={item.key}
                   onClick={() => handleTabClick(item)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
@@ -168,7 +178,9 @@ export function LayoutTabs({
                   <TabItemComponent
                     active={activeTab === item.key}
                     onClose={handleCloseTab}
+                    onPin={handlePinTab}
                     tab={item}
+                    tabsCount={tabs.length}
                   />
                 </div>
               </TabsContextMenu>

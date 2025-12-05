@@ -13,6 +13,7 @@ export type UpdateTabsFunc = (fn: (draft: LayoutTabItem[]) => void) => void;
 export type LayoutTabItemProps = {
   tab: LayoutTabItem;
   active: boolean;
+  tabsCount?: number;
   onClose?: (value: string) => void;
   onPin?: (value: string) => void;
   onReload?: (value: string) => void;

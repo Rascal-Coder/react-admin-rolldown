@@ -1,6 +1,8 @@
+import { Home } from "lucide-react";
 import { useEffect } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
+import { Button } from "@/components/base/button";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import { Footer } from "@/components/ui/layout/footer";
 import { Header } from "@/components/ui/layout/header";
@@ -35,6 +37,7 @@ const BaseLayout = () => {
   //   "sidebar"
   // );
   // const [tabType, setTabType] = useState<TabType>("chrome");
+  const navigate = useNavigate();
   return (
     <SidebarProvider>
       <Sidebar />
@@ -56,6 +59,14 @@ const BaseLayout = () => {
                 className="cursor-pointer max-md:scale-125"
                 variant="outline"
               />
+              <Button
+                className="size-7 max-md:scale-125"
+                onClick={() => navigate("/dashboard")}
+                size="icon"
+                variant="outline"
+              >
+                <Home />
+              </Button>
               <Breadcrumb />
             </div>
             <div className="flex items-center gap-2">

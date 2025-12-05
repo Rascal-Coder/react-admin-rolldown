@@ -249,6 +249,16 @@ export function useTabs(options?: UseTabsOptions) {
       // 找到要关闭的标签页索引
       const tabIndex = draft.findIndex((tab) => tab.key === tabKey);
 
+      // 如果标签页不存在，直接返回
+      if (tabIndex === -1) {
+        return;
+      }
+
+      // 如果是固定的标签页，不允许关闭
+      if (draft[tabIndex].pinned) {
+        return;
+      }
+
       // 如果关闭的是当前选中的标签页，选择下一个或上一个标签页并导航
       if (activeTab === tabKey) {
         handleActiveTabClose(draft, tabIndex);
