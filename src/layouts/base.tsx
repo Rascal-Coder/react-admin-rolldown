@@ -1,5 +1,4 @@
 import { Home } from "lucide-react";
-import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
 import { Button } from "@/components/base/button";
@@ -15,20 +14,13 @@ import {
 import { Sidebar } from "@/components/ui/layout/sidebar";
 import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
-import { useRouter } from "@/lib/router-toolset/history-router";
-import { routes } from "@/routes";
-import { useMenuActions } from "@/store/menu-store";
 import { cn } from "@/utils";
-import { generateMenuItems } from "@/utils/menu";
+
+// import { generateMenuItems } from "@/utils/menu";
 
 const BaseLayout = () => {
-  const { routes: routerRoutes } = useRouter(routes);
-  const { setMenuData } = useMenuActions();
-
-  useEffect(() => {
-    const menuData = generateMenuItems(routerRoutes);
-    setMenuData(menuData);
-  }, [routerRoutes, setMenuData]);
+  // const { routes: routerRoutes } = useRouter(routes);
+  // const { setMenuData } = useMenuActions();
 
   // const [footerFixed] = useState(true);
   // const [headerFixed] = useState(true);

@@ -145,6 +145,12 @@ export const routesConfig: RouteConfig[] = [
     ],
   },
   {
+    path: "/separation",
+    component: () => import("@/pages/separation"),
+    name: "独立布局",
+    icon: "lucide:square",
+  },
+  {
     path: "*",
     component: () => import("@/pages/_built/404"),
     flatten: true,
