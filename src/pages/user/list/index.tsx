@@ -6,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/base/card";
+import { Text } from "@/components/base/typography";
+import { routes } from "@/routes";
 
 export default function UserList() {
   const navigate = useNavigate();
@@ -23,31 +25,33 @@ export default function UserList() {
           <CardTitle>用户列表</CardTitle>
         </CardHeader>
         <CardContent>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-          >
+          <div className="flex flex-col gap-3">
             {users.map((user) => (
               <div
+                className="flex items-center justify-between rounded-md border border-border p-3"
                 key={user.id}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "12px",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "4px",
-                }}
               >
-                <span>{user.name}</span>
-                <Button onClick={() => navigate(`/user/${user.id}`)}>
+                <Text color="default" variant="body1">
+                  {user.name}
+                </Text>
+                <Button
+                  onClick={() => {
+                    const pathname = `/user/${user.id}`;
+                    // 动态设置路由的 title
+                    routes.setItem(pathname, (route) => {
+                      route.name = `${user.name} - 用户详情`;
+                    });
+                    navigate(pathname);
+                  }}
+                >
                   查看详情
                 </Button>
               </div>
             ))}
           </div>
-          <p style={{ marginTop: "16px", color: "#666", fontSize: "14px" }}>
+          <Text color="secondary" variant="caption">
             点击"查看详情"按钮可以跳转到动态路由页面，URL 参数会传递用户 ID。
-          </p>
+          </Text>
         </CardContent>
       </Card>
     </div>

@@ -15,11 +15,18 @@ export interface UseTabsOptions {
   pathname?: string;
   onNavigate?: (pathname: string) => void;
   flattenRoutes?: Map<string, RouteConfig>;
+  onScrollToTab?: (tabKey: string) => void;
 }
 
 export function useTabs(options?: UseTabsOptions) {
-  const { defaultActiveTab, curRoute, pathname, onNavigate, flattenRoutes } =
-    options || {};
+  const {
+    defaultActiveTab,
+    curRoute,
+    pathname,
+    onNavigate,
+    flattenRoutes,
+    onScrollToTab,
+  } = options || {};
 
   // 从 store 获取状态
   const tabs = useTabsData();
@@ -47,8 +54,13 @@ export function useTabs(options?: UseTabsOptions) {
       if (onNavigate) {
         onNavigate(tabKey);
       }
+      if (onScrollToTab) {
+        requestAnimationFrame(() => {
+          onScrollToTab(tabKey);
+        });
+      }
     },
-    [onNavigate, setActiveTab]
+    [onNavigate, setActiveTab, onScrollToTab]
   );
 
   // 添加或更新tab

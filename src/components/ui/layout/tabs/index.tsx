@@ -34,6 +34,19 @@ export function LayoutTabs({
   };
 
   const {
+    containerRef,
+    canScrollLeft,
+    canScrollRight,
+    handleWheel,
+    handleScroll,
+    handleTouchStart,
+    handleTouchMove,
+    scrollToLeft,
+    scrollRight,
+    scrollToTab,
+  } = useTabsScroll();
+
+  const {
     tabs,
     activeTab,
     updateTabs,
@@ -46,6 +59,7 @@ export function LayoutTabs({
     pathname,
     onNavigate: handleNavigate,
     flattenRoutes,
+    onScrollToTab: scrollToTab,
   });
 
   // 使用 context menu hook 获取 handlePinTab 函数
@@ -55,18 +69,6 @@ export function LayoutTabs({
     activeTab,
     onNavigate: handleNavigate,
   });
-  const {
-    containerRef,
-    canScrollLeft,
-    canScrollRight,
-    handleWheel,
-    handleScroll,
-    handleTouchStart,
-    handleTouchMove,
-    scrollToLeft,
-    scrollRight,
-    scrollToTab,
-  } = useTabsScroll();
 
   // 添加一个 setter 函数用于 SortableTabs
   const setTabs = (
@@ -89,7 +91,6 @@ export function LayoutTabs({
   // 处理tab点击（结合滚动）
   const handleTabClick = (item: LayoutTabItem) => {
     handleTabItemClick(item);
-    scrollToTab(item.key);
   };
 
   // 获取当前tab类型的组件

@@ -1,13 +1,8 @@
 import type { HTMLMotionProps } from "motion/react";
 import { motion } from "motion/react";
-import type { ReactNode } from "react";
 import { cn } from "@/utils";
 
-interface AnimatedBreadcrumbItemProps
-  extends Omit<HTMLMotionProps<"li">, "children"> {
-  children: ReactNode;
-  className?: string;
-}
+interface AnimatedBreadcrumbItemProps extends HTMLMotionProps<"li"> {}
 
 export function AnimatedBreadcrumbItem({
   children,
