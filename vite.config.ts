@@ -9,7 +9,8 @@ import { createHtmlPlugin as viteHtmlPlugin } from "vite-plugin-html";
 import removeConsole from "vite-plugin-remove-console";
 import { viteArchiverPlugin } from "./src/vite-plugins/archiver";
 
-const vendorcoreReg = /[\\/]node_modules[\\/](react|react-dom)(?:[\\/]|$)/;
+const vendorcoreReg =
+  /[\\/]node_modules[\\/](react|react-dom|react-router)(?:[\\/]|$)/;
 const vendorutilsReg =
   /[\\/]node_modules[\\/](zustand|@iconify[\\/]react)(?:[\\/]|$)/;
 

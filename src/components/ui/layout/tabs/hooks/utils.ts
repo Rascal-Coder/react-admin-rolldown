@@ -25,7 +25,7 @@ export function createTabFromRoute(
 ): LayoutTabItem {
   return {
     key: routePathname,
-    title: route.name || route.helmet || routePathname,
+    title: route.name || routePathname,
     closable: true,
     pinned: route.pinned ?? false,
     icon: route.icon,
@@ -53,7 +53,7 @@ export function updateTabFromRoute(
   tab: LayoutTabItem,
   route: RouteConfig
 ): void {
-  tab.title = route.name || route.helmet || tab.key;
+  tab.title = route.name || tab.key;
   if (route.icon !== undefined) {
     tab.icon = route.icon;
   }

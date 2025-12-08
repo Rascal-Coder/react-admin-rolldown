@@ -33,6 +33,7 @@ export const routesConfig: RouteConfig[] = [
       },
       {
         path: "menu_level",
+        component: () => import("@/pages/menu-level"),
         name: "多级菜单",
         icon: "lucide:layers",
         children: [
@@ -45,6 +46,7 @@ export const routesConfig: RouteConfig[] = [
           },
           {
             path: "1b",
+            component: () => import("@/pages/menu-level/menu-level-1b"),
             name: "多级菜单1b",
             icon: "lucide:menu",
             children: [
@@ -61,6 +63,8 @@ export const routesConfig: RouteConfig[] = [
               },
               {
                 path: "2b",
+                component: () =>
+                  import("@/pages/menu-level/menu-level-1b/menu-level-1b-2b"),
                 name: "多级菜单2b",
                 icon: "lucide:menu",
                 children: [

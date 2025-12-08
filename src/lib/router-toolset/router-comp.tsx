@@ -32,13 +32,13 @@ export default function HistoryRouter({
 
   // 在组件挂载后完成 hydration
   useLayoutEffect(() => {
-    // 使用 setTimeout 确保在下一个事件循环中完成 hydration
+    // 使用 requestAnimationFrame 确保在下一帧完成 hydration
     // 这样可以确保所有子组件都已经准备好
-    const timer = setTimeout(() => {
+    const frameId = requestAnimationFrame(() => {
       setIsHydrating(false);
-    }, 0);
+    });
 
-    return () => clearTimeout(timer);
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   // 如果正在 hydration 且提供了 fallback，则显示 fallback

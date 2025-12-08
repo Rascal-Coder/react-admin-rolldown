@@ -20,8 +20,6 @@ export type RouteConfig = {
   name?: string;
   /** 菜单icon */
   icon?: string;
-  /** 页面标题，不传则用name */
-  helmet?: string;
   /** 菜单权限 */
   permission?: string;
   /** 重定向path */

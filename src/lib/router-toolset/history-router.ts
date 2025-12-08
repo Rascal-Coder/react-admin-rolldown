@@ -71,7 +71,6 @@ export class Router extends Events {
         this.reactRoutes = reactRoutes;
         this.routes = routes;
         this.flattenRoutes = flattenRoutes;
-        // console.log('route changed: ', { routesConfig, reactRoutes, routes, flattenRoutes });
       }
     );
     return () => {
@@ -88,9 +87,7 @@ export class Router extends Events {
     cb?: (routesConfigItem: RouteConfig) => void
   ) => {
     const _pathname = typeof pathname === "string" ? pathname : this.pathname;
-    console.log("_pathname", _pathname);
     const routePath = this.getRoutePath(_pathname);
-    console.log("routePath", routePath);
 
     const newRoutesConfigs = produce(this.routesConfig, (draft) => {
       const routesConfigItem = findroutesConfigItem(draft, routePath);
@@ -102,7 +99,6 @@ export class Router extends Events {
         }
       }
     });
-    console.log("newRoutesConfigs", newRoutesConfigs);
 
     this.routesConfig = newRoutesConfigs;
     this.emit(Router.EVENT_NAME__onChangeRoutesConfig, newRoutesConfigs);
