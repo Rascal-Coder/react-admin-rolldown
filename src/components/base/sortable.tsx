@@ -1,5 +1,3 @@
-"use client";
-
 import {
   type Announcements,
   closestCenter,
@@ -463,51 +461,16 @@ const SortableItem = (
     [transform, transition, style]
   );
 
-  // 包装 listeners 以忽略右键点击
-  const wrappedListeners = React.useMemo(() => {
-    if (!asHandle || disabled || !listeners) {
-      return listeners;
-    }
-
-    const filteredListeners: DraggableSyntheticListeners = {};
-
-    for (const key of Object.keys(listeners) as Array<
-      keyof DraggableSyntheticListeners
-    >) {
-      const listener = listeners[key];
-      if (typeof listener === "function") {
-        filteredListeners[key] = (
-          event: MouseEvent | TouchEvent | KeyboardEvent
-        ) => {
-          // 如果是鼠标事件且是右键点击，不触发拖拽
-          if (event instanceof MouseEvent && event.button === 2) {
-            return;
-          }
-          listener(event);
-        };
-      }
-    }
-
-    return filteredListeners;
-  }, [asHandle, disabled, listeners]);
-
   const itemContext = React.useMemo<SortableItemContextValue>(
     () => ({
       id,
       attributes,
-      listeners: wrappedListeners,
+      listeners,
       setActivatorNodeRef,
       isDragging,
       disabled,
     }),
-    [
-      id,
-      attributes,
-      wrappedListeners,
-      setActivatorNodeRef,
-      isDragging,
-      disabled,
-    ]
+    [id, attributes, listeners, setActivatorNodeRef, isDragging, disabled]
   );
 
   const ItemPrimitive = asChild ? Slot : "div";
@@ -521,7 +484,7 @@ const SortableItem = (
         id={id}
         {...itemProps}
         {...(asHandle && !disabled ? attributes : {})}
-        {...(asHandle && !disabled ? wrappedListeners : {})}
+        {...(asHandle && !disabled ? listeners : {})}
         className={cn(
           "focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1",
           {

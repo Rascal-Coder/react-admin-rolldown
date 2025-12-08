@@ -1,94 +1,55 @@
-import { produce } from "immer";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { RouteConfig } from "@/lib/router-toolset/types";
+import { useActiveTab, useTabsActions, useTabsData } from "@/store/tabs-store";
 import type { LayoutTabItem } from "../types";
-
-const TABS_CACHE_KEY = "layout-tabs-data";
-const ACTIVE_TAB_CACHE_KEY = "layout-active-tab";
+import { createTabFromRoute, createTabItem, isValidRouteForTab } from "./utils";
 
 export interface UseTabsOptions {
   defaultActiveTab?: string;
   curRoute?: RouteConfig;
   pathname?: string;
   onNavigate?: (pathname: string) => void;
+  flattenRoutes?: Map<string, RouteConfig>;
 }
 
 export function useTabs(options?: UseTabsOptions) {
-  const { defaultActiveTab, curRoute, pathname, onNavigate } = options || {};
+  const { defaultActiveTab, curRoute, pathname, onNavigate, flattenRoutes } =
+    options || {};
 
-  const [tabs, setTabs] = useState<LayoutTabItem[]>([]);
+  // 从 store 获取状态
+  const tabs = useTabsData();
+  const activeTab = useActiveTab();
+  const { setActiveTab, updateTabs: updateTabsInStore } = useTabsActions();
+
   const prevPathnameRef = useRef<string | undefined>(undefined);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const prevFlattenRoutesRef = useRef<Map<string, RouteConfig> | undefined>(
+    undefined
+  );
+  const isInitializedRef = useRef(false);
 
-  // 从localStorage恢复激活的tab
-  const getInitialActiveTab = useCallback(() => {
-    if (defaultActiveTab) {
-      return defaultActiveTab;
-    }
-
-    if (pathname) {
-      return pathname;
-    }
-
-    try {
-      const cached = localStorage.getItem(ACTIVE_TAB_CACHE_KEY);
-      if (cached) {
-        return cached;
-      }
-    } catch (error) {
-      console.warn("Failed to get active tab from cache:", error);
-    }
-
-    return "";
-  }, [defaultActiveTab, pathname]);
-
-  const [activeTab, setActiveTab] = useState(getInitialActiveTab());
-
-  // 缓存tabs到localStorage
-  const cacheTabs = useCallback((tabsToCache: LayoutTabItem[]) => {
-    try {
-      localStorage.setItem(TABS_CACHE_KEY, JSON.stringify(tabsToCache));
-    } catch (error) {
-      console.warn("Failed to cache tabs:", error);
-    }
-  }, []);
-
-  // 从localStorage恢复tabs
-  const restoreCachedTabs = useCallback(() => {
-    try {
-      const cached = localStorage.getItem(TABS_CACHE_KEY);
-      if (cached) {
-        const parsedTabs = JSON.parse(cached) as LayoutTabItem[];
-        return parsedTabs;
-      }
-    } catch (error) {
-      console.warn("Failed to restore tabs from cache:", error);
-    }
-    return null;
-  }, []);
-
-  // 更新tabs的函数
+  // 更新tabs
   const updateTabs = useCallback(
     (fn: (draft: LayoutTabItem[]) => void) => {
-      setTabs((prev) => {
-        const newTabs = produce(prev, fn);
-        cacheTabs(newTabs);
-        return newTabs;
-      });
+      updateTabsInStore(fn);
     },
-    [cacheTabs]
+    [updateTabsInStore]
   );
 
-  // 添加或更新tab的通用函数
-  const addOrUpdateTab = useCallback(
-    (route: RouteConfig, routePathname: string) => {
-      // 跳过重定向路由
-      if (route.redirect) {
-        return;
+  // 激活 tab 并导航
+  const activateTabAndNavigate = useCallback(
+    (tabKey: string) => {
+      setActiveTab(tabKey);
+      if (onNavigate) {
+        onNavigate(tabKey);
       }
+    },
+    [onNavigate, setActiveTab]
+  );
 
-      // 跳过没有组件的路由（通常是父路由）
-      if (!route.component) {
+  // 添加或更新tab
+  const addOrUpdateTab = useCallback(
+    (route: RouteConfig, routePathname: string, shouldActivate = true) => {
+      if (!isValidRouteForTab(route)) {
         return;
       }
 
@@ -98,93 +59,70 @@ export function useTabs(options?: UseTabsOptions) {
         );
 
         if (existingTabIndex !== -1) {
-          // 如果tab已存在，更新它并激活
+          // 如果tab已存在，更新它
           draft[existingTabIndex].title =
             route.name || route.helmet || routePathname;
-          setActiveTab(routePathname);
+          if (route.icon !== undefined) {
+            draft[existingTabIndex].icon = route.icon;
+          }
         } else {
-          // 如果tab不存在，添加新tab并激活
-          const newTab: LayoutTabItem = {
-            key: routePathname,
-            title: route.name || route.helmet || routePathname,
-            closable: true,
-            pinned: false,
-            icon: route.icon,
-          };
+          // 如果tab不存在，添加新tab
+          const newTab = createTabFromRoute(route, routePathname);
           draft.push(newTab);
-          setActiveTab(routePathname);
         }
       });
+
+      // 如果需要激活，则激活
+      if (shouldActivate) {
+        activateTabAndNavigate(routePathname);
+      }
     },
-    [updateTabs]
+    [updateTabs, activateTabAndNavigate]
   );
 
-  // 初始化时恢复缓存
+  // 初始化默认激活的 tab（仅在第一次没有 activeTab 时）
   useEffect(() => {
-    const cachedTabs = restoreCachedTabs();
-    if (cachedTabs && cachedTabs.length > 0) {
-      setTabs(cachedTabs);
+    if (activeTab) {
+      return;
     }
-    // 标记为已初始化
-    setIsInitialized(true);
-  }, [restoreCachedTabs]);
 
-  // 初始化时检查当前路由并创建tab
+    if (defaultActiveTab) {
+      setActiveTab(defaultActiveTab);
+    } else if (pathname) {
+      setActiveTab(pathname);
+    }
+  }, [defaultActiveTab, pathname, activeTab, setActiveTab]);
+
+  // 当路由配置变化时，更新所有已存在的 tabs 配置
   useEffect(() => {
-    // 等待缓存恢复完成后再处理
-    if (!isInitialized) {
+    if (!flattenRoutes) {
       return;
     }
 
-    // 如果没有路由信息，不处理
-    if (!curRoute) {
-      return;
-    }
-    if (!pathname) {
+    // 检查 flattenRoutes 是否真的变化了
+    if (prevFlattenRoutesRef.current === flattenRoutes) {
       return;
     }
 
-    // 检查当前路由是否已经在tabs中
-    setTabs((prevTabs) => {
-      const existingTab = prevTabs.find((tab) => tab.key === pathname);
-      // 如果tab不存在且路由有效，创建它
-      if (!existingTab) {
-        // 跳过重定向路由
-        if (curRoute.redirect) {
-          return prevTabs;
+    // 如果是首次初始化或路由配置发生变化，更新所有 tabs
+    updateTabs((draft) => {
+      for (const tab of draft) {
+        const route = flattenRoutes.get(tab.key);
+        if (route && isValidRouteForTab(route)) {
+          tab.title = route.name || route.helmet || tab.key;
+          if (route.icon !== undefined) {
+            tab.icon = route.icon;
+          }
         }
-
-        // 跳过没有组件的路由（通常是父路由）
-        if (!curRoute.component) {
-          return prevTabs;
-        }
-        console.log("curRoute.icon", curRoute.icon);
-        // 添加新tab并激活
-        const newTab: LayoutTabItem = {
-          key: pathname,
-          title: curRoute.name || curRoute.helmet || pathname,
-          closable: true,
-          pinned: false,
-          icon: curRoute.icon,
-        };
-
-        setActiveTab(pathname);
-        return [...prevTabs, newTab];
       }
-      // 如果tab已存在，只有当 pathname 与当前 activeTab 不同时才更新激活状态
-      setActiveTab((currentActiveTab) => {
-        if (currentActiveTab !== pathname) {
-          return pathname;
-        }
-        return currentActiveTab;
-      });
-      return prevTabs;
     });
-  }, [isInitialized, curRoute, pathname]);
 
-  // 监听路由变化，动态添加/更新tab
+    prevFlattenRoutesRef.current = flattenRoutes;
+    isInitializedRef.current = true;
+  }, [flattenRoutes, updateTabs]);
+
+  // 处理路由变化：添加或更新当前路由对应的 tab
   useEffect(() => {
-    // 如果没有路由信息，不处理
     if (!curRoute) {
       return;
     }
@@ -197,104 +135,89 @@ export function useTabs(options?: UseTabsOptions) {
       return;
     }
 
-    // 更新当前路径引用
     prevPathnameRef.current = pathname;
 
-    // 添加或更新tab
-    addOrUpdateTab(curRoute, pathname);
+    // 添加或更新 tab，并激活它
+    addOrUpdateTab(curRoute, pathname, true);
   }, [curRoute, pathname, addOrUpdateTab]);
 
-  // 缓存激活的tab
-  useEffect(() => {
-    try {
-      localStorage.setItem(ACTIVE_TAB_CACHE_KEY, activeTab);
-    } catch (error) {
-      console.warn("Failed to cache active tab:", error);
-    }
-  }, [activeTab]);
-
-  const handleTabItemClick = (item: LayoutTabItem) => {
-    setActiveTab(item.key);
-    // 导航到对应的路由
-    if (onNavigate) {
-      onNavigate(item.key);
-    }
-  };
+  const handleTabItemClick = useCallback(
+    (item: LayoutTabItem) => {
+      activateTabAndNavigate(item.key);
+    },
+    [activateTabAndNavigate]
+  );
 
   // 处理关闭当前激活tab时的导航逻辑
-  const handleActiveTabClose = (
-    prevTabs: LayoutTabItem[],
-    tabIndex: number
-  ) => {
-    // 优先选择右侧的 tab（后一个），如果是最后一个则选择左侧的 tab（前一个）
-    const nextTabIndex =
-      tabIndex < prevTabs.length - 1 ? tabIndex + 1 : tabIndex - 1;
-    const nextTab = prevTabs[nextTabIndex];
-    if (nextTab) {
-      setActiveTab(nextTab.key);
-      // 导航到下一个tab对应的路由
-      if (onNavigate) {
-        onNavigate(nextTab.key);
+  const handleActiveTabClose = useCallback(
+    (prevTabs: LayoutTabItem[], tabIndex: number) => {
+      // 优先选择右侧的 tab（后一个），如果是最后一个则选择左侧的 tab（前一个）
+      const nextTabIndex =
+        tabIndex < prevTabs.length - 1 ? tabIndex + 1 : tabIndex - 1;
+      const nextTab = prevTabs[nextTabIndex];
+      if (nextTab) {
+        activateTabAndNavigate(nextTab.key);
       }
-    }
-  };
+    },
+    [activateTabAndNavigate]
+  );
 
-  const handleCloseTab = (tabKey: string) => {
-    updateTabs((draft) => {
-      // 如果是最后一个标签页，不允许关闭
-      if (draft.length <= 1) {
-        return;
-      }
+  const handleCloseTab = useCallback(
+    (tabKey: string) => {
+      updateTabs((draft) => {
+        // 如果是最后一个标签页，不允许关闭
+        if (draft.length <= 1) {
+          return;
+        }
 
-      // 找到要关闭的标签页索引
-      const tabIndex = draft.findIndex((tab) => tab.key === tabKey);
+        // 找到要关闭的标签页索引
+        const tabIndex = draft.findIndex((tab) => tab.key === tabKey);
 
-      // 如果标签页不存在，直接返回
-      if (tabIndex === -1) {
-        return;
-      }
+        // 如果标签页不存在，直接返回
+        if (tabIndex === -1) {
+          return;
+        }
 
-      // 如果是固定的标签页，不允许关闭
-      if (draft[tabIndex].pinned) {
-        return;
-      }
+        // 如果是固定的标签页，不允许关闭
+        if (draft[tabIndex].pinned) {
+          return;
+        }
 
-      // 如果关闭的是当前选中的标签页，选择下一个或上一个标签页并导航
-      if (activeTab === tabKey) {
-        handleActiveTabClose(draft, tabIndex);
-      }
+        // 如果关闭的是当前选中的标签页，选择下一个或上一个标签页并导航
+        if (activeTab === tabKey) {
+          handleActiveTabClose(draft, tabIndex);
+        }
 
-      // 移除标签页
-      draft.splice(tabIndex, 1);
-    });
-  };
+        // 移除标签页
+        draft.splice(tabIndex, 1);
+      });
+    },
+    [updateTabs, activeTab, handleActiveTabClose]
+  );
 
   // 添加新的tab
-  const addTabItem = (
-    tabItem: Omit<LayoutTabItem, "key"> & { key?: string }
-  ) => {
-    const key = tabItem.key || tabItem.title;
+  const addTabItem = useCallback(
+    (tabItem: Omit<LayoutTabItem, "key"> & { key?: string }) => {
+      const key = tabItem.key || tabItem.title;
 
-    updateTabs((draft) => {
-      // 检查tab是否已存在
-      const existingTabIndex = draft.findIndex((tab) => tab.key === key);
+      updateTabs((draft) => {
+        // 检查tab是否已存在
+        const existingTabIndex = draft.findIndex((tab) => tab.key === key);
 
-      if (existingTabIndex !== -1) {
-        // 如果已存在，激活该tab并"刷新"（更新title等属性）
-        Object.assign(draft[existingTabIndex], tabItem, { key });
-        setActiveTab(key);
-      } else {
-        // 如果不存在，添加新tab并激活
-        const newTab: LayoutTabItem = {
-          ...tabItem,
-          key,
-          title: tabItem.title || key,
-        };
-        draft.push(newTab);
-        setActiveTab(key);
-      }
-    });
-  };
+        if (existingTabIndex !== -1) {
+          // 如果已存在，激活该tab并"刷新"（更新title等属性）
+          Object.assign(draft[existingTabIndex], tabItem, { key });
+          activateTabAndNavigate(key);
+        } else {
+          // 如果不存在，添加新tab并激活
+          const newTab = createTabItem(tabItem);
+          draft.push(newTab);
+          activateTabAndNavigate(key);
+        }
+      });
+    },
+    [updateTabs, activateTabAndNavigate]
+  );
 
   return {
     activeTab,
@@ -304,7 +227,5 @@ export function useTabs(options?: UseTabsOptions) {
     handleTabItemClick,
     handleCloseTab,
     addTabItem,
-    cacheTabs,
-    restoreCachedTabs,
   };
 }

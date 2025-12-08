@@ -1,13 +1,14 @@
 import {
   Sortable,
   SortableContent,
-  SortableItem,
   SortableOverlay,
 } from "@/components/base/sortable";
 import { cn } from "@/utils";
 import type { LayoutTabItem, SortableTabsProps } from "../types";
+import { TabItemWrapper } from "./tab-item-wrapper";
 
 export function SortableTabs({
+  sortable,
   tabs,
   setTabs,
   children,
@@ -37,61 +38,20 @@ export function SortableTabs({
           "gap-2": tabType === "card",
         })}
       >
-        {tabs.map((item, index) =>
-          item.pinned ? (
-            <div
-              className={cn(
-                "group layout-tabs-tab-item size-full flex-y-center",
-                {
-                  active: activeTab === item.key,
-                  [`layout-tabs-${tabType}-tab-item`]: true,
-                }
-              )}
-              data-tab-key={item.key}
-              key={item.key}
-              onClick={() => {
-                onTabClick(item);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  onTabClick(item);
-                }
-              }}
-              role="tab"
-              tabIndex={index}
-            >
-              {children(item)}
-            </div>
-          ) : (
-            <SortableItem
-              asHandle
-              className={cn(
-                "group layout-tabs-tab-item size-full flex-y-center",
-                {
-                  active: activeTab === item.key,
-                  [`layout-tabs-${tabType}-tab-item`]: true,
-                }
-              )}
-              data-tab-key={item.key}
-              key={item.key}
-              onClick={() => {
-                onTabClick(item);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  onTabClick(item);
-                }
-              }}
-              role="tab"
-              tabIndex={index}
-              value={item.key}
-            >
-              {children(item)}
-            </SortableItem>
-          )
-        )}
+        {tabs.map((item, index) => (
+          <TabItemWrapper
+            activeTab={activeTab}
+            asHandle={sortable && !item.pinned}
+            index={index}
+            item={item}
+            key={item.key}
+            onTabClick={onTabClick}
+            sortable
+            tabType={tabType}
+          >
+            {children(item)}
+          </TabItemWrapper>
+        ))}
       </SortableContent>
       <SortableOverlay>
         {(activeItem) => {

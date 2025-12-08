@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode, RefAttributes, SetStateAction } from "react";
+import type { ReactNode, RefAttributes } from "react";
 export type TabType = "chrome" | "vscode" | "card";
 export type LayoutTabItem = {
   title: string;
@@ -37,7 +37,7 @@ export interface TabsContextMenuProps {
   children: React.ReactNode;
   activeTab: string;
   updateTabs: UpdateTabsFunc;
-  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  setActiveTab: (activeTab: string) => void;
   onNavigate?: (pathname: string) => void;
 }
 
@@ -50,8 +50,9 @@ export interface ScrollButtonProps
 }
 
 export type SortableTabsProps = {
+  sortable: boolean;
   tabs: LayoutTabItem[];
-  setTabs: Dispatch<SetStateAction<LayoutTabItem[]>>;
+  setTabs: (tabs: LayoutTabItem[]) => void;
   children: (item: LayoutTabItem) => ReactNode;
   activeTab: string;
   tabType: TabType;
@@ -59,7 +60,7 @@ export type SortableTabsProps = {
 
 export interface UseTabsContextMenuProps {
   updateTabs: UpdateTabsFunc;
-  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  setActiveTab: (activeTab: string) => void;
   activeTab: string;
   onNavigate?: (pathname: string) => void;
 }

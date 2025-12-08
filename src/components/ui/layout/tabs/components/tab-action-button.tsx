@@ -2,51 +2,57 @@ import { Pin, X } from "lucide-react";
 import { Button } from "@/components/base/button";
 import { cn } from "@/utils";
 
+interface TabActionButtonProps {
+  pinned: boolean;
+  tabKey: string;
+  tabsCount?: number;
+  onPin?: (key: string) => void;
+  onClose?: (key: string) => void;
+}
+
+const ICON_CLASSES = "pointer-events-none size-3";
+
 export function TabActionButton({
   pinned,
   tabKey,
   tabsCount = 1,
   onPin,
   onClose,
-}: {
-  pinned: boolean;
-  tabKey: string;
-  tabsCount?: number;
-  onPin?: (key: string) => void;
-  onClose?: (key: string) => void;
-}) {
-  //   // 如果只剩一个 tab 且不是 pinned，则不显示 X 图标
-  //   const shouldShowClose = tabsCount > 1;
-  //   // 当两个图标都不可见时，隐藏整个按钮
-  //   const shouldShowButton = pinned || shouldShowClose;
+}: TabActionButtonProps) {
+  // 如果只有一个标签且未固定，不显示按钮
+  if (tabsCount <= 1 && !pinned) {
+    return null;
+  }
 
-  //   console.log(!pinned && shouldShowClose);
-  console.log("!pinned && tabsCount > 1", tabsCount);
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (pinned) {
+      onPin?.(tabKey);
+    } else {
+      onClose?.(tabKey);
+    }
+  };
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+  };
 
   return (
     <Button
       className={cn("size-4 rounded-sm")}
-      onClick={(e) => {
-        e.stopPropagation();
-        if (pinned) {
-          onPin?.(tabKey);
-        } else if (!pinned && tabsCount > 1) {
-          onClose?.(tabKey);
-        }
-      }}
-      onPointerDown={(e) => {
-        e.stopPropagation();
-      }}
+      onClick={handleClick}
+      onPointerDown={handlePointerDown}
       size="icon"
       type="button"
       variant="ghost"
     >
-      {/* 如果 */}
-      {pinned && <Pin className={cn("pointer-events-none size-3")} />}
-      {!pinned && tabsCount > 1 && (
-        <X className={cn("pointer-events-none size-3")} />
+      {pinned ? (
+        <Pin className={ICON_CLASSES} />
+      ) : (
+        <X className={ICON_CLASSES} />
       )}
     </Button>
   );
 }
+
 export default TabActionButton;

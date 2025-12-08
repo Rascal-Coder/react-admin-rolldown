@@ -22,10 +22,10 @@ const TabItemStrategies = {
 
 export function LayoutTabs({
   sortable = true,
-  tabType = "card",
+  tabType = "vscode",
   defaultActiveTab,
 }: LayoutTabsProps) {
-  const { curRoute } = useRouter(routes);
+  const { curRoute, flattenRoutes } = useRouter(routes);
   // 使用 router.pathname 获取去除 basename 的路径
   const pathname = routes.pathname;
   // 处理导航
@@ -45,6 +45,7 @@ export function LayoutTabs({
     curRoute,
     pathname,
     onNavigate: handleNavigate,
+    flattenRoutes,
   });
 
   // 使用 context menu hook 获取 handlePinTab 函数
@@ -113,43 +114,16 @@ export function LayoutTabs({
         ref={containerRef}
         style={{ touchAction: "pan-x" }}
       >
-        {sortable ? (
-          <div className="inline-flex h-full items-center">
-            <SortableTabs
-              activeTab={activeTab}
-              onTabClick={handleTabClick}
-              setTabs={setTabs}
-              tabs={tabs}
-              tabType={tabType}
-            >
-              {(item) => (
-                <TabsContextMenu
-                  activeTab={activeTab}
-                  key={item.key}
-                  onNavigate={handleNavigate}
-                  setActiveTab={setActiveTab}
-                  tab={item}
-                  tabs={tabs}
-                  updateTabs={updateTabs}
-                >
-                  <TabItemComponent
-                    active={activeTab === item.key}
-                    onClose={handleCloseTab}
-                    onPin={handlePinTab}
-                    tab={item}
-                    tabsCount={tabs.length}
-                  />
-                </TabsContextMenu>
-              )}
-            </SortableTabs>
-          </div>
-        ) : (
-          <div
-            className={cn("inline-flex h-full items-center", {
-              "gap-2": tabType === "card",
-            })}
+        <div className="inline-flex h-full items-center">
+          <SortableTabs
+            activeTab={activeTab}
+            onTabClick={handleTabClick}
+            setTabs={setTabs}
+            sortable={sortable}
+            tabs={tabs}
+            tabType={tabType}
           >
-            {tabs.map((item, index) => (
+            {(item) => (
               <TabsContextMenu
                 activeTab={activeTab}
                 key={item.key}
@@ -159,34 +133,17 @@ export function LayoutTabs({
                 tabs={tabs}
                 updateTabs={updateTabs}
               >
-                <div
-                  className={cn("group size-full flex-y-center", {
-                    active: activeTab === item.key,
-                    [`layout-tabs-${tabType}-tab-item`]: true,
-                  })}
-                  data-tab-key={item.key}
-                  onClick={() => handleTabClick(item)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      handleTabClick(item);
-                    }
-                  }}
-                  role="tab"
-                  tabIndex={index}
-                >
-                  <TabItemComponent
-                    active={activeTab === item.key}
-                    onClose={handleCloseTab}
-                    onPin={handlePinTab}
-                    tab={item}
-                    tabsCount={tabs.length}
-                  />
-                </div>
+                <TabItemComponent
+                  active={activeTab === item.key}
+                  onClose={handleCloseTab}
+                  onPin={handlePinTab}
+                  tab={item}
+                  tabsCount={tabs.length}
+                />
               </TabsContextMenu>
-            ))}
-          </div>
-        )}
+            )}
+          </SortableTabs>
+        </div>
       </div>
       <ScrollButton
         canScroll={canScrollRight}
