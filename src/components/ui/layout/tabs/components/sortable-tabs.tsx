@@ -1,3 +1,4 @@
+import { AnimatePresence } from "motion/react";
 import {
   Sortable,
   SortableContent,
@@ -38,20 +39,22 @@ export function SortableTabs({
           "gap-2": tabType === "card",
         })}
       >
-        {tabs.map((item, index) => (
-          <TabItemWrapper
-            activeTab={activeTab}
-            asHandle={sortable && !item.pinned}
-            index={index}
-            item={item}
-            key={item.key}
-            onTabClick={onTabClick}
-            sortable
-            tabType={tabType}
-          >
-            {children(item)}
-          </TabItemWrapper>
-        ))}
+        <AnimatePresence initial={false} mode="popLayout">
+          {tabs.map((item, index) => (
+            <TabItemWrapper
+              activeTab={activeTab}
+              asHandle={sortable && !item.pinned}
+              index={index}
+              item={item}
+              key={item.key}
+              onTabClick={onTabClick}
+              sortable
+              tabType={tabType}
+            >
+              {children(item)}
+            </TabItemWrapper>
+          ))}
+        </AnimatePresence>
       </SortableContent>
       <SortableOverlay>
         {(activeItem) => {

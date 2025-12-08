@@ -27,14 +27,6 @@ export function CapsuleBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
                 ease: [0.4, 0, 0.2, 1],
               }}
             >
-              {/* {list.length <= 1 && (
-                <BreadcrumbPage className="inline-flex items-center gap-0.5 bg-muted px-4 text-sm leading-loose transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
-                  <span className="flex-y-center gap-1.5 truncate">
-                    {item.icon && <Icon icon={item.icon} size={16}/>}
-                    {item.label}
-                  </span>
-                </BreadcrumbPage>
-              )} */}
               {list.length >= 1 && index === list.length - 1 && (
                 <BreadcrumbPage className="capsule-breadcrumb inline-flex items-center gap-0.5 bg-mutd px-4 pl-5 text-sm leading-loose transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
                   <span className="flex-y-center gap-1.5 truncate">

@@ -6,7 +6,7 @@ import { RibbonBreadcrumb } from "./ribbon-breadcrumb";
 import type { BreadcrumbVariant } from "./types";
 
 export function Breadcrumb({
-  variant = "ribbon",
+  variant = "capsule",
 }: {
   variant?: BreadcrumbVariant;
 }) {
