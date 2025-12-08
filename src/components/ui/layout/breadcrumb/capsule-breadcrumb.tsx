@@ -13,7 +13,7 @@ export function CapsuleBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
       <AnimatedBreadcrumbList className="w-max flex-y-center gap-0 overflow-hidden rounded-full border border-[currentColor] bg-[currentColor] text-border sm:gap-0">
         {list.map((item, index) => (
           <AnimatedBreadcrumbItem
-            className="group inline-flex items-center gap-1.5 text-muted-foreground"
+            className="group text-muted-foreground"
             key={item.href}
           >
             <div

@@ -2,7 +2,12 @@ import { useCallback, useEffect, useRef } from "react";
 import type { RouteConfig } from "@/lib/router-toolset/types";
 import { useActiveTab, useTabsActions, useTabsData } from "@/store/tabs-store";
 import type { LayoutTabItem } from "../types";
-import { createTabFromRoute, createTabItem, isValidRouteForTab } from "./utils";
+import {
+  createTabFromRoute,
+  createTabItem,
+  isValidRouteForTab,
+  updateTabFromRoute,
+} from "./utils";
 
 export interface UseTabsOptions {
   defaultActiveTab?: string;
@@ -60,11 +65,7 @@ export function useTabs(options?: UseTabsOptions) {
 
         if (existingTabIndex !== -1) {
           // 如果tab已存在，更新它
-          draft[existingTabIndex].title =
-            route.name || route.helmet || routePathname;
-          if (route.icon !== undefined) {
-            draft[existingTabIndex].icon = route.icon;
-          }
+          updateTabFromRoute(draft[existingTabIndex], route);
         } else {
           // 如果tab不存在，添加新tab
           const newTab = createTabFromRoute(route, routePathname);
@@ -109,10 +110,7 @@ export function useTabs(options?: UseTabsOptions) {
       for (const tab of draft) {
         const route = flattenRoutes.get(tab.key);
         if (route && isValidRouteForTab(route)) {
-          tab.title = route.name || route.helmet || tab.key;
-          if (route.icon !== undefined) {
-            tab.icon = route.icon;
-          }
+          updateTabFromRoute(tab, route);
         }
       }
     });

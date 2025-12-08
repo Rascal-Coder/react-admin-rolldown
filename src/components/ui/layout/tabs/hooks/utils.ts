@@ -27,7 +27,7 @@ export function createTabFromRoute(
     key: routePathname,
     title: route.name || route.helmet || routePathname,
     closable: true,
-    pinned: false,
+    pinned: route.pinned ?? false,
     icon: route.icon,
   };
 }
@@ -44,4 +44,20 @@ export function createTabItem(
     key,
     title: tabItem.title || key,
   };
+}
+
+/**
+ * 从路由配置更新 tab 项
+ */
+export function updateTabFromRoute(
+  tab: LayoutTabItem,
+  route: RouteConfig
+): void {
+  tab.title = route.name || route.helmet || tab.key;
+  if (route.icon !== undefined) {
+    tab.icon = route.icon;
+  }
+  if (route.pinned !== undefined) {
+    tab.pinned = route.pinned;
+  }
 }

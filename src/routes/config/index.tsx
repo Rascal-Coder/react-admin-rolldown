@@ -20,6 +20,7 @@ export const routesConfig: RouteConfig[] = [
             path: "workbench",
             component: () => import("@/pages/dashboard/workbench"),
             name: "工作台",
+            pinned: true,
             icon: "lucide:workflow",
           },
           {
@@ -113,6 +114,27 @@ export const routesConfig: RouteConfig[] = [
             icon: "lucide:sparkles",
             badgeType: "normal",
             badgeVariant: "success",
+          },
+        ],
+      },
+      {
+        path: "user",
+        name: "用户管理",
+        icon: "lucide:user",
+        children: [
+          { path: "", redirect: "list" },
+          {
+            path: "list",
+            component: () => import("@/pages/user/list"),
+            name: "用户列表",
+            icon: "lucide:users",
+          },
+          {
+            path: ":id",
+            component: () => import("@/pages/user/detail"),
+            name: "用户详情",
+            icon: "lucide:user-circle",
+            hidden: true, // 动态路由通常隐藏在菜单中
           },
         ],
       },

@@ -58,7 +58,7 @@ const MenuItemIcon = ({
         isSelected && size === "md" && "text-primary!"
       )}
     >
-      {icon && <Icon icon={icon} size={4} />}
+      {icon && <Icon icon={icon} size={16} />}
     </span>
   );
 };

@@ -4,8 +4,8 @@ import type { MenuItemData } from "@/components/ui/layout/tree-menu/types";
 
 export type RouteConfig = {
   component?: () => Promise<{ default: () => JSX.Element }>;
-  // /** 布局组件 */
-  // layout?: React.ReactNode;
+  /** 是否固定在标签页 */
+  pinned?: boolean;
   /** 路径，同react-router */
   path: string;
   /** 对应react-router的pathname，所有非父路由将会有该值 */
@@ -14,8 +14,6 @@ export type RouteConfig = {
   collecttedPathname?: string[];
   /** ['', 'layout', 'layout-children1', 'permission'] */
   collecttedPath?: string[];
-  /** 组件的文件地址 */
-  // component?: () => Promise<any>;
   /** 隐藏在菜单 */
   hidden?: boolean;
   /** 菜单名称 */
@@ -43,8 +41,6 @@ export type RouteConfig = {
   external?: boolean;
   /** 父路由 */
   parent?: RouteConfig;
-  /** 懒加载组件 */
-  // lazy?: string;
   /** 排序 */
   order?: number;
   /** 徽章类型 */
