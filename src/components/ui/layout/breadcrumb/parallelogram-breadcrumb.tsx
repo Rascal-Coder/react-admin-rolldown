@@ -1,56 +1,42 @@
-import { AnimatePresence, motion } from "motion/react";
-import { Link } from "react-router";
-import {
-  Breadcrumb as BreadcrumbBase,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/base/breadcrumb";
+import { useNavigate } from "react-router";
+import { Breadcrumb as BreadcrumbBase } from "@/components/base/breadcrumb";
 import Icon from "@/components/ui/icon/icon";
+import { AnimatedBreadcrumbItem } from "./animated-breadcrumb-item";
+import { AnimatedBreadcrumbList } from "./animated-breadcrumb-list";
 import type { BreadcrumbItem } from "./types";
 export function ParallelogramBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
+  const navigate = useNavigate();
   return (
     <BreadcrumbBase className="p-1">
-      <BreadcrumbList className="w-max flex-y-center gap-0 overflow-hidden sm:gap-0">
-        <AnimatePresence initial={false} mode="popLayout">
-          {list.map((item, index) => (
-            <motion.li
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              className="inline-flex items-center gap-1.5"
-              data-slot="breadcrumb-item"
-              exit={{ opacity: 0, scale: 0.9, y: -10 }}
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              key={item.href}
-              transition={{
-                duration: 0.25,
-                ease: [0.4, 0, 0.2, 1],
-              }}
+      <AnimatedBreadcrumbList className="w-max flex-y-center gap-0 overflow-hidden sm:gap-0">
+        {list.map((item, index) => (
+          <AnimatedBreadcrumbItem key={item.href}>
+            <div
+              className={`parallelogram-breadcrumb inline-flex items-center gap-0.5 bg-muted px-4 text-sm leading-[2.15] transition-[background-color] duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60 ${
+                index !== list.length - 1 ? "mr-[-6px] cursor-pointer" : ""
+              }`}
+              {...(index !== list.length - 1
+                ? {
+                    onClick: () => navigate(item.href),
+                    onKeyDown: (e: React.KeyboardEvent) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        navigate(item.href);
+                      }
+                    },
+                    role: "button",
+                    tabIndex: 0,
+                  }
+                : {})}
             >
-              {index === list.length - 1 ? (
-                <BreadcrumbPage className="parallelogram-breadcrumb inline-flex items-center gap-0.5 bg-muted px-4 text-sm leading-[2.15] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
-                  <span className="flex-y-center gap-1.5 truncate">
-                    {item.icon && <Icon icon={item.icon} size={16} />}
-                    {item.label}
-                  </span>
-                </BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink
-                  asChild
-                  className="parallelogram-breadcrumb mr-[-6px] inline-flex items-center gap-0.5 bg-muted px-4 text-sm leading-[2.15] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60"
-                >
-                  <Link
-                    className="flex-y-center gap-1.5 truncate"
-                    to={item.href}
-                  >
-                    {item.icon && <Icon icon={item.icon} size={16} />}
-                    {item.label}
-                  </Link>
-                </BreadcrumbLink>
-              )}
-            </motion.li>
-          ))}
-        </AnimatePresence>
-      </BreadcrumbList>
+              <span className="flex-y-center gap-1.5 truncate">
+                {item.icon && <Icon icon={item.icon} size={16} />}
+                {item.label}
+              </span>
+            </div>
+          </AnimatedBreadcrumbItem>
+        ))}
+      </AnimatedBreadcrumbList>
     </BreadcrumbBase>
   );
 }

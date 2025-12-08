@@ -1,102 +1,64 @@
-import { AnimatePresence, motion } from "motion/react";
-import { Link } from "react-router";
-import {
-  Breadcrumb as BreadcrumbBase,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/base/breadcrumb";
+import { useNavigate } from "react-router";
+import { Breadcrumb as BreadcrumbBase } from "@/components/base/breadcrumb";
 import Icon from "@/components/ui/icon/icon";
 import { cn } from "@/utils";
+import { AnimatedBreadcrumbItem } from "./animated-breadcrumb-item";
+import { AnimatedBreadcrumbList } from "./animated-breadcrumb-list";
 import type { BreadcrumbItem } from "./types";
 
 export function RibbonBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
+  const navigate = useNavigate();
   return (
     <BreadcrumbBase className="p-1">
-      <BreadcrumbList className="w-max flex-y-center overflow-hidden rounded-sm">
-        <AnimatePresence initial={false} mode="popLayout">
-          {list.map((item, index) => {
-            if (list.length <= 1) {
-              return (
-                <motion.li
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  className="inline-flex items-center gap-1.5"
-                  data-slot="breadcrumb-item"
-                  exit={{ opacity: 0, scale: 0.9, y: -10 }}
-                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                  key={item.href}
-                  transition={{
-                    duration: 0.25,
-                    ease: [0.4, 0, 0.2, 1],
-                  }}
-                >
-                  <BreadcrumbPage className="inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
-                    <span className="flex-y-center gap-1.5 truncate">
-                      {item.icon && <Icon icon={item.icon} size={16} />}
-                      {item.label}
-                    </span>
-                  </BreadcrumbPage>
-                </motion.li>
-              );
+      <AnimatedBreadcrumbList className="w-max flex-y-center overflow-hidden rounded-sm">
+        {list.map((item, index) => {
+          const isLast = index === list.length - 1;
+          const isFirst = index === 0;
+          const isSingle = list.length <= 1;
+          const isClickable = !isLast;
+
+          const getClassName = () => {
+            if (isSingle) {
+              return "inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-[background-color] duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60";
             }
-            if (index === list.length - 1) {
-              return (
-                <motion.li
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  className="inline-flex items-center gap-1.5"
-                  data-slot="breadcrumb-item"
-                  exit={{ opacity: 0, scale: 0.9, y: -10 }}
-                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                  key={item.href}
-                  transition={{
-                    duration: 0.25,
-                    ease: [0.4, 0, 0.2, 1],
-                  }}
-                >
-                  <BreadcrumbPage className="ribbon-breadcrumb-last inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60">
-                    <span className="flex-y-center gap-1.5 truncate">
-                      {item.icon && <Icon icon={item.icon} size={16} />}
-                      {item.label}
-                    </span>
-                  </BreadcrumbPage>
-                </motion.li>
-              );
+            if (isLast) {
+              return "ribbon-breadcrumb-last inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-[background-color] duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60";
             }
-            return (
-              <motion.li
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="inline-flex items-center gap-1.5"
-                data-slot="breadcrumb-item"
-                exit={{ opacity: 0, scale: 0.9, y: -10 }}
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                key={item.href}
-                transition={{
-                  duration: 0.25,
-                  ease: [0.4, 0, 0.2, 1],
-                }}
-              >
-                <BreadcrumbLink
-                  asChild
-                  className={cn(
-                    "ribbon-breadcrumb mr-[calc(-1*10px+-8px)] inline-flex items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-all duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60",
-                    {
-                      "ribbon-breadcrumb-first": index === 0,
-                    }
-                  )}
-                >
-                  <Link
-                    className="flex-y-center gap-1.5 truncate"
-                    to={item.href}
-                  >
-                    {item.icon && <Icon icon={item.icon} size={16} />}
-                    {item.label}
-                  </Link>
-                </BreadcrumbLink>
-              </motion.li>
+            return cn(
+              "ribbon-breadcrumb mr-[calc(-1*10px+-8px)] inline-flex cursor-pointer items-center gap-0.5 bg-muted px-4 py-0.5 text-sm leading-[1.75] transition-[background-color] duration-300 hover:bg-accent dark:hover:bg-accent-foreground/60",
+              {
+                "ribbon-breadcrumb-first": isFirst,
+              }
             );
-          })}
-        </AnimatePresence>
-      </BreadcrumbList>
+          };
+
+          return (
+            <AnimatedBreadcrumbItem key={item.href}>
+              <div
+                className={getClassName()}
+                {...(isClickable
+                  ? {
+                      onClick: () => navigate(item.href),
+                      onKeyDown: (e: React.KeyboardEvent) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          navigate(item.href);
+                        }
+                      },
+                      role: "button",
+                      tabIndex: 0,
+                    }
+                  : {})}
+              >
+                <span className="flex-y-center gap-1.5 truncate">
+                  {item.icon && <Icon icon={item.icon} size={16} />}
+                  {item.label}
+                </span>
+              </div>
+            </AnimatedBreadcrumbItem>
+          );
+        })}
+      </AnimatedBreadcrumbList>
     </BreadcrumbBase>
   );
 }
