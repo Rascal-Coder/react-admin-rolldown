@@ -53,11 +53,13 @@ export function TabItemWrapper({
       [`layout-tabs-${tabType}-tab-item`]: true,
     }),
     "data-tab-key": item.key,
-    onClick: () => onTabClick(item),
+    onClick: () => activeTab !== item.key && onTabClick(item),
     onKeyDown: (e: React.KeyboardEvent) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        onTabClick(item);
+        if (activeTab !== item.key) {
+          onTabClick(item);
+        }
       }
     },
     role: "tab" as const,
@@ -75,6 +77,7 @@ export function TabItemWrapper({
           layout
           transition={tabTransition}
           variants={tabAnimationVariants}
+          whileTap={{ scale: activeTab === item.key ? 1 : 0.9 }}
         >
           {children}
         </motion.div>

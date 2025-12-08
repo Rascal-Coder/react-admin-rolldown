@@ -64,7 +64,19 @@ export function SortableTabs({
             return null;
           }
 
-          return children(item);
+          return (
+            <div
+              className={cn(
+                "group layout-tabs-tab-item size-full flex-y-center",
+                {
+                  active: activeTab === item.key,
+                  [`layout-tabs-${tabType}-tab-item`]: true,
+                }
+              )}
+            >
+              {children(item)}
+            </div>
+          );
         }}
       </SortableOverlay>
     </Sortable>

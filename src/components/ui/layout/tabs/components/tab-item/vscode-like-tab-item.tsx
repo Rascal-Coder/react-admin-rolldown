@@ -30,7 +30,7 @@ export function VscodeLikeTabItem({
         {tab.icon && <Icon icon={tab.icon} size={16} />}
         {tab.title}
       </span>
-      <div className="shrink-0">
+      <div className="shrink-0 cursor-pointer">
         <TabActionButton
           onClose={onClose}
           onPin={onPin}

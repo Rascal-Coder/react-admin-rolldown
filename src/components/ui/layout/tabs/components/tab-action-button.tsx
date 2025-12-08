@@ -10,7 +10,7 @@ interface TabActionButtonProps {
   onClose?: (key: string) => void;
 }
 
-const ICON_CLASSES = "pointer-events-none size-3";
+const ICON_CLASSES = "size-3";
 
 export function TabActionButton({
   pinned,

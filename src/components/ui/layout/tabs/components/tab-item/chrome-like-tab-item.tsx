@@ -79,7 +79,7 @@ export function ChromeLikeTabItem({
               {tab.title}
             </span>
           </div>
-          <div className="shrink-0">
+          <div className="shrink-0 cursor-pointer">
             <TabActionButton
               onClose={onClose}
               onPin={onPin}

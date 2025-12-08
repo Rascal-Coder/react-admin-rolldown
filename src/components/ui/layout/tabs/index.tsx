@@ -73,9 +73,16 @@ export function LayoutTabs({
     newTabs: LayoutTabItem[] | ((prev: LayoutTabItem[]) => LayoutTabItem[])
   ) => {
     if (typeof newTabs === "function") {
-      updateTabs(newTabs);
+      updateTabs((draft) => {
+        const result = newTabs(draft);
+        draft.length = 0;
+        draft.push(...result);
+      });
     } else {
-      updateTabs(() => newTabs);
+      updateTabs((draft) => {
+        draft.length = 0;
+        draft.push(...newTabs);
+      });
     }
   };
 
