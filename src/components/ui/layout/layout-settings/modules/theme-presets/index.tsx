@@ -15,6 +15,19 @@ export default function ThemePresets() {
   const settings = useAppSettings();
   const { updateAppSettings } = useSettingsActions();
   const { themeColorPresets } = settings;
+
+  // Find the color group of the current theme preset
+  const getCurrentColorGroup = (): ColorGroup => {
+    for (const [group, presets] of Object.entries(colorGroups)) {
+      if (presets.includes(themeColorPresets)) {
+        return group as ColorGroup;
+      }
+    }
+    return "warm"; // fallback
+  };
+
+  const currentGroup = getCurrentColorGroup();
+
   return (
     <>
       <div
@@ -32,7 +45,7 @@ export default function ThemePresets() {
         </span>
       </div>
       {/* Category Filters */}
-      <Tabs className="w-full" defaultValue="neutrals">
+      <Tabs className="w-full" defaultValue={currentGroup}>
         <TabsList className="w-full">
           {(Object.keys(groupLabels) as ColorGroup[]).map((group) => (
             <TabsTrigger className="flex-1" key={group} value={group}>

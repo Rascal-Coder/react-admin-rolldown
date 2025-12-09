@@ -39,13 +39,11 @@ const VerticalTreeMenu = ({
     const hasChildren = Boolean(item.children && item.children.length > 0);
 
     const handleNodeClick = () => {
-      const pathIds = currentPath.map((node) => node.id);
-
+      // 只有叶子节点才触发选中和导航
+      // 父节点的展开/收起由 TreeNodeTrigger 的 toggleExpanded 自动处理
       if (!hasChildren) {
-        onSelectionChange?.([item.id]);
-        navigate(item.id);
-      }
-      if (currentPath.length > 1 && !currentPath.at(-1)?.children) {
+        // 选中整个路径（包括所有父节点和当前叶子节点）
+        const pathIds = currentPath.map((node) => node.id);
         onSelectionChange?.(pathIds);
         navigate(item.id);
       }
@@ -97,6 +95,7 @@ const VerticalTreeMenu = ({
       className="overflow-x-hidden"
       defaultExpandedIds={defaultExpandedIds}
       onSelectionChange={onSelectionChange}
+      selectable={false}
       selectedIds={selectedIds}
       {...props}
     >

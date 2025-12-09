@@ -10,8 +10,14 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
-  const { themeMode, themeColorPresets, fontFamily, fontSize } =
-    useAppSettings();
+  const {
+    themeMode,
+    themeColorPresets,
+    fontFamily,
+    fontSize,
+    grayMode,
+    colorWeakMode,
+  } = useAppSettings();
   const systemTheme = useSystemTheme();
   // 同步设置主题属性，避免闪烁
   useLayoutEffect(() => {
@@ -34,7 +40,28 @@ export function ThemeProvider({ children, adapters = [] }: ThemeProviderProps) {
       // 设置字体族
       body.style.fontFamily = fontFamily;
     }
-  }, [themeMode, themeColorPresets, fontFamily, fontSize, systemTheme]);
+    if (grayMode) {
+      // Gray mode
+      root.classList.add("grayscale-mode");
+    } else {
+      root.classList.remove("grayscale-mode");
+    }
+
+    if (colorWeakMode) {
+      // Color weak mode
+      root.classList.add("color-weak-mode");
+    } else {
+      root.classList.remove("color-weak-mode");
+    }
+  }, [
+    themeMode,
+    themeColorPresets,
+    fontFamily,
+    fontSize,
+    systemTheme,
+    grayMode,
+    colorWeakMode,
+  ]);
 
   // Wrap children with adapters
   const wrappedWithAdapters = adapters.reduce(

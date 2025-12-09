@@ -17,6 +17,8 @@ export type SettingsType = {
   direction: "ltr" | "rtl";
   sidebarOpen: boolean;
   sidebarWidth: string;
+  grayMode: boolean;
+  colorWeakMode: boolean;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -45,6 +47,8 @@ const useSettingStore = create<SettingStore>()(
         direction: "ltr",
         sidebarOpen: true,
         sidebarWidth: "16rem",
+        grayMode: false,
+        colorWeakMode: false,
       },
       actions: {
         setAppSettings: (appSettings) => {
