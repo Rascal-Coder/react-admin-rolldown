@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import {
   Tabs,
   TabsContent,
@@ -63,10 +64,9 @@ export default function ThemePresets() {
                 )
                 .map(([preset, color]) => (
                   <button
-                    className={cn(
-                      "group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-transparent p-2 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800",
-                      themeColorPresets === preset &&
-                        "border-primary/20 bg-primary/5 shadow-sm dark:bg-primary/10"
+                    className={clsx(
+                      "group flex flex-col items-center justify-center gap-2 py-2 outline-box",
+                      themeColorPresets === preset && "outline-box-active"
                     )}
                     key={preset}
                     onClick={() =>

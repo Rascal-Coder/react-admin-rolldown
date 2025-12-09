@@ -79,7 +79,7 @@ export function SwitchItem({
       role="button"
       tabIndex={disabled ? -1 : 0}
     >
-      <span className="flex items-center text-sm">
+      <span className="flex items-center text-foreground text-sm">
         {children}
 
         {(tipContent || tip) && (
