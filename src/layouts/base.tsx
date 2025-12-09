@@ -5,6 +5,7 @@ import { Button } from "@/components/base/button";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import { Footer } from "@/components/ui/layout/footer";
 import { Header } from "@/components/ui/layout/header";
+import LayoutSettings from "@/components/ui/layout/layout-settings";
 import { ProfileDropdown } from "@/components/ui/layout/profile-dropdown";
 import {
   SidebarInset,
@@ -126,6 +127,7 @@ const BaseLayout = () => {
           />
         )} */}
       </SidebarInset>
+      <LayoutSettings />
     </SidebarProvider>
   );
 };

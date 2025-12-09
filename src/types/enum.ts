@@ -30,12 +30,23 @@ export enum ThemeLayout {
 }
 
 export enum ThemeColorPresets {
-  Default = "default",
-  Cyan = "cyan",
-  Purple = "purple",
-  Blue = "blue",
-  Orange = "orange",
   Red = "red",
+  Orange = "orange",
+  Amber = "amber",
+  Yellow = "yellow",
+  Lime = "lime",
+  Green = "green",
+  Emerald = "emerald",
+  Teal = "teal",
+  Cyan = "cyan",
+  Sky = "sky",
+  Blue = "blue",
+  Indigo = "indigo",
+  Violet = "violet",
+  Purple = "purple",
+  Fuchsia = "fuchsia",
+  Pink = "pink",
+  Rose = "rose",
 }
 
 export enum LocalEnum {

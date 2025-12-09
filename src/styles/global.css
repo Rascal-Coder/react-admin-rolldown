@@ -66,8 +66,9 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: var(--background);
   --sidebar-foreground: var(--colors-palette-gray-800);
-  --sidebar-primary: var(--colors-palette-primary-default);
-  --sidebar-primary-foreground: var(--colors-palette-primary-lighter);
+  /* 暂时没有用到 */
+  /* --sidebar-primary: var(--colors-palette-primary-default);
+  --sidebar-primary-foreground: var(--colors-palette-primary-lighter); */
   --sidebar-accent: var(--colors-palette-gray-300);
   --sidebar-accent-foreground: var(--colors-palette-gray-800);
   --sidebar-border: var(--colors-palette-gray-300);
@@ -101,8 +102,9 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: var(--background);
   --sidebar-foreground: var(--colors-common-white);
-  --sidebar-primary: var(--colors-palette-primary-default);
-  --sidebar-primary-foreground: var(--colors-palette-primary-darker);
+  /* 暂时没有用到 */
+  /* --sidebar-primary: var(--colors-palette-primary-default);
+  --sidebar-primary-foreground: var(--colors-palette-primary-darker); */
   --sidebar-accent: rgba(var(--colors-palette-gray-300Channel) / 0.2);
   --sidebar-accent-foreground: var(--colors-common-white);
   --sidebar-border: rgba(
