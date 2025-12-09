@@ -4,4 +4,6 @@ import { routesConfig } from "./config";
 
 const basename = GLOBAL_CONFIG.basename;
 
-export const routes = new Router(routesConfig, { basename });
+export const routes = new Router(routesConfig, {
+  basename,
+});

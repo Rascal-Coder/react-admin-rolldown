@@ -33,10 +33,6 @@ export function generateReactRoutes(configs?: RouteConfig[]) {
   return ret;
 }
 
-// export function notEmptyPath(path: string) {
-//   return path === "" ? "/" : path;
-// }
-
 /**
  * 使用RouteConfig定义的路由数据，拓展出一些用于渲染(如菜单)的数据
  */

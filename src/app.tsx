@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useRoutes } from "react-router";
+import { ErrorFallback } from "./components/ui/error-fallback";
 import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
 import { GLOBAL_CONFIG } from "./global-config";
 import { useRouter } from "./lib/router-toolset/history-router";
@@ -17,18 +19,20 @@ function App() {
     setMenuData(menuData);
   }, [routerRoutes, setMenuData]);
   return (
-    <HelmetProvider>
-      <Helmet>
-        <title>
-          {curRoute?.name
-            ? `${curRoute.name} | ${GLOBAL_CONFIG.appName}`
-            : GLOBAL_CONFIG.appName}
-        </title>
-        <link href={"/logo.svg"} rel="icon" />
-      </Helmet>
-      <RouteLoadingProgress />
-      {element}
-    </HelmetProvider>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <HelmetProvider>
+        <Helmet>
+          <title>
+            {curRoute?.name
+              ? `${curRoute.name} | ${GLOBAL_CONFIG.appName}`
+              : GLOBAL_CONFIG.appName}
+          </title>
+          <link href={"/logo.svg"} rel="icon" />
+        </Helmet>
+        <RouteLoadingProgress />
+        {element}
+      </HelmetProvider>
+    </ErrorBoundary>
   );
 }
 
