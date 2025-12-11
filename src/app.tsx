@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useRoutes } from "react-router";
+import { DirectionProvider } from "@/context/direction-provider";
 import { ErrorFallback } from "./components/ui/error-fallback";
 import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
 import { GLOBAL_CONFIG } from "./global-config";
@@ -30,7 +31,7 @@ function App() {
           <link href={"/logo.svg"} rel="icon" />
         </Helmet>
         <RouteLoadingProgress />
-        {element}
+        <DirectionProvider>{element}</DirectionProvider>
       </HelmetProvider>
     </ErrorBoundary>
   );

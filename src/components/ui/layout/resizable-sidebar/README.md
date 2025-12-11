@@ -84,10 +84,10 @@ const { dragRef, handleMouseDown } = useSidebarResize({
   // Callback to update dragging rail state
   setIsDraggingRail: setIsDraggingRail,
 
-  // Cookie name for persisting width (default: undefined)
-  widthCookieName: "sidebar:width",
+  // // Cookie name for persisting width (default: undefined)
+  // widthCookieName: "sidebar:width",
 
-  // Cookie max age in seconds (default: 1 week)
-  widthCookieMaxAge: 60 * 60 * 24 * 7,
+  // // Cookie max age in seconds (default: 1 week)
+  // widthCookieMaxAge: 60 * 60 * 24 * 7,
 });
 ```

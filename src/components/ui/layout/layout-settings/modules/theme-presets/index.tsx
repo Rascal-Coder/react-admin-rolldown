@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { Text } from "@/components/base/typography";
 import {
   Tabs,
   TabsContent,
@@ -30,7 +31,8 @@ export default function ThemePresets() {
   const currentGroup = getCurrentColorGroup();
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
+      <Text variant="subTitle1">预设主题</Text>
       <div
         className="flex items-center gap-2 rounded-md bg-gray-100 px-2 py-1 dark:bg-gray-800"
         style={{ color: presetsColors[themeColorPresets].default }}
@@ -101,6 +103,6 @@ export default function ThemePresets() {
           </TabsContent>
         ))}
       </Tabs>
-    </>
+    </div>
   );
 }

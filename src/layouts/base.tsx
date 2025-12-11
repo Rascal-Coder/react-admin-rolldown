@@ -15,6 +15,7 @@ import {
 import { Sidebar } from "@/components/ui/layout/sidebar";
 import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
+import { useDirection } from "@/context/direction-context";
 import { cn } from "@/utils";
 
 // import { generateMenuItems } from "@/utils/menu";
@@ -31,9 +32,10 @@ const BaseLayout = () => {
   // );
   // const [tabType, setTabType] = useState<TabType>("chrome");
   const navigate = useNavigate();
+  const { dir } = useDirection();
   return (
     <SidebarProvider>
-      <Sidebar />
+      <Sidebar side={dir === "ltr" ? "left" : "right"} />
       <SidebarInset
         className={cn(
           "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(5)))]",
