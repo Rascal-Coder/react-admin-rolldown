@@ -11,10 +11,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/base/sheet";
+import { Slider } from "@/components/base/slider";
 import { Text } from "@/components/base/typography";
 import FloatButton from "@/components/ui/float-button";
 import Icon from "@/components/ui/icon/icon";
-import NumberInput from "@/components/ui/number-input";
+// import NumberInput from "@/components/ui/number-input";
 import { useAppSettings, useSettingsActions } from "@/store/setting-store";
 import { FontFamilyPreset } from "@/theme/tokens/typography";
 import { ThemeMode } from "@/types/enum";
@@ -138,11 +139,14 @@ export default function LayoutSettings() {
             </div>
 
             <Text variant="subTitle2">字体大小</Text>
-            <NumberInput
-              defaultValue={fontSize}
+            <Slider
+              defaultValue={[fontSize]}
               max={20}
               min={12}
-              onValueChange={(value) => updateAppSettings({ fontSize: value })}
+              onValueChange={(value) =>
+                updateAppSettings({ fontSize: value[0] })
+              }
+              step={1}
             />
           </div>
           {/* gray mode & color weak mode */}
