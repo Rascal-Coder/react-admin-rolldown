@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 import { Text } from "@/components/base/typography";
 import { useDirection } from "@/context/direction-context";
-import type { Direction } from "@/context/types";
+import { Direction } from "@/types/enum";
 import { cn } from "@/utils";
 import { RadioGroup } from "../../components/radio-group";
 
@@ -121,20 +121,20 @@ export default function DirectionSettings() {
   const { dir, setDir } = useDirection();
   return (
     <div className="flex flex-col gap-3">
-      <Text variant="subTitle1">Direction</Text>
+      <Text variant="subTitle1">方向</Text>
       <RadioGroup
         ariaDescription="Choose between left-to-right or right-to-left site direction"
         ariaLabel="Choose between left-to-right or right-to-left site direction"
         items={[
           {
-            value: "ltr",
+            value: Direction.LTR,
             label: "Left to Right",
-            content: <IconDir dir="ltr" />,
+            content: <IconDir dir={Direction.LTR} />,
           },
           {
-            value: "rtl",
+            value: Direction.RTL,
             label: "Right to Left",
-            content: <IconDir dir="rtl" />,
+            content: <IconDir dir={Direction.RTL} />,
           },
         ]}
         onValueChange={setDir}

@@ -19,9 +19,14 @@ import {
 import FloatButton from "@/components/ui/float-button";
 import { useDirection } from "@/context/direction-context";
 import { cn } from "@/utils";
+import BreadcrumbSettings from "./modules/breadcrumb-settings";
+import ContentSettings from "./modules/content-settings";
 import DirectionSettings from "./modules/direction-settings";
 import FontSettings from "./modules/font-settings";
+import HeaderFooterSettings from "./modules/header-footer-settings";
 import OtherSettings from "./modules/other-settings";
+import SidebarSettings from "./modules/sidebar-settings";
+import TabsSettings from "./modules/tabs-settings";
 import ThemeModeSelector from "./modules/theme-mode";
 import ThemePresets from "./modules/theme-presets";
 
@@ -43,7 +48,7 @@ export default function LayoutSettings() {
           icon={
             <Settings className="size-6 animate-slow-spin text-foreground transition-all duration-200" />
           }
-          tooltip="界面配置"
+          tooltip="偏好设置"
           tooltipTriggerMode="hover"
         />
       </SheetTrigger>
@@ -54,7 +59,7 @@ export default function LayoutSettings() {
         style={sheetContentBgStyle}
       >
         <SheetHeader>
-          <SheetTitle>界面配置</SheetTitle>
+          <SheetTitle>偏好设置</SheetTitle>
           <SheetDescription>自定义偏好设置 & 实时预览</SheetDescription>
         </SheetHeader>
         <Tabs
@@ -85,7 +90,18 @@ export default function LayoutSettings() {
             className="flex flex-col gap-2 overflow-y-auto px-6 py-2"
             value="layout"
           >
+            {/* 方向设置 */}
             <DirectionSettings />
+            {/* 内容设置 */}
+            <ContentSettings />
+            {/* 顶栏和底栏设置 */}
+            <HeaderFooterSettings />
+            {/* 标签栏设置 */}
+            <TabsSettings />
+            {/* 面包屑设置 */}
+            <BreadcrumbSettings />
+            {/* 侧边栏设置 */}
+            <SidebarSettings />
           </TabsContent>
         </Tabs>
       </SheetContent>

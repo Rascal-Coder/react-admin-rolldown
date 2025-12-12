@@ -7,7 +7,7 @@ type FooterVariant = "sidebar" | "floating" | "inset";
 
 const FOOTER_COLLAPSED_MARGIN_BY_VARIANT: Record<FooterVariant, string> = {
   sidebar: "ml-(--sidebar-width-icon)",
-  floating: "ml-[calc(var(--sidebar-width-icon)+(--spacing(4)))]",
+  floating: "ml-[calc(var(--sidebar-width-icon)+(--spacing(5)))]",
   inset: "ml-[calc(var(--sidebar-width-icon)+(--spacing(5)))]",
 };
 
@@ -20,6 +20,7 @@ interface FooterProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
   isFixed?: boolean;
   variant?: FooterVariant;
+  ref?: React.RefObject<HTMLElement | null>;
 }
 
 export function Footer({
@@ -31,6 +32,7 @@ export function Footer({
   className,
   isFixed = false,
   variant = "sidebar",
+  ref,
 }: FooterProps) {
   const { state } = useSidebar();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -59,6 +61,7 @@ export function Footer({
           "fixed right-0 bottom-0 left-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]",
         className
       )}
+      ref={ref}
     >
       <div>
         <a className="mx-1 hover:text-primary" href={icpLink ?? ""}>

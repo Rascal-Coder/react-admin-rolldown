@@ -16,26 +16,36 @@ import { Sidebar } from "@/components/ui/layout/sidebar";
 import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { useDirection } from "@/context/direction-context";
+import { useElementHeight } from "@/hooks/use-element-height";
+import { useAppSettings } from "@/store/setting-store";
 import { cn } from "@/utils";
 
-// import { generateMenuItems } from "@/utils/menu";
-
 const BaseLayout = () => {
-  // const { routes: routerRoutes } = useRouter(routes);
-  // const { setMenuData } = useMenuActions();
-
-  // const [footerFixed] = useState(true);
-  // const [headerFixed] = useState(true);
-  // const [showFooter] = useState(true);
-  // const [sidebarVariant] = useState<"sidebar" | "floating" | "inset">(
-  //   "sidebar"
-  // );
-  // const [tabType, setTabType] = useState<TabType>("chrome");
   const navigate = useNavigate();
   const { dir } = useDirection();
+  const {
+    themeStretch,
+    multiTab,
+    tabType,
+    tabSortable,
+    breadCrumbVariant,
+    breadCrumb,
+    sidebarVariant,
+    showFooter,
+    footerFixed,
+    headerFixed,
+  } = useAppSettings();
+  const [headerRef, headerHeight] = useElementHeight<HTMLElement>();
+  const [footerRef, footerHeight] = useElementHeight<HTMLElement>();
+  console.log("headerHeight", headerHeight);
+  console.log("footerHeight", footerHeight);
+
   return (
     <SidebarProvider>
-      <Sidebar side={dir === "ltr" ? "left" : "right"} />
+      <Sidebar
+        side={dir === "ltr" ? "left" : "right"}
+        variant={sidebarVariant}
+      />
       <SidebarInset
         className={cn(
           "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(5)))]",
@@ -44,10 +54,11 @@ const BaseLayout = () => {
       >
         <Header
           className="border-b border-dashed"
-          // isFixed={headerFixed}
-          // variant={sidebarVariant}
+          isFixed={headerFixed}
+          ref={headerRef}
+          variant={sidebarVariant}
         >
-          <LayoutTabs />
+          {multiTab && <LayoutTabs sortable={tabSortable} tabType={tabType} />}
           <div className="flex justify-between gap-2 px-2 py-1.5">
             <div className="flex items-center gap-2">
               <SidebarTrigger
@@ -62,7 +73,7 @@ const BaseLayout = () => {
               >
                 <Home />
               </Button>
-              <Breadcrumb />
+              {breadCrumb && <Breadcrumb variant={breadCrumbVariant} />}
             </div>
             <div className="flex items-center gap-2">
               <ThemeSwitch />
@@ -77,57 +88,31 @@ const BaseLayout = () => {
           className={cn(
             "flex w-full flex-auto flex-col text-foreground",
             "transition-[max-width] duration-300 ease-in-out",
-            "mx-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6"
-            // footerFixed && showFooter && "mb-8",
-            // headerFixed && "mt-23",
-            // showFooter && "pb-0!"
+            "mx-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6",
+            {
+              "max-w-full": themeStretch,
+              "xl:max-w-screen-xl": !themeStretch,
+            }
           )}
           data-layout="bug-admin-layout"
+          style={{
+            willChange: "max-width",
+            marginTop: headerFixed ? headerHeight : 0,
+            marginBottom: footerFixed && showFooter ? footerHeight : 0,
+          }}
         >
           <div className="h-full rounded-xl bg-muted p-4">
             <Outlet />
-            {/* <div className="flex gap-2">
-              <Button onClick={() => setSidebarVariant("sidebar")}>
-                sidebar
-              </Button>
-              <Button onClick={() => setSidebarVariant("floating")}>
-                floating
-              </Button>
-              <Button onClick={() => setSidebarVariant("inset")}>inset</Button>
-              <Button onClick={() => setFooterFixed(!footerFixed)}>
-                {footerFixed ? "set unfixed" : "set fixed"}
-              </Button>
-            </div>
-            <div>
-              <Button onClick={() => setShowFooter(!showFooter)}>
-                showFooter===={showFooter ? "true" : "false"}
-              </Button>
-              <Button onClick={() => setHeaderFixed(!headerFixed)}>
-                headerFixed===={headerFixed ? "true" : "false"}
-              </Button>
-              <Button onClick={() => setTabType("chrome")}>chrome</Button>
-              <Button onClick={() => setTabType("vscode")}>vscode</Button>
-              <Button onClick={() => setTabType("card")}>card</Button>
-            </div>
-            fixed-status: {footerFixed ? "fixed" : "unfixed"}
-            {Array.from({ length: 100 }).map((_, index) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: use index as key
-              <div key={index}>content</div>
-            ))} */}
           </div>
         </main>
-        <Footer
-          companyName="Bug Admin"
-          // isFixed={footerFixed}
-          // variant={sidebarVariant}
-        />
-        {/* {showFooter && (
+        {showFooter && (
           <Footer
             companyName="Bug Admin"
             isFixed={footerFixed}
+            ref={footerRef}
             variant={sidebarVariant}
           />
-        )} */}
+        )}
       </SidebarInset>
       <LayoutSettings />
     </SidebarProvider>

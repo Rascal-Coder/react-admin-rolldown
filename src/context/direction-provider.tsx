@@ -1,8 +1,8 @@
 import { DirectionProvider as RdxDirProvider } from "@radix-ui/react-direction";
 import { useEffect, useState } from "react";
 import { useAppSettings, useSettingsActions } from "@/store/setting-store";
+import { Direction } from "@/types/enum";
 import { DirectionContext } from "./direction-context";
-import type { Direction } from "./types";
 
 export function DirectionProvider({ children }: { children: React.ReactNode }) {
   const settings = useAppSettings();
@@ -23,14 +23,14 @@ export function DirectionProvider({ children }: { children: React.ReactNode }) {
   };
 
   const resetDir = () => {
-    _setDir("ltr");
-    updateAppSettings({ direction: "ltr" });
+    _setDir(Direction.LTR);
+    updateAppSettings({ direction: Direction.LTR });
   };
 
   return (
     <DirectionContext.Provider
       value={{
-        defaultDir: "ltr",
+        defaultDir: Direction.LTR,
         dir,
         setDir,
         resetDir,

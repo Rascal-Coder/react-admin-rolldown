@@ -1,4 +1,4 @@
-export type Direction = "ltr" | "rtl";
+import type { Direction } from "@/types/enum";
 
 export type DirectionContextType = {
   defaultDir: Direction;

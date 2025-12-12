@@ -74,3 +74,14 @@ export enum HtmlDataAttribute {
   ColorPalette = "data-color-palette",
   ThemeMode = "data-theme-mode",
 }
+
+export enum Direction {
+  LTR = "ltr",
+  RTL = "rtl",
+}
+
+export enum TabType {
+  Chrome = "chrome",
+  Vscode = "vscode",
+  Card = "card",
+}

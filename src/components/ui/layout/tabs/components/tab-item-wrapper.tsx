@@ -1,7 +1,8 @@
 import { motion } from "motion/react";
 import { SortableItem } from "@/components/base/sortable";
+import type { TabType } from "@/types/enum";
 import { cn } from "@/utils";
-import type { LayoutTabItem, TabType } from "../types";
+import type { LayoutTabItem } from "../types";
 
 interface TabItemWrapperProps {
   item: LayoutTabItem;

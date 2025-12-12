@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "@/lib/router-toolset/history-router";
 import { routes } from "@/routes";
+import { TabType } from "@/types/enum";
 import { cn } from "@/utils";
 import { TabsContextMenu } from "./components/context-menu";
 import { ScrollButton } from "./components/scroll-button";
@@ -22,7 +23,7 @@ const TabItemStrategies = {
 
 export function LayoutTabs({
   sortable = true,
-  tabType = "vscode",
+  tabType = TabType.Vscode,
   defaultActiveTab,
 }: LayoutTabsProps) {
   const { curRoute, flattenRoutes } = useRouter(routes);

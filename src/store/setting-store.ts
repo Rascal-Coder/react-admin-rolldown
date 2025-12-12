@@ -1,24 +1,37 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { StorageEnum, ThemeColorPresets, ThemeLayout, ThemeMode } from "#/enum";
-import type { Direction } from "@/context/types";
+import {
+  Direction,
+  StorageEnum,
+  TabType,
+  ThemeColorPresets,
+  ThemeLayout,
+  ThemeMode,
+} from "#/enum";
+import type { BreadcrumbVariant } from "@/components/ui/layout/breadcrumb/types";
 import { FontFamilyPreset, typographyTokens } from "@/theme/tokens/typography";
-
+export type SidebarVariant = "inset" | "sidebar" | "floating";
 export type SettingsType = {
   themeColorPresets: ThemeColorPresets;
   themeMode: ThemeMode;
   themeLayout: ThemeLayout;
   themeStretch: boolean;
   breadCrumb: boolean;
-  accordion: boolean;
+  breadCrumbVariant: BreadcrumbVariant;
   multiTab: boolean;
   fontFamily: string;
   fontSize: number;
   direction: Direction;
   sidebarOpen: boolean;
   sidebarWidth: string;
+  sidebarVariant: "sidebar" | "floating" | "inset";
   grayMode: boolean;
   colorWeakMode: boolean;
+  tabType: TabType;
+  tabSortable: boolean;
+  headerFixed: boolean;
+  footerFixed: boolean;
+  showFooter: boolean;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -39,15 +52,21 @@ const useSettingStore = create<SettingStore>()(
         themeLayout: ThemeLayout.Vertical,
         themeStretch: false,
         breadCrumb: true,
-        accordion: false,
-        multiTab: false,
+        breadCrumbVariant: "ribbon",
+        multiTab: true,
         fontFamily: FontFamilyPreset.openSans,
         fontSize: Number(typographyTokens.fontSize.sm),
-        direction: "ltr",
+        direction: Direction.LTR,
         sidebarOpen: true,
         sidebarWidth: "16rem",
+        sidebarVariant: "inset",
         grayMode: false,
         colorWeakMode: false,
+        tabType: TabType.Chrome,
+        tabSortable: true,
+        headerFixed: false,
+        footerFixed: false,
+        showFooter: true,
       },
       actions: {
         setAppSettings: (appSettings) => {

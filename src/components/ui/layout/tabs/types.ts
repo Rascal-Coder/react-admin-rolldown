@@ -1,5 +1,5 @@
 import type { ReactNode, RefAttributes } from "react";
-export type TabType = "chrome" | "vscode" | "card";
+import type { TabType } from "@/types/enum";
 export type LayoutTabItem = {
   title: string;
   key: string;

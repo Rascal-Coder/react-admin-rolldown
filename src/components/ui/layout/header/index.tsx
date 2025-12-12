@@ -8,11 +8,12 @@ type HeaderVariant = "sidebar" | "floating" | "inset";
 
 const COLLAPSED_MARGIN_LEFT_BY_VARIANT: Record<HeaderVariant, string> = {
   sidebar: "ml-(--sidebar-width-icon)",
-  floating: "ml-[calc(var(--sidebar-width-icon)+(--spacing(4)))]",
+  floating: "ml-[calc(var(--sidebar-width-icon)+(--spacing(5)))]",
   inset: "ml-[calc(var(--sidebar-width-icon)+(--spacing(5)))]",
 };
 
 type HeaderProps = React.HTMLAttributes<HTMLElement> & {
+  ref?: React.RefObject<HTMLElement | null>;
   isFixed?: boolean;
   variant?: HeaderVariant;
 };
