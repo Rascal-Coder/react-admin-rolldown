@@ -24,6 +24,9 @@ export default function OtherSettings() {
       >
         灰色模式
       </SwitchItem>
+      <div className="sr-only" id="gray-mode-description">
+        Enable grayscale mode to reduce color interference
+      </div>
       <SwitchItem
         checked={colorWeakMode}
         onCheckedChange={(checked) =>
@@ -34,6 +37,9 @@ export default function OtherSettings() {
       >
         色弱模式
       </SwitchItem>
+      <div className="sr-only" id="color-weak-mode-description">
+        Enable color weak mode to help color blind users
+      </div>
     </>
   );
 }

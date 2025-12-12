@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { Text } from "@/components/base/typography";
 import {
   Tabs,
@@ -6,13 +5,19 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/animated-tabs";
+import { RadioGroup } from "@/components/ui/layout/layout-settings/components/radio-group";
 import { useAppSettings, useSettingsActions } from "@/store/setting-store";
 import { presetsColors } from "@/theme/tokens/color";
 import type { ThemeColorPresets } from "@/types/enum";
-import { cn } from "@/utils";
 import { colorGroups, groupLabels } from "./constants";
 import type { ColorGroup } from "./types";
 
+/**
+ * 预设主题
+ * 暖色系主题包括红色、橙色、黄色、绿色、蓝色、紫色、粉色、玫瑰色
+ * 冷色系主题包括绿色、蓝色、紫色、粉色、玫瑰色
+ * 用户可以通过点击预设主题来选择不同的主题颜色
+ */
 export default function ThemePresets() {
   const settings = useAppSettings();
   const { updateAppSettings } = useSettingsActions();
@@ -57,51 +62,51 @@ export default function ThemePresets() {
           ))}
         </TabsList>
 
-        {(Object.keys(groupLabels) as ColorGroup[]).map((group) => (
-          <TabsContent key={group} value={group}>
-            <div className="grid grid-cols-3 gap-3">
-              {Object.entries(presetsColors)
-                .filter(([preset]) =>
-                  colorGroups[group].includes(preset as ThemeColorPresets)
-                )
-                .map(([preset, color]) => (
-                  <button
-                    className={clsx(
-                      "group flex flex-col items-center justify-center gap-2 py-2 outline-box",
-                      themeColorPresets === preset && "outline-box-active"
-                    )}
-                    key={preset}
-                    onClick={() =>
-                      updateAppSettings({
-                        themeColorPresets: preset as ThemeColorPresets,
-                      })
-                    }
-                    type="button"
-                  >
-                    <div
-                      className={cn(
-                        "h-4 w-6 rounded-full shadow-sm ring-1 ring-black/10 ring-inset transition-all duration-300 dark:ring-white/10",
-                        themeColorPresets === preset
-                          ? "w-6 rotate-0"
-                          : "-rotate-45"
-                      )}
-                      style={{ backgroundColor: color.default }}
-                    />
-                    <span
-                      className={cn(
-                        "font-medium text-xs capitalize transition-colors group-hover:text-gray-900 dark:group-hover:text-gray-200",
-                        themeColorPresets === preset
-                          ? "font-bold text-primary"
-                          : "text-gray-600 dark:text-gray-400"
-                      )}
-                    >
-                      {preset}
-                    </span>
-                  </button>
-                ))}
-            </div>
-          </TabsContent>
-        ))}
+        {(Object.keys(groupLabels) as ColorGroup[]).map((group) => {
+          const groupItems = Object.entries(presetsColors)
+            .filter(([preset]) =>
+              colorGroups[group].includes(preset as ThemeColorPresets)
+            )
+            .map(([preset, color]) => ({
+              value: preset as ThemeColorPresets,
+              label: preset,
+              content: (
+                <svg
+                  className="group-data-[state=unchecked]:-rotate-45 h-8 w-full transition-transform duration-500 ease-out group-data-[state=checked]:rotate-0"
+                  viewBox="0 0 100 100"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title>{preset} color preset</title>
+                  <ellipse
+                    cx="50"
+                    cy="50"
+                    fill={color.default}
+                    rx="35"
+                    ry="20"
+                  />
+                </svg>
+              ),
+            }));
+
+          return (
+            <TabsContent key={group} value={group}>
+              <RadioGroup
+                ariaDescription="Select theme preset from warm or cool group"
+                ariaLabel={`Select theme preset from ${groupLabels[group]} group`}
+                items={groupItems}
+                onValueChange={(value) =>
+                  updateAppSettings({
+                    themeColorPresets: value,
+                  })
+                }
+                value={themeColorPresets}
+              />
+              <div className="sr-only" id="theme-presets-description">
+                Choose between warm or cool theme presets
+              </div>
+            </TabsContent>
+          );
+        })}
       </Tabs>
     </div>
   );

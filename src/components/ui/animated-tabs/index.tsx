@@ -1,7 +1,7 @@
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils";
 
 function Tabs({
   className,
@@ -72,10 +72,31 @@ function TabsList({
       });
     }
 
+    // Listen for direction changes on document
+    const dirObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "dir"
+        ) {
+          // Wait for next frame to ensure layout has updated
+          requestAnimationFrame(() => {
+            requestAnimationFrame(updateIndicator);
+          });
+        }
+      }
+    });
+
+    dirObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["dir"],
+    });
+
     return () => {
       clearTimeout(timeoutId);
       window.removeEventListener("resize", updateIndicator);
       observer.disconnect();
+      dirObserver.disconnect();
     };
   }, [updateIndicator]);
 
