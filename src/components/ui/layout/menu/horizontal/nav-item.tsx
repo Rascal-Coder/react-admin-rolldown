@@ -1,129 +1,160 @@
-// import useLocale from "@/locales/use-locale";
-
-import type { CSSProperties } from "react";
+import { cva } from "class-variance-authority";
+import { useNavigate } from "react-router";
+import { Badge } from "@/components/base/badge";
+import DotBadge from "@/components/base/dot-badge";
 import Icon from "@/components/ui/icon/icon";
-import { themeVars } from "@/theme/theme.css";
 import { cn } from "@/utils";
 import type { NavItemProps } from "./types";
-export type NavItemStyles = {
-  icon: CSSProperties;
-  texts: CSSProperties;
-  title: CSSProperties;
-  caption: CSSProperties;
-  info: CSSProperties;
-  arrow: CSSProperties;
-};
 
-export const navItemStyles: NavItemStyles = {
-  icon: {
-    display: "inline-flex",
-    flexShrink: 0,
-    width: 22,
-    height: 22,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  texts: {
-    display: "inline-flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    flex: "1 1 auto",
-  },
-  title: {
-    display: "-webkit-box",
-    WebkitBoxOrient: "vertical",
-    WebkitLineClamp: 1,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    fontSize: "0.875rem",
-    fontWeight: 500,
-    textAlign: "left",
-    lineHeight: 18 / 12,
-  },
-  caption: {
-    display: "-webkit-box",
-    WebkitLineClamp: 1,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    fontSize: "0.75rem",
-    fontWeight: 400,
-    color: themeVars.colors.text.disabled,
-    textAlign: "left",
-    lineHeight: 18 / 12,
-  },
+// Variants for NavItem
+const navItemVariants = cva(
+  "inline-flex min-h-[32px] w-full max-w-[250px] cursor-pointer items-center rounded-md px-2 py-1.5 align-middle text-sm transition-all duration-300 ease-in-out",
+  {
+    variants: {
+      active: {
+        true: "",
+        false: "text-text-secondary! hover:bg-action-hover!",
+      },
+      depth: {
+        1: "",
+        2: "",
+      },
+    },
+    compoundVariants: [
+      {
+        active: true,
+        depth: 1,
+        className: "bg-primary/hover! text-primary! hover:bg-primary/focus!",
+      },
+      {
+        active: true,
+        depth: 2,
+        className: "bg-action-hover!",
+      },
+    ],
+    defaultVariants: {
+      active: false,
+      depth: 1,
+    },
+  }
+);
 
-  info: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-    marginLeft: "6px",
-  },
+// Icon styles
+const navIconVariants = cva(
+  "inline-flex size-[22px] shrink-0 items-center justify-center"
+);
 
-  arrow: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-    width: 16,
-    height: 16,
-    marginLeft: "6px",
-    transition: "all 0.3s ease-in-out",
-  },
-};
+// Label/Title styles
+const navLabelVariants = cva(
+  "ml-2 line-clamp-1 flex-auto overflow-hidden text-ellipsis text-left font-medium text-sm leading-normal"
+);
 
-export const navItemClasses = {
-  base: "inline-flex w-full items-center align-middle rounded-md px-2 py-1.5 text-sm transition-all duration-300 ease-in-out text-text-secondary! cursor-pointer",
-  hover: "hover:bg-action-hover!",
-  active: "bg-primary/hover! hover:bg-primary/focus! text-primary!",
-  disabled: "cursor-not-allowed hover:bg-transparent text-action-disabled!",
-};
+// Arrow styles
+const navArrowVariants = cva(
+  "ml-1.5 inline-flex size-4 shrink-0 items-center justify-center transition-all duration-300 ease-in-out"
+);
 
-export const NavItem = (item: NavItemProps) => {
-  //   const { t } = useLocale();
+export const NavItem = ({
+  icon,
+  label,
+  badgeText,
+  badgeType,
+  badgeVariant,
+  hasChild,
+  active = false,
+  depth = 1,
+  className,
+  id,
+  external = false,
+  onClick,
+  ...props
+}: NavItemProps & { className?: string }) => {
+  const navigate = useNavigate();
 
-  const content = (
-    <>
+  // Map depth to valid variant values (1 or 2)
+  const depthVariant = (depth === 1 ? 1 : 2) as 1 | 2;
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // 如果有自定义点击事件，优先执行
+    if (onClick) {
+      onClick(e);
+      return;
+    }
+
+    // 如果有子菜单，不进行跳转（由 HoverCard 处理）
+    if (hasChild) {
+      return;
+    }
+
+    // 处理外链
+    if (external && id) {
+      window.open(id, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    // 处理内部路由跳转
+    if (id && !hasChild) {
+      navigate(id);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    // 支持 Enter 和 Space 键触发点击
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+    }
+  };
+
+  const isInteractive = !hasChild || !!onClick;
+
+  const interactiveProps = isInteractive
+    ? {
+        onClick: handleClick,
+        onKeyDown: handleKeyDown,
+        role: "button" as const,
+        tabIndex: 0,
+      }
+    : {};
+
+  return (
+    <div
+      className={cn(
+        navItemVariants({ active, depth: depthVariant }),
+        isInteractive && "cursor-pointer",
+        className
+      )}
+      {...interactiveProps}
+      {...props}
+    >
       {/* Icon */}
-      {item.icon && (
-        <span
-          className="items-center justify-center"
-          style={navItemStyles.icon}
-        >
-          <Icon icon={item.icon} />
+      {icon && (
+        <span className={navIconVariants()}>
+          <Icon icon={icon} />
         </span>
       )}
 
       {/* Label */}
-      <span className="block! ml-2 flex-auto!" style={navItemStyles.title}>
-        {item.label}
-      </span>
+      <span className={navLabelVariants()}>{label}</span>
 
       {/* Badge */}
-      {item.badgeText && (
-        <span style={navItemStyles.info}>{item.badgeText}</span>
+      {badgeText && badgeType === "text" && (
+        <Badge variant={badgeVariant || "default"}>{badgeText}</Badge>
+      )}
+      {badgeType === "normal" && (
+        <DotBadge variant={badgeVariant || "default"} />
       )}
 
       {/* Arrow */}
-      {item.hasChild && <ItemIcon depth={item.depth} />}
-    </>
+      {hasChild && <ItemIcon depth={depth} />}
+    </div>
   );
-
-  const itemClassName = cn(
-    navItemClasses.base,
-    navItemClasses.hover,
-    "min-h-[32px] max-w-[250px]",
-    item.active && item.depth === 1 && navItemClasses.active,
-    item.active && item.depth !== 1 && "bg-action-hover!",
-    item.disabled && navItemClasses.disabled
-  );
-
-  return <div className={itemClassName}>{content}</div>;
 };
 
 const ItemIcon = ({ depth = 1 }: { depth?: number }) => {
   const icon =
     depth === 1 ? "eva:arrow-ios-downward-fill" : "eva:arrow-ios-forward-fill";
-  return <Icon icon={icon} style={navItemStyles.arrow} />;
+  return <Icon className={navArrowVariants()} icon={icon} />;
 };
+
+export { navItemVariants };

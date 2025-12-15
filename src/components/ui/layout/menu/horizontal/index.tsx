@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { NavGroup } from "./nav-group";
+import { NavList } from "./nav-list";
 import type { NavProps } from "./types";
 
 export default function HorizontalMenu({
@@ -8,14 +8,23 @@ export default function HorizontalMenu({
   ...props
 }: NavProps) {
   return (
-    <nav className={cn("flex items-center gap-1", className)} {...props}>
-      {data.map((group, index) => (
-        <NavGroup
-          items={group.items}
-          key={group.name || index}
-          name={group.name}
-        />
-      ))}
+    <nav
+      className={cn(
+        "flex items-center gap-1 overflow-x-auto overflow-y-hidden",
+        "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border",
+        "hover:scrollbar-thumb-muted-foreground/50",
+        "max-w-full",
+        className
+      )}
+      {...props}
+    >
+      <li className="flex items-center">
+        <ul className="flex flex-row gap-1 whitespace-nowrap">
+          {data.map((item, index) => (
+            <NavList data={item} depth={1} key={item.label || index} />
+          ))}
+        </ul>
+      </li>
     </nav>
   );
 }

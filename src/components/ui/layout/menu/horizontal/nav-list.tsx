@@ -19,6 +19,7 @@ export function NavList({ data, depth = 0 }: NavListProps) {
       badgeType={data.badgeType}
       badgeVariant={data.badgeVariant}
       depth={depth}
+      external={data.external}
       hasChild={hasChild}
       icon={data.icon}
       id={data.id}

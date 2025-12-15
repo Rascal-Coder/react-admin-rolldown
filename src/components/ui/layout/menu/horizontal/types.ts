@@ -1,6 +1,5 @@
 import type { BadgeProps } from "@/components/base/dot-badge/types";
 
-// Use the same MenuItemData structure as vertical menu
 export interface MenuItemData {
   label: string;
   icon?: string;
@@ -9,6 +8,7 @@ export interface MenuItemData {
   badgeType?: "text" | "normal";
   badgeText?: string;
   badgeVariant?: BadgeProps["variant"];
+  external?: boolean;
 }
 
 export type NavItemOptionsProps = {
@@ -19,8 +19,6 @@ export type NavItemOptionsProps = {
 export type NavItemStateProps = {
   open?: boolean;
   active?: boolean;
-  disabled?: boolean;
-  hidden?: boolean;
 };
 
 /**
@@ -35,6 +33,8 @@ export type NavItemProps = React.ComponentProps<"div"> &
     badgeType?: "text" | "normal";
     badgeText?: string;
     badgeVariant?: BadgeProps["variant"];
+    external?: boolean;
+    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   };
 
 /**
@@ -45,19 +45,8 @@ export type NavListProps = Pick<NavItemProps, "depth"> & {
 };
 
 /**
- * Group
- */
-export type NavGroupProps = Omit<NavListProps, "data" | "depth"> & {
-  name?: string;
-  items: MenuItemData[];
-};
-
-/**
  * Main
  */
 export type NavProps = React.ComponentProps<"nav"> & {
-  data: {
-    name?: string;
-    items: MenuItemData[];
-  }[];
+  data: MenuItemData[];
 };

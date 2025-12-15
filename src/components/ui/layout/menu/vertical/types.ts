@@ -8,6 +8,7 @@ interface MenuItemData {
   badgeType?: "text" | "normal";
   badgeText?: string;
   badgeVariant?: BadgeProps["variant"];
+  external?: boolean;
 }
 
 export type { MenuItemData };
