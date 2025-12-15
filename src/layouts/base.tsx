@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import { Footer } from "@/components/ui/layout/footer";
 import { Header } from "@/components/ui/layout/header";
 import LayoutSettings from "@/components/ui/layout/layout-settings";
+import HorizontalMenu from "@/components/ui/layout/menu/horizontal";
 import { ProfileDropdown } from "@/components/ui/layout/profile-dropdown";
 import {
   SidebarInset,
@@ -17,6 +18,7 @@ import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { useDirection } from "@/context/direction-context";
 import { useElementHeight } from "@/hooks/use-element-height";
+import { useMenuData } from "@/store/menu-store";
 import { useAppSettings } from "@/store/setting-store";
 import { cn } from "@/utils";
 
@@ -34,15 +36,15 @@ const BaseLayout = () => {
     showFooter,
     footerFixed,
     headerFixed,
+    collapsibleType,
   } = useAppSettings();
   const [headerRef, headerHeight] = useElementHeight<HTMLElement>();
   const [footerRef, footerHeight] = useElementHeight<HTMLElement>();
-  console.log("headerHeight", headerHeight);
-  console.log("footerHeight", footerHeight);
-
+  const menuData = useMenuData();
   return (
     <SidebarProvider>
       <Sidebar
+        collapsible={collapsibleType}
         side={dir === "ltr" ? "left" : "right"}
         variant={sidebarVariant}
       />
@@ -74,6 +76,9 @@ const BaseLayout = () => {
                 <Home />
               </Button>
               {breadCrumb && <Breadcrumb variant={breadCrumbVariant} />}
+              {menuData && (
+                <HorizontalMenu data={[{ items: menuData.menuItems }]} />
+              )}
             </div>
             <div className="flex items-center gap-2">
               <ThemeSwitch />

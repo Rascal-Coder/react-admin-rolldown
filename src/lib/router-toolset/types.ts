@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import type { BadgeProps } from "@/components/base/dot-badge/types";
-import type { MenuItemData } from "@/components/ui/layout/tree-menu/types";
+import type { MenuItemData } from "@/components/ui/layout/menu/vertical/types";
 
 export type RouteConfig = {
   component?: () => Promise<{ default: () => JSX.Element }>;

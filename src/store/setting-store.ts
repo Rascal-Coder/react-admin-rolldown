@@ -11,6 +11,7 @@ import {
 import type { BreadcrumbVariant } from "@/components/ui/layout/breadcrumb/types";
 import { FontFamilyPreset, typographyTokens } from "@/theme/tokens/typography";
 export type SidebarVariant = "inset" | "sidebar" | "floating";
+export type CollapsibleType = "icon" | "offcanvas";
 export type SettingsType = {
   themeColorPresets: ThemeColorPresets;
   themeMode: ThemeMode;
@@ -23,7 +24,6 @@ export type SettingsType = {
   fontSize: number;
   direction: Direction;
   sidebarOpen: boolean;
-  sidebarWidth: string;
   sidebarVariant: "sidebar" | "floating" | "inset";
   grayMode: boolean;
   colorWeakMode: boolean;
@@ -32,6 +32,7 @@ export type SettingsType = {
   headerFixed: boolean;
   footerFixed: boolean;
   showFooter: boolean;
+  collapsibleType: CollapsibleType;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -58,7 +59,6 @@ const useSettingStore = create<SettingStore>()(
         fontSize: Number(typographyTokens.fontSize.sm),
         direction: Direction.LTR,
         sidebarOpen: true,
-        sidebarWidth: "16rem",
         sidebarVariant: "inset",
         grayMode: false,
         colorWeakMode: false,
@@ -67,6 +67,7 @@ const useSettingStore = create<SettingStore>()(
         headerFixed: false,
         footerFixed: false,
         showFooter: true,
+        collapsibleType: "icon",
       },
       actions: {
         setAppSettings: (appSettings) => {

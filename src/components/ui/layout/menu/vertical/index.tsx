@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useRouter } from "@/lib/router-toolset/history-router";
 import { routes } from "@/routes";
-import { useSidebar } from "./resizable-sidebar";
-import MiniTreeMenu from "./tree-menu/mini";
-import type { MenuItemData } from "./tree-menu/types";
-import VerticalTreeMenu from "./tree-menu/vertical";
+import { useSidebar } from "../../resizable-sidebar";
+import MiniTreeMenu from "./mini";
+import type { MenuItemData } from "./types";
+import VerticalTreeMenu from "./vertical";
 
-const TreeMenu = ({ data }: { data: MenuItemData[] }) => {
+const Nav = ({ data }: { data: MenuItemData[] }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { state } = useSidebar();
   const { curRoute } = useRouter(routes);
@@ -44,4 +44,4 @@ const TreeMenu = ({ data }: { data: MenuItemData[] }) => {
   return <div>{menu}</div>;
 };
 
-export default TreeMenu;
+export default Nav;

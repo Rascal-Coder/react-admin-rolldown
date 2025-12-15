@@ -28,6 +28,8 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 //* new constants for sidebar resizing
 const MIN_SIDEBAR_WIDTH = "14rem";
 const MAX_SIDEBAR_WIDTH = "22rem";
+//* localStorage key for sidebar width
+const SIDEBAR_WIDTH_STORAGE_KEY = "sidebar-width";
 
 type SidebarContext = {
   state: "expanded" | "collapsed";
@@ -82,7 +84,9 @@ const SidebarProvider = ({
 
   // Get initial state from settings store or use defaults
   const initialOpen = settings.sidebarOpen ?? defaultOpen;
-  const initialWidth = settings.sidebarWidth ?? defaultWidth;
+  // Get sidebar width from localStorage
+  const initialWidth =
+    localStorage.getItem(SIDEBAR_WIDTH_STORAGE_KEY) ?? defaultWidth;
 
   //* new state for sidebar width
   const [width, setWidthState] = React.useState(initialWidth);
@@ -109,14 +113,11 @@ const SidebarProvider = ({
     [setOpenProp, open, updateAppSettings]
   );
 
-  // Wrapper for setWidth that also saves to store
-  const setWidth = React.useCallback(
-    (newWidth: string) => {
-      setWidthState(newWidth);
-      updateAppSettings({ sidebarWidth: newWidth });
-    },
-    [updateAppSettings]
-  );
+  // Wrapper for setWidth that also saves to localStorage
+  const setWidth = React.useCallback((newWidth: string) => {
+    setWidthState(newWidth);
+    localStorage.setItem(SIDEBAR_WIDTH_STORAGE_KEY, newWidth);
+  }, []);
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(

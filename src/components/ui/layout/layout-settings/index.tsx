@@ -24,13 +24,13 @@ import ContentSettings from "./modules/content-settings";
 import DirectionSettings from "./modules/direction-settings";
 import FontSettings from "./modules/font-settings";
 import HeaderFooterSettings from "./modules/header-footer-settings";
+import LayoutSettings from "./modules/layout-settings";
 import OtherSettings from "./modules/other-settings";
 import SidebarSettings from "./modules/sidebar-settings";
 import TabsSettings from "./modules/tabs-settings";
 import ThemeModeSelector from "./modules/theme-mode";
 import ThemePresets from "./modules/theme-presets";
-
-export default function LayoutSettings() {
+export default function LayoutSettingsComponent() {
   const [activeTab, setActiveTab] = useState("appearance");
   const sheetContentBgStyle: CSSProperties = {
     backdropFilter: "blur(20px)",
@@ -90,18 +90,20 @@ export default function LayoutSettings() {
             className="flex flex-col gap-2 overflow-y-auto px-6 py-2"
             value="layout"
           >
+            {/* 标签栏设置 */}
+            <TabsSettings />
+            {/* 面包屑设置 */}
+            <BreadcrumbSettings />
+            {/* 布局设置 */}
+            <LayoutSettings />
+            {/* 侧边栏设置 */}
+            <SidebarSettings />
             {/* 方向设置 */}
             <DirectionSettings />
             {/* 内容设置 */}
             <ContentSettings />
             {/* 顶栏和底栏设置 */}
             <HeaderFooterSettings />
-            {/* 标签栏设置 */}
-            <TabsSettings />
-            {/* 面包屑设置 */}
-            <BreadcrumbSettings />
-            {/* 侧边栏设置 */}
-            <SidebarSettings />
           </TabsContent>
         </Tabs>
       </SheetContent>

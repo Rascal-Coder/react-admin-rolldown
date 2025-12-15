@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/layout/resizable-sidebar";
 import { useMenuData } from "@/store/menu-store";
 import { Logo } from "../logo";
+import Nav from "../menu/vertical";
 import { NavUser } from "../nav-user";
-import TreeMenu from "../tree-menu";
 
 export type SidebarProps = React.ComponentProps<typeof BaseSidebar> & {
   logo?: string;
@@ -26,12 +26,12 @@ export function Sidebar({ ...props }: SidebarProps) {
   }
 
   return (
-    <BaseSidebar collapsible="icon" {...props}>
+    <BaseSidebar {...props}>
       <SidebarHeader>
         <Logo onClick={() => {}} />
       </SidebarHeader>
       <SidebarContent>
-        <TreeMenu data={menuData.menuItems} />
+        <Nav data={menuData.menuItems} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser
