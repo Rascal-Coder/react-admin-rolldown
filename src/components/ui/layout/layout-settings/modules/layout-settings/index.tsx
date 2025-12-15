@@ -6,7 +6,11 @@ import {
   useSettingsActions,
 } from "@/store/setting-store";
 import { RadioGroup } from "../../components/radio-group";
-import { IconLayoutHorizontal, IconLayoutVertical } from "./icons";
+import {
+  IconLayoutCompact,
+  IconLayoutHorizontal,
+  IconLayoutVertical,
+} from "./icons";
 export default function LayoutSettings() {
   const { collapsibleType } = useAppSettings();
   const { updateAppSettings } = useSettingsActions();
@@ -27,11 +31,11 @@ export default function LayoutSettings() {
             label: "vertical",
             content: <IconLayoutVertical />,
           },
-          // {
-          //   value: "icon",
-          //   label: "Compact",
-          //   content: <IconLayoutCompact />,
-          // },
+          {
+            value: "icon",
+            label: "Compact",
+            content: <IconLayoutCompact />,
+          },
           {
             value: "offcanvas",
             label: "horizontal",
@@ -40,6 +44,7 @@ export default function LayoutSettings() {
         ]}
         onValueChange={(v) => {
           if (v === "default") {
+            updateAppSettings({ collapsibleType: "icon" as CollapsibleType });
             setOpen(true);
             return;
           }

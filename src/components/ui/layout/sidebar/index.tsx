@@ -17,6 +17,7 @@ export type SidebarProps = React.ComponentProps<typeof BaseSidebar> & {
 };
 
 export function Sidebar({ ...props }: SidebarProps) {
+  // const { collapsibleType } = useAppSettings();
   // 从全局菜单 store 中读取完整菜单数据（Source: 菜单全局状态）
   const menuData = useMenuData();
 
@@ -42,7 +43,7 @@ export function Sidebar({ ...props }: SidebarProps) {
           }}
         />
       </SidebarFooter>
-      <SidebarRail />
+      {props.collapsible === "icon" && <SidebarRail />}
     </BaseSidebar>
   );
 }

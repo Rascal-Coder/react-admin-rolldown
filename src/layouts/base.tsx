@@ -63,20 +63,22 @@ const BaseLayout = () => {
           {multiTab && <LayoutTabs sortable={tabSortable} tabType={tabType} />}
           <div className="flex justify-between gap-2 px-2 py-1.5">
             <div className="flex min-w-0 flex-1 items-center gap-2">
-              <SidebarTrigger
-                className="flex-shrink-0 cursor-pointer max-md:scale-125"
-                variant="outline"
-              />
+              {collapsibleType !== "offcanvas" && (
+                <SidebarTrigger
+                  className="shrink-0 cursor-pointer max-md:scale-125"
+                  variant="outline"
+                />
+              )}
               <Button
-                className="size-7 flex-shrink-0 max-md:scale-125"
+                className="size-7 shrink-0 max-md:scale-125"
                 onClick={() => navigate("/dashboard")}
                 size="icon"
                 variant="outline"
               >
                 <Home />
               </Button>
-              {breadCrumb && (
-                <div className="flex-shrink-0">
+              {collapsibleType !== "offcanvas" && breadCrumb && (
+                <div className="shrink-0">
                   <Breadcrumb variant={breadCrumbVariant} />
                 </div>
               )}
@@ -86,7 +88,7 @@ const BaseLayout = () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-shrink-0 items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <ThemeSwitch />
               <ProfileDropdown
                 user={{ name: "Bug", email: "bug@bug.com", avatar }}

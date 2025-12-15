@@ -1,6 +1,7 @@
 import { Settings } from "lucide-react";
 import { type HTMLMotionProps, motion } from "motion/react";
-import { type ReactNode, useState } from "react";
+import type { ReactNode, Ref } from "react";
+import { useState } from "react";
 
 import {
   Tooltip,
@@ -14,6 +15,7 @@ interface FloatSettingsButtonProps
   icon?: ReactNode;
   tooltip?: string;
   tooltipTriggerMode?: "hover" | "always";
+  ref?: Ref<HTMLButtonElement>;
 }
 
 export default function FloatSettingsButton({
@@ -21,6 +23,7 @@ export default function FloatSettingsButton({
   icon,
   tooltip,
   tooltipTriggerMode = "always",
+  ref,
   ...props
 }: FloatSettingsButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +36,7 @@ export default function FloatSettingsButton({
         className
       )}
       initial={{ opacity: 0, scale: 0 }}
+      ref={ref}
       style={{
         boxShadow:
           "0 6px 16px 0 rgba(0, 0, 0, 0.08),0 3px 6px -4px rgba(0, 0, 0, 0.12),0 9px 28px 8px rgba(0, 0, 0, 0.05)",
