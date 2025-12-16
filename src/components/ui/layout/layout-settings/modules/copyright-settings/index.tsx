@@ -21,6 +21,7 @@ export default function CopyrightSettings() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           initial={{ opacity: 0, y: -10 }}
+          key="copyright-settings"
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
           <div className="flex items-center">

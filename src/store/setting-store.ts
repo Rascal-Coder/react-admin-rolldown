@@ -33,6 +33,11 @@ export type SettingsType = {
   footerFixed: boolean;
   showFooter: boolean;
   collapsibleType: CollapsibleType;
+  icpLink: string;
+  icp: string;
+  copyrightDate: string;
+  companyName: string;
+  companySiteLink: string;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -68,6 +73,11 @@ const useSettingStore = create<SettingStore>()(
         footerFixed: false,
         showFooter: true,
         collapsibleType: "icon",
+        icpLink: "",
+        icp: "",
+        copyrightDate: "",
+        companyName: "Bug Admin",
+        companySiteLink: "https://react-admin-rolldown.vercel.app/",
       },
       actions: {
         setAppSettings: (appSettings) => {

@@ -20,6 +20,7 @@ import { useDirection } from "@/context/direction-context";
 import { cn } from "@/utils";
 import BreadcrumbSettings from "./modules/breadcrumb-settings";
 import ContentSettings from "./modules/content-settings";
+import CopyrightSettings from "./modules/copyright-settings";
 import DirectionSettings from "./modules/direction-settings";
 import FontSettings from "./modules/font-settings";
 import HeaderFooterSettings from "./modules/header-footer-settings";
@@ -97,7 +98,7 @@ export default function LayoutSettingsComponent() {
             </TabsList>
             {/* 外观 */}
             <TabsContent
-              className="flex flex-col gap-2 overflow-y-auto px-6 py-2"
+              className="flex flex-col gap-1 overflow-y-auto px-6 py-2"
               value="appearance"
             >
               {/* 主题模式选择 */}
@@ -111,7 +112,7 @@ export default function LayoutSettingsComponent() {
             </TabsContent>
             {/* 布局 */}
             <TabsContent
-              className="flex flex-col gap-2 overflow-y-auto px-6 py-2"
+              className="flex flex-col gap-1 overflow-y-auto px-6 py-2"
               value="layout"
             >
               {/* 标签栏设置 */}
@@ -128,6 +129,8 @@ export default function LayoutSettingsComponent() {
               <ContentSettings />
               {/* 顶栏和底栏设置 */}
               <HeaderFooterSettings />
+              {/* 版权设置 */}
+              <CopyrightSettings />
             </TabsContent>
           </Tabs>
         </SheetContent>

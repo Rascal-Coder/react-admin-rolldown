@@ -37,6 +37,11 @@ const BaseLayout = () => {
     footerFixed,
     headerFixed,
     collapsibleType,
+    icp,
+    icpLink,
+    companyName,
+    companySiteLink,
+    copyrightDate,
   } = useAppSettings();
   const [headerRef, headerHeight] = useElementHeight<HTMLElement>();
   const [footerRef, footerHeight] = useElementHeight<HTMLElement>();
@@ -82,7 +87,8 @@ const BaseLayout = () => {
                   <Breadcrumb variant={breadCrumbVariant} />
                 </div>
               )}
-              {menuData && (
+              {/* 水平布局时使用HorizontalMenu */}
+              {menuData && collapsibleType === "offcanvas" && (
                 <div className="min-w-0 flex-1 overflow-hidden">
                   <HorizontalMenu data={menuData.menuItems} />
                 </div>
@@ -120,7 +126,11 @@ const BaseLayout = () => {
         </main>
         {showFooter && (
           <Footer
-            companyName="Bug Admin"
+            companyName={companyName}
+            companySiteLink={companySiteLink}
+            date={copyrightDate}
+            icp={icp}
+            icpLink={icpLink}
             isFixed={footerFixed}
             ref={footerRef}
             variant={sidebarVariant}
