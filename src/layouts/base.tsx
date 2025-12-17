@@ -1,5 +1,12 @@
+import { useUpdateEffect } from "ahooks";
+import { KeepAlive, useKeepAliveRef } from "keepalive-for-react";
 import { Home } from "lucide-react";
-import { Outlet, useNavigate } from "react-router";
+import {
+  useLocation,
+  useNavigate,
+  useOutlet,
+  useOutletContext,
+} from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
 import { Button } from "@/components/base/button";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
@@ -18,10 +25,15 @@ import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { useDirection } from "@/context/direction-context";
 import { useElementHeight } from "@/hooks/use-element-height";
+import {
+  useCacheActions,
+  useCacheRoutes,
+  useRemoveCacheKey,
+} from "@/store/cache-store";
 import { useMenuData } from "@/store/menu-store";
 import { useAppSettings } from "@/store/setting-store";
 import { cn } from "@/utils";
-
+import "./transition.css";
 const BaseLayout = () => {
   const navigate = useNavigate();
   const { dir } = useDirection();
@@ -46,6 +58,23 @@ const BaseLayout = () => {
   const [headerRef, headerHeight] = useElementHeight<HTMLElement>();
   const [footerRef, footerHeight] = useElementHeight<HTMLElement>();
   const menuData = useMenuData();
+  const cacheKeys = useCacheRoutes();
+  const previousRoute = useOutletContext();
+  const outlet = useOutlet(previousRoute);
+  const { pathname } = useLocation();
+  const aliveRef = useKeepAliveRef();
+  const removeCacheKey = useRemoveCacheKey();
+  const { setRemoveCacheKey } = useCacheActions();
+  useUpdateEffect(() => {
+    if (!(aliveRef.current && removeCacheKey)) {
+      return;
+    }
+
+    aliveRef.current.destroy(removeCacheKey);
+
+    // 有的时候用户打开同一页面输入在关闭 不去切换新的页面 会造成无法二次删除缓存
+    setRemoveCacheKey(null);
+  }, [removeCacheKey]);
   return (
     <SidebarProvider>
       <Sidebar
@@ -120,10 +149,17 @@ const BaseLayout = () => {
             marginBottom: footerFixed && showFooter ? footerHeight : 0,
           }}
         >
-          <div className="h-full rounded-xl bg-muted p-4">
-            <Outlet />
-          </div>
+          <KeepAlive
+            activeCacheKey={pathname}
+            aliveRef={aliveRef}
+            cacheNodeClassName="fade-slide h-full rounded-xl bg-muted p-4"
+            enableActivity
+            include={cacheKeys}
+          >
+            {outlet}
+          </KeepAlive>
         </main>
+
         {showFooter && (
           <Footer
             companyName={companyName}

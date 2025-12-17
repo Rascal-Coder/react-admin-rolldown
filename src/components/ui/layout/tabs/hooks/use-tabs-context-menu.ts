@@ -1,3 +1,4 @@
+import { useCacheActions } from "@/store/cache-store";
 import type { LayoutTabItem, UseTabsContextMenuProps } from "../types";
 
 export function useTabsContextMenu({
@@ -6,6 +7,7 @@ export function useTabsContextMenu({
   activeTab,
   onNavigate,
 }: UseTabsContextMenuProps) {
+  const { setRemoveCacheKey } = useCacheActions();
   // 导航到指定的tab
   const navigateToTab = (tabKey: string) => {
     setActiveTab(tabKey);
@@ -27,6 +29,8 @@ export function useTabsContextMenu({
 
   // 关闭当前标签页
   const handleCloseTab = (tabKey: string) => {
+    let shouldRemoveCache = false;
+
     updateTabs((draft) => {
       // 如果是最后一个标签页，不允许关闭
       if (draft.length <= 1) {
@@ -53,7 +57,13 @@ export function useTabsContextMenu({
 
       // 移除标签页
       draft.splice(tabIndex, 1);
+      shouldRemoveCache = true;
     });
+
+    // 通知 cache-store 移除该路由的缓存
+    if (shouldRemoveCache) {
+      setRemoveCacheKey(tabKey);
+    }
   };
 
   // 固定/取消固定标签页
@@ -83,6 +93,8 @@ export function useTabsContextMenu({
 
   // 关闭左侧标签页
   const handleCloseLeftTabs = (tabKey: string) => {
+    const removedKeys: string[] = [];
+
     updateTabs((draft) => {
       const currentIndex = draft.findIndex((tab) => tab.key === tabKey);
       if (currentIndex === -1) {
@@ -98,6 +110,7 @@ export function useTabsContextMenu({
       // 只关闭非固定的标签页（从右到左删除）
       for (let i = currentIndex - 1; i >= 0; i--) {
         if (!draft[i].pinned) {
+          removedKeys.push(draft[i].key);
           draft.splice(i, 1);
         }
       }
@@ -107,10 +120,17 @@ export function useTabsContextMenu({
         navigateToTab(tabKey);
       }
     });
+
+    // 批量通知 cache-store 移除缓存
+    if (removedKeys.length > 0) {
+      setRemoveCacheKey(removedKeys);
+    }
   };
 
   // 关闭右侧标签页
   const handleCloseRightTabs = (tabKey: string) => {
+    const removedKeys: string[] = [];
+
     updateTabs((draft) => {
       const currentIndex = draft.findIndex((tab) => tab.key === tabKey);
       if (currentIndex === -1) {
@@ -126,6 +146,7 @@ export function useTabsContextMenu({
       // 只关闭非固定的标签页（从右到左删除，避免索引变化问题）
       for (let i = draft.length - 1; i > currentIndex; i--) {
         if (!draft[i].pinned) {
+          removedKeys.push(draft[i].key);
           draft.splice(i, 1);
         }
       }
@@ -135,10 +156,17 @@ export function useTabsContextMenu({
         navigateToTab(tabKey);
       }
     });
+
+    // 批量通知 cache-store 移除缓存
+    if (removedKeys.length > 0) {
+      setRemoveCacheKey(removedKeys);
+    }
   };
 
   // 关闭其他标签页
   const handleCloseOtherTabs = (tabKey: string) => {
+    const removedKeys: string[] = [];
+
     updateTabs((draft) => {
       // 检查当前激活的tab是否会被移除
       const activeTabItem = draft.find((tab) => tab.key === activeTab);
@@ -149,6 +177,7 @@ export function useTabsContextMenu({
       for (let i = draft.length - 1; i >= 0; i--) {
         const tab = draft[i];
         if (tab.key !== tabKey && !tab.pinned) {
+          removedKeys.push(tab.key);
           draft.splice(i, 1);
         }
       }
@@ -158,6 +187,11 @@ export function useTabsContextMenu({
         navigateToTab(tabKey);
       }
     });
+
+    // 批量通知 cache-store 移除缓存
+    if (removedKeys.length > 0) {
+      setRemoveCacheKey(removedKeys);
+    }
   };
 
   // 重新加载标签页

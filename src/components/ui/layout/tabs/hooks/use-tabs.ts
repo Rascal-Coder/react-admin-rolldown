@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import type { RouteConfig } from "@/lib/router-toolset/types";
+import { useCacheActions } from "@/store/cache-store";
 import { useActiveTab, useTabsActions, useTabsData } from "@/store/tabs-store";
 import type { LayoutTabItem } from "../types";
 import {
@@ -32,6 +33,7 @@ export function useTabs(options?: UseTabsOptions) {
   const tabs = useTabsData();
   const activeTab = useActiveTab();
   const { setActiveTab, updateTabs: updateTabsInStore } = useTabsActions();
+  const { setRemoveCacheKey } = useCacheActions();
 
   const prevPathnameRef = useRef<string | undefined>(undefined);
   const prevFlattenRoutesRef = useRef<Map<string, RouteConfig> | undefined>(
@@ -201,8 +203,11 @@ export function useTabs(options?: UseTabsOptions) {
         // 移除标签页
         draft.splice(tabIndex, 1);
       });
+
+      // 通知 cache-store 移除该路由的缓存
+      setRemoveCacheKey(tabKey);
     },
-    [updateTabs, activeTab, handleActiveTabClose]
+    [updateTabs, activeTab, handleActiveTabClose, setRemoveCacheKey]
   );
 
   // 添加新的tab

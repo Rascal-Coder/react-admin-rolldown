@@ -122,6 +122,13 @@ export const routesConfig: RouteConfig[] = [
         ],
       },
       {
+        path: "alive",
+        component: () => import("@/pages/alive"),
+        name: "KeepAlive",
+        icon: "local:kun",
+        keepAlive: true,
+      },
+      {
         path: "user",
         name: "用户管理",
         icon: "lucide:user",

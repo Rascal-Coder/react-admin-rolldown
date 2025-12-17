@@ -3,6 +3,9 @@ import type { BadgeProps } from "@/components/base/dot-badge/types";
 import type { MenuItemData } from "@/components/ui/layout/menu/vertical/types";
 
 export type RouteConfig = {
+  /** 是否缓存 */
+  keepAlive?: boolean;
+  /** 页面组件 */
   component?: () => Promise<{ default: () => JSX.Element }>;
   /** 是否固定在标签页 */
   pinned?: boolean;
