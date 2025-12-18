@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { SortableItem } from "@/components/base/sortable";
 import type { TabType } from "@/types/enum";
 import { cn } from "@/utils";
@@ -70,7 +70,7 @@ export function TabItemWrapper({
   if (sortable) {
     return (
       <SortableItem {...commonProps} asHandle={asHandle} value={item.key}>
-        <motion.div
+        <m.div
           animate="animate"
           className="size-full"
           exit="exit"
@@ -81,13 +81,13 @@ export function TabItemWrapper({
           whileTap={{ scale: activeTab === item.key ? 1 : 0.9 }}
         >
           {children}
-        </motion.div>
+        </m.div>
       </SortableItem>
     );
   }
 
   return (
-    <motion.div
+    <m.div
       {...commonProps}
       animate="animate"
       exit="exit"
@@ -97,6 +97,6 @@ export function TabItemWrapper({
       variants={tabAnimationVariants}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

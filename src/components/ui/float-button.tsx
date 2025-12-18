@@ -1,5 +1,5 @@
 import { Settings } from "lucide-react";
-import { type HTMLMotionProps, motion } from "motion/react";
+import { type HTMLMotionProps, m } from "motion/react";
 import type { ReactNode, Ref } from "react";
 import { useState } from "react";
 
@@ -29,7 +29,7 @@ export default function FloatSettingsButton({
   const [isOpen, setIsOpen] = useState(false);
 
   const Button = (
-    <motion.button
+    <m.button
       animate={{ opacity: 1, scale: 1 }}
       className={cn(
         "fixed bottom-8 z-50 flex size-12 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -46,7 +46,7 @@ export default function FloatSettingsButton({
       {...props}
     >
       {icon || <Settings className="size-6" />}
-    </motion.button>
+    </m.button>
   );
 
   if (tooltip) {

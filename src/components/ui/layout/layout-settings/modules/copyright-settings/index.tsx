@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { Text } from "@/components/base/typography";
 import { useAppSettings, useSettingsActions } from "@/store/setting-store";
 import { InputItem } from "../../components/input-item";
@@ -17,7 +17,7 @@ export default function CopyrightSettings() {
   return (
     <AnimatePresence mode="wait">
       {showFooter && (
-        <motion.div
+        <m.div
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           initial={{ opacity: 0, y: -10 }}
@@ -77,7 +77,7 @@ export default function CopyrightSettings() {
           >
             ICP网站链接
           </InputItem>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

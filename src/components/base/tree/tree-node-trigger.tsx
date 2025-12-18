@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { type ReactNode, useMemo } from "react";
 import { cn } from "@/utils";
 import { useTree, useTreeNode } from "./context";
@@ -28,7 +28,7 @@ const TreeNodeTrigger = ({
     return "bg-accent/50";
   }, [level, isSelected]);
   return (
-    <motion.div
+    <m.div
       className={cn(
         "group relative mx-1 mb-0.5 flex cursor-pointer items-center rounded-md px-3 py-2 transition-all duration-200 hover:bg-accent/80",
         selectedStyle,
@@ -47,7 +47,7 @@ const TreeNodeTrigger = ({
     >
       <TreeLines />
       {children as ReactNode}
-    </motion.div>
+    </m.div>
   );
 };
 

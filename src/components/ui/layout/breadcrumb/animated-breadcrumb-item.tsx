@@ -1,5 +1,5 @@
 import type { HTMLMotionProps } from "motion/react";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { cn } from "@/utils";
 
 interface AnimatedBreadcrumbItemProps extends HTMLMotionProps<"li"> {}
@@ -17,7 +17,7 @@ export function AnimatedBreadcrumbItem({
   ...props
 }: AnimatedBreadcrumbItemProps) {
   return (
-    <motion.li
+    <m.li
       animate={animate}
       className={cn(className)}
       data-slot="breadcrumb-item"
@@ -27,6 +27,6 @@ export function AnimatedBreadcrumbItem({
       {...props}
     >
       {children}
-    </motion.li>
+    </m.li>
   );
 }

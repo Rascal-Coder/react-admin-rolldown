@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useCallback, useState } from "react";
 import { cn } from "@/utils";
 import { TreeContext } from "./context";
@@ -88,14 +88,14 @@ const TreeProvider = ({
         animateExpand,
       }}
     >
-      <motion.div
+      <m.div
         animate={{ opacity: 1, y: 0 }}
         className={cn("w-full", className)}
         initial={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
         {children}
-      </motion.div>
+      </m.div>
     </TreeContext.Provider>
   );
 };

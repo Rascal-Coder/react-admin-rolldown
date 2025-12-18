@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useTree, useTreeNode } from "./context";
 import type { TreeNodeContentProps } from "./types";
 
@@ -15,7 +15,7 @@ const TreeNodeContent = ({
   return (
     <AnimatePresence>
       {hasChildren && isExpanded && (
-        <motion.div
+        <m.div
           animate={{ height: "auto", opacity: 1 }}
           className="overflow-hidden"
           exit={{ height: 0, opacity: 0 }}
@@ -25,7 +25,7 @@ const TreeNodeContent = ({
             ease: "easeInOut",
           }}
         >
-          <motion.div
+          <m.div
             animate={{ y: 0 }}
             className={className}
             exit={{ y: -10 }}
@@ -37,8 +37,8 @@ const TreeNodeContent = ({
             {...props}
           >
             {children}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

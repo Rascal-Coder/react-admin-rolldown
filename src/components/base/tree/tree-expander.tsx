@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { cn } from "@/utils";
 import { useTree, useTreeNode } from "./context";
 import type { TreeExpanderProps } from "./types";
@@ -20,7 +20,7 @@ const TreeExpander = ({
   }
 
   return (
-    <motion.div
+    <m.div
       animate={{ rotate: isExpanded ? 90 : 0 }}
       className={cn(
         "mr-1 flex h-4 w-4 cursor-pointer items-center justify-center",
@@ -35,7 +35,7 @@ const TreeExpander = ({
       {...props}
     >
       <ChevronRight className="h-3 w-3" />
-    </motion.div>
+    </m.div>
   );
 };
 

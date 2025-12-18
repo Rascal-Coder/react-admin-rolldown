@@ -1,4 +1,4 @@
-import type { motion } from "motion/react";
+import type { m } from "motion/react";
 import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
 
 type TreeContextType = {
@@ -44,20 +44,20 @@ type TreeNodeProps = HTMLAttributes<HTMLDivElement> & {
   children?: ReactNode;
 };
 
-type TreeNodeTriggerProps = ComponentProps<typeof motion.div>;
+type TreeNodeTriggerProps = ComponentProps<typeof m.div>;
 
 type TreeLabelProps = HTMLAttributes<HTMLSpanElement>;
 
-type TreeIconProps = ComponentProps<typeof motion.div> & {
+type TreeIconProps = ComponentProps<typeof m.div> & {
   icon?: ReactNode;
   hasChildren?: boolean;
 };
 
-type TreeNodeContentProps = ComponentProps<typeof motion.div> & {
+type TreeNodeContentProps = ComponentProps<typeof m.div> & {
   hasChildren?: boolean;
 };
 
-type TreeExpanderProps = ComponentProps<typeof motion.div> & {
+type TreeExpanderProps = ComponentProps<typeof m.div> & {
   hasChildren?: boolean;
 };
 

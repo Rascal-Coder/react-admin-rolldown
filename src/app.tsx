@@ -3,6 +3,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useRoutes } from "react-router";
 import { DirectionProvider } from "@/context/direction-provider";
+import { MotionLazy } from "./components/ui/animate/motion-lazy";
 import { ErrorFallback } from "./components/ui/error-fallback";
 import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
 import { GLOBAL_CONFIG } from "./global-config";
@@ -31,7 +32,9 @@ function App() {
           <link href={"/logo.svg"} rel="icon" />
         </Helmet>
         <RouteLoadingProgress />
-        <DirectionProvider>{element}</DirectionProvider>
+        <DirectionProvider>
+          <MotionLazy>{element}</MotionLazy>
+        </DirectionProvider>
       </HelmetProvider>
     </ErrorBoundary>
   );
