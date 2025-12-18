@@ -1,26 +1,29 @@
+// Easing function type compatible with Framer Motion
+type EasingFunction = [number, number, number, number];
+
 export type VariantsType = {
   durationIn?: number;
   durationOut?: number;
-  easeIn?: [];
-  easeOut?: [];
+  easeIn?: EasingFunction;
+  easeOut?: EasingFunction;
   distance?: number;
 };
 
 export type TranHoverType = {
   duration?: number;
-  ease?: [];
+  ease?: EasingFunction;
 };
 export type TranEnterType = {
   durationIn?: number;
-  easeIn?: [];
+  easeIn?: EasingFunction;
 };
 export type TranExitType = {
   durationOut?: number;
-  easeOut?: [];
+  easeOut?: EasingFunction;
 };
 
 export type BackgroundType = {
   duration?: number;
-  ease?: [];
+  ease?: EasingFunction;
   colors?: string[];
 };

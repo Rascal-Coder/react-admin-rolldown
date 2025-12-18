@@ -12,6 +12,18 @@ import type { BreadcrumbVariant } from "@/components/ui/layout/breadcrumb/types"
 import { FontFamilyPreset, typographyTokens } from "@/theme/tokens/typography";
 export type SidebarVariant = "inset" | "sidebar" | "floating";
 export type CollapsibleType = "icon" | "offcanvas";
+
+// 页面切换动画类型
+export type PageTransitionType =
+  | "fadeInLeft"
+  | "fadeInRight"
+  | "fadeInUp"
+  | "fadeInDown"
+  | "zoomIn"
+  | "bounceIn"
+  | "flipInX"
+  | "scaleInX";
+
 export type SettingsType = {
   themeColorPresets: ThemeColorPresets;
   themeMode: ThemeMode;
@@ -38,6 +50,7 @@ export type SettingsType = {
   copyrightDate: string;
   companyName: string;
   companySiteLink: string;
+  pageTransition: PageTransitionType;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -78,6 +91,7 @@ const useSettingStore = create<SettingStore>()(
         copyrightDate: "",
         companyName: "Bug Admin",
         companySiteLink: "https://react-admin-rolldown.vercel.app/",
+        pageTransition: "fadeInLeft",
       },
       actions: {
         setAppSettings: (appSettings) => {

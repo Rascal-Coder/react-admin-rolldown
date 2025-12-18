@@ -7,19 +7,6 @@ import { varScale } from "./scale";
 import { varSlide } from "./slide";
 import { varZoom } from "./zoom";
 
-// export * from "./action";
-// export * from "./background";
-// export * from "./bounce";
-// export * from "./container";
-// export * from "./fade";
-// export * from "./flip";
-// export * from "./path";
-// export * from "./rotate";
-// export * from "./scale";
-// export * from "./slide";
-// export * from "./transition";
-// export * from "./zoom";
-
 export function getVariant(variant = "slideInUp") {
   return {
     // Slide

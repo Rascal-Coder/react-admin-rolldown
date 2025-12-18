@@ -1,6 +1,7 @@
 import { useUpdateEffect } from "ahooks";
 import { KeepAlive, useKeepAliveRef } from "keepalive-for-react";
 import { Home } from "lucide-react";
+import { m, type Variants } from "motion/react";
 import {
   useLocation,
   useNavigate,
@@ -9,6 +10,7 @@ import {
 } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
 import { Button } from "@/components/base/button";
+import { getVariant } from "@/components/ui/animate/variants";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import { Footer } from "@/components/ui/layout/footer";
 import { Header } from "@/components/ui/layout/header";
@@ -33,7 +35,7 @@ import {
 import { useMenuData } from "@/store/menu-store";
 import { useAppSettings } from "@/store/setting-store";
 import { cn } from "@/utils";
-import "./transition.css";
+
 const BaseLayout = () => {
   const navigate = useNavigate();
   const { dir } = useDirection();
@@ -54,6 +56,7 @@ const BaseLayout = () => {
     companyName,
     companySiteLink,
     copyrightDate,
+    pageTransition,
   } = useAppSettings();
   const [headerRef, headerHeight] = useElementHeight<HTMLElement>();
   const [footerRef, footerHeight] = useElementHeight<HTMLElement>();
@@ -149,15 +152,24 @@ const BaseLayout = () => {
             marginBottom: footerFixed && showFooter ? footerHeight : 0,
           }}
         >
-          <KeepAlive
-            activeCacheKey={pathname}
-            aliveRef={aliveRef}
-            cacheNodeClassName="fade-slide h-full rounded-xl bg-muted p-4"
-            enableActivity
-            include={cacheKeys}
+          <m.div
+            animate="animate"
+            className="h-full"
+            exit="exit"
+            initial="initial"
+            key={pathname}
+            variants={getVariant(pageTransition) as Variants}
           >
-            {outlet}
-          </KeepAlive>
+            <KeepAlive
+              activeCacheKey={pathname}
+              aliveRef={aliveRef}
+              cacheNodeClassName="h-full rounded-xl bg-muted p-4"
+              enableActivity
+              include={cacheKeys}
+            >
+              {outlet}
+            </KeepAlive>
+          </m.div>
         </main>
 
         {showFooter && (

@@ -18,6 +18,7 @@ import {
 import FloatButton from "@/components/ui/float-button";
 import { useDirection } from "@/context/direction-context";
 import { cn } from "@/utils";
+import AnimationSettings from "./modules/animation-settings";
 import BreadcrumbSettings from "./modules/breadcrumb-settings";
 import ContentSettings from "./modules/content-settings";
 import CopyrightSettings from "./modules/copyright-settings";
@@ -127,6 +128,8 @@ export default function LayoutSettingsComponent() {
               <DirectionSettings />
               {/* 内容设置 */}
               <ContentSettings />
+              {/* 页面切换动画设置 */}
+              <AnimationSettings />
               {/* 顶栏和底栏设置 */}
               <HeaderFooterSettings />
               {/* 版权设置 */}
