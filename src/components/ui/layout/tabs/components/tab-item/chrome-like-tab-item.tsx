@@ -71,7 +71,7 @@ export function ChromeLikeTabItem({
       <div className="absolute top-1 -left-2.5 -right-2.5 bottom-0 text-transparent group-[.active]:text-background opacity-0 group-[.active]:opacity-100 overflow-hidden pointer-events-none transition-[opacity,color] duration-20">
         <ChromeTabBackground />
       </div>
-      <div className="relative w-full h-full p-1">
+      <div className="relative w-full h-full px-1 pt-2 pb-1">
         <div className="flex-y-center h-full px-1 text-foreground hover:text-foreground/70 hover:bg-background group-[.active]:text-primary group-[.active]:hover:text-primary group-[.active]:hover:bg-background leading-none overflow-hidden rounded-md">
           <div className="flex-1 truncate text-sm flex-y-center gap-1.5">
             {tab.icon && <Icon icon={tab.icon} size={16} />}
