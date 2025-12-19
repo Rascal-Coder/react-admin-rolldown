@@ -31,6 +31,7 @@ import SidebarSettings from "./modules/sidebar-settings";
 import TabsSettings from "./modules/tabs-settings";
 import ThemeModeSelector from "./modules/theme-mode";
 import ThemePresets from "./modules/theme-presets";
+import WatermarkSettings from "./modules/watermark-settings";
 export default function LayoutSettingsComponent() {
   const [activeTab, setActiveTab] = useState("appearance");
   const [open, setOpen] = useState(false);
@@ -96,6 +97,7 @@ export default function LayoutSettingsComponent() {
             <TabsList className="w-full">
               <TabsTrigger value="appearance">外观</TabsTrigger>
               <TabsTrigger value="layout">布局</TabsTrigger>
+              <TabsTrigger value="general">通用</TabsTrigger>
             </TabsList>
             {/* 外观 */}
             <TabsContent
@@ -128,12 +130,21 @@ export default function LayoutSettingsComponent() {
               <DirectionSettings />
               {/* 内容设置 */}
               <ContentSettings />
-              {/* 页面切换动画设置 */}
-              <AnimationSettings />
+
               {/* 顶栏和底栏设置 */}
               <HeaderFooterSettings />
               {/* 版权设置 */}
               <CopyrightSettings />
+            </TabsContent>
+            {/* 通用 */}
+            <TabsContent
+              className="flex flex-col gap-1 overflow-y-auto px-6 py-2"
+              value="general"
+            >
+              {/* 页面切换动画设置 */}
+              <AnimationSettings />
+              {/* 水印设置 */}
+              <WatermarkSettings />
             </TabsContent>
           </Tabs>
         </SheetContent>

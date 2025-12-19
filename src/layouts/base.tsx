@@ -1,7 +1,8 @@
-import { useUpdateEffect } from "ahooks";
+import { useMount, useUpdateEffect } from "ahooks";
 import { KeepAlive, useKeepAliveRef } from "keepalive-for-react";
 import { Home } from "lucide-react";
 import { m, type Variants } from "motion/react";
+import { useCallback } from "react";
 import {
   useLocation,
   useNavigate,
@@ -27,6 +28,7 @@ import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { useDirection } from "@/context/direction-context";
 import { useElementHeight } from "@/hooks/use-element-height";
+import { useWatermark } from "@/hooks/use-watermark";
 import {
   useCacheActions,
   useCacheRoutes,
@@ -57,6 +59,9 @@ const BaseLayout = () => {
     companySiteLink,
     copyrightDate,
     pageTransition,
+    watermarkEnabled,
+    watermarkContent,
+    watermarkColor,
   } = useAppSettings();
   const [headerRef, headerHeight] = useElementHeight<HTMLElement>();
   const [footerRef, footerHeight] = useElementHeight<HTMLElement>();
@@ -68,6 +73,43 @@ const BaseLayout = () => {
   const aliveRef = useKeepAliveRef();
   const removeCacheKey = useRemoveCacheKey();
   const { setRemoveCacheKey } = useCacheActions();
+  const { destroyWatermark, updateWatermark } = useWatermark();
+  const handleWatermark = useCallback(() => {
+    if (watermarkEnabled) {
+      updateWatermark({
+        content: watermarkContent,
+        advancedStyle: {
+          type: "linear",
+          colorStops: [
+            {
+              color: watermarkColor,
+              offset: 0,
+            },
+            {
+              color: watermarkColor,
+              offset: 1,
+            },
+          ],
+        },
+      });
+    } else {
+      destroyWatermark();
+    }
+  }, [
+    watermarkEnabled,
+    watermarkContent,
+    watermarkColor,
+    destroyWatermark,
+    updateWatermark,
+  ]);
+
+  useMount(() => {
+    handleWatermark();
+  });
+  useUpdateEffect(() => {
+    handleWatermark();
+  }, [watermarkEnabled, watermarkContent, watermarkColor]);
+
   useUpdateEffect(() => {
     if (!(aliveRef.current && removeCacheKey)) {
       return;

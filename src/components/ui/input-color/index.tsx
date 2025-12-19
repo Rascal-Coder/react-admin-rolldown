@@ -1,0 +1,649 @@
+"use client";
+
+import { Loader2, PipetteIcon } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { HexAlphaColorPicker, HexColorPicker } from "react-colorful";
+import { z } from "zod";
+import { Button } from "@/components/base/button";
+import { Input } from "@/components/base/input";
+import { Label } from "@/components/base/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/base/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/base/select";
+import { cn } from "@/utils";
+import {
+  hexToRgb,
+  hexToRgba,
+  hslaToRgba,
+  hslToRgb,
+  rgbaToHex,
+  rgbaToHsla,
+  rgbToHex,
+  rgbToHsl,
+} from "./shared";
+
+const HEX_COLOR_REGEX = /^#[0-9A-Fa-f]*$/;
+
+export const colorSchema = z
+  .string()
+  .regex(
+    /^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/,
+    "Color must be a valid hex color (e.g., #FF0000 or #FF0000FF)"
+  )
+  .transform((val) => val.toUpperCase());
+
+interface ColorPickerProps {
+  value: string;
+  onChange: (value: string) => void;
+  onBlur?: () => void;
+  isLoading?: boolean;
+  label?: string;
+  error?: string;
+  className?: string;
+  alpha?: boolean;
+  showInput?: boolean;
+}
+
+interface ColorValues {
+  hex: string;
+  rgb: { r: number; g: number; b: number };
+  hsl: { h: number; s: number; l: number };
+  rgba?: { r: number; g: number; b: number; a: number };
+  hsla?: { h: number; s: number; l: number; a: number };
+}
+
+// 辅助函数：初始化颜色值（降低主函数复杂度）
+const initializeColorValues = (
+  inputValue: string,
+  hasAlpha: boolean
+): ColorValues => {
+  if (hasAlpha) {
+    const rgba = hexToRgba(inputValue);
+    const hsla = rgbaToHsla(rgba.r, rgba.g, rgba.b, rgba.a);
+    return {
+      hex: inputValue.length === 9 ? inputValue.slice(0, 7) : inputValue,
+      rgb: { r: rgba.r, g: rgba.g, b: rgba.b },
+      hsl: rgbToHsl(rgba.r, rgba.g, rgba.b),
+      rgba,
+      hsla,
+    };
+  }
+  const rgb = hexToRgb(inputValue);
+  const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+  return {
+    hex: inputValue,
+    rgb,
+    hsl,
+  };
+};
+
+// 辅助函数：验证十六进制颜色
+const validateHexColor = (
+  hexValue: string,
+  maxLength: number
+): string | null => {
+  if (hexValue.length === maxLength) {
+    try {
+      colorSchema.parse(hexValue);
+      return null;
+    } catch (validationError) {
+      if (validationError instanceof z.ZodError) {
+        console.log("Enter a valid color");
+        return "Enter a valid color";
+      }
+    }
+  } else {
+    console.log("Enter a valid color");
+    return "Enter a valid color";
+  }
+  return null;
+};
+
+// 辅助函数：渲染颜色格式选择器的选项
+const renderFormatOptions = (hasAlpha: boolean) => {
+  if (hasAlpha) {
+    return (
+      <>
+        <SelectItem className="h-7 text-sm" value="HEXA">
+          HEXA
+        </SelectItem>
+        <SelectItem className="h-7 text-sm" value="RGBA">
+          RGBA
+        </SelectItem>
+        <SelectItem className="h-7 text-sm" value="HSLA">
+          HSLA
+        </SelectItem>
+      </>
+    );
+  }
+  return (
+    <>
+      <SelectItem className="h-7 text-sm" value="HEX">
+        HEX
+      </SelectItem>
+      <SelectItem className="h-7 text-sm" value="RGB">
+        RGB
+      </SelectItem>
+      <SelectItem className="h-7 text-sm" value="HSL">
+        HSL
+      </SelectItem>
+    </>
+  );
+};
+
+// 辅助函数：渲染颜色输入字段
+const renderColorInputFields = (params: {
+  colorFormat: string;
+  alpha: boolean;
+  colorValues: ColorValues;
+  handlers: {
+    handleHexChange: (value: string) => void;
+    handleRgbChange: (component: "r" | "g" | "b", value: string) => void;
+    handleRgbaChange: (component: "r" | "g" | "b" | "a", value: string) => void;
+    handleHslChange: (component: "h" | "s" | "l", value: string) => void;
+    handleHslaChange: (component: "h" | "s" | "l" | "a", value: string) => void;
+    getCurrentHexValue: () => string;
+  };
+}) => {
+  const { colorFormat, alpha, colorValues, handlers } = params;
+  if (colorFormat === "HEX" || colorFormat === "HEXA") {
+    return (
+      <Input
+        className="h-7 w-[160px] rounded-sm text-sm"
+        maxLength={alpha ? 9 : 7}
+        onChange={(e) => handlers.handleHexChange(e.target.value)}
+        placeholder={alpha ? "#FF0000FF" : "#FF0000"}
+        value={handlers.getCurrentHexValue()}
+      />
+    );
+  }
+
+  if (colorFormat === "RGB") {
+    return (
+      <div className="flex items-center">
+        <Input
+          className="h-7 w-13 rounded-r-none rounded-l-sm text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleRgbChange("r", e.target.value)}
+          placeholder="255"
+          value={colorValues.rgb.r}
+        />
+        <Input
+          className="h-7 w-13 rounded-none border-x-0 text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleRgbChange("g", e.target.value)}
+          placeholder="255"
+          value={colorValues.rgb.g}
+        />
+        <Input
+          className="h-7 w-13 rounded-r-sm rounded-l-none text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleRgbChange("b", e.target.value)}
+          placeholder="255"
+          value={colorValues.rgb.b}
+        />
+      </div>
+    );
+  }
+
+  if (colorFormat === "RGBA" && alpha && colorValues.rgba) {
+    return (
+      <div className="flex items-center">
+        <Input
+          className="h-7 w-10 rounded-r-none rounded-l-sm px-1 text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleRgbaChange("r", e.target.value)}
+          placeholder="255"
+          value={colorValues.rgba.r}
+        />
+        <Input
+          className="h-7 w-10 rounded-none border-x-0 px-1 text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleRgbaChange("g", e.target.value)}
+          placeholder="255"
+          value={colorValues.rgba.g}
+        />
+        <Input
+          className="h-7 w-10 rounded-none border-x-0 px-1 text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleRgbaChange("b", e.target.value)}
+          placeholder="255"
+          value={colorValues.rgba.b}
+        />
+        <Input
+          className="h-7 w-10 rounded-r-sm rounded-l-none px-1 text-center text-sm"
+          maxLength={4}
+          onChange={(e) => handlers.handleRgbaChange("a", e.target.value)}
+          placeholder="1.00"
+          value={colorValues.rgba.a.toFixed(2)}
+        />
+      </div>
+    );
+  }
+
+  if (colorFormat === "HSL") {
+    return (
+      <div className="flex items-center">
+        <Input
+          className="h-7 w-13 rounded-r-none rounded-l-sm text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleHslChange("h", e.target.value)}
+          placeholder="360"
+          value={colorValues.hsl.h}
+        />
+        <Input
+          className="h-7 w-13 rounded-none border-x-0 text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleHslChange("s", e.target.value)}
+          placeholder="100"
+          value={colorValues.hsl.s}
+        />
+        <Input
+          className="h-7 w-13 rounded-r-sm rounded-l-none text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleHslChange("l", e.target.value)}
+          placeholder="100"
+          value={colorValues.hsl.l}
+        />
+      </div>
+    );
+  }
+
+  if (colorFormat === "HSLA" && alpha && colorValues.hsla) {
+    return (
+      <div className="flex items-center">
+        <Input
+          className="h-7 w-10 rounded-r-none rounded-l-sm px-1 text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleHslaChange("h", e.target.value)}
+          placeholder="360"
+          value={colorValues.hsla.h}
+        />
+        <Input
+          className="h-7 w-10 rounded-none border-x-0 px-1 text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleHslaChange("s", e.target.value)}
+          placeholder="100"
+          value={colorValues.hsla.s}
+        />
+        <Input
+          className="h-7 w-10 rounded-none border-x-0 px-1 text-center text-sm"
+          maxLength={3}
+          onChange={(e) => handlers.handleHslaChange("l", e.target.value)}
+          placeholder="100"
+          value={colorValues.hsla.l}
+        />
+        <Input
+          className="h-7 w-10 rounded-r-sm rounded-l-none px-1 text-center text-sm"
+          maxLength={4}
+          onChange={(e) => handlers.handleHslaChange("a", e.target.value)}
+          placeholder="1.00"
+          value={colorValues.hsla.a.toFixed(2)}
+        />
+      </div>
+    );
+  }
+
+  return null;
+};
+
+export default function InputColor({
+  value,
+  onChange,
+  onBlur,
+  isLoading = false,
+  label,
+  error,
+  className = "mt-6",
+  alpha = false,
+  showInput = true,
+}: ColorPickerProps) {
+  const [colorFormat, setColorFormat] = useState(alpha ? "HEXA" : "HEX");
+  const [colorValues, setColorValues] = useState<ColorValues>(() =>
+    initializeColorValues(value, alpha)
+  );
+  // Add a state to store the current HEX/HEXA input value
+  const [hexInputValue, setHexInputValue] = useState(value);
+  const [hexInputError, setHexInputError] = useState<string | null>(null);
+
+  // Update all color formats when color changes
+  const updateColorValues = useCallback(
+    (newColor: string) => {
+      if (alpha) {
+        const rgba = hexToRgba(newColor);
+        const hsla = rgbaToHsla(rgba.r, rgba.g, rgba.b, rgba.a);
+        setColorValues({
+          hex: newColor.length === 9 ? newColor.slice(0, 7) : newColor,
+          rgb: { r: rgba.r, g: rgba.g, b: rgba.b },
+          hsl: rgbToHsl(rgba.r, rgba.g, rgba.b),
+          rgba,
+          hsla,
+        });
+        setHexInputValue(newColor.toUpperCase());
+      } else {
+        const rgb = hexToRgb(newColor);
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+        setColorValues({
+          hex: newColor.toUpperCase(),
+          rgb,
+          hsl,
+        });
+        setHexInputValue(newColor.toUpperCase());
+      }
+    },
+    [alpha]
+  );
+
+  // Handle color picker change
+  const handleColorChange = (newColor: string) => {
+    updateColorValues(newColor);
+    onChange(newColor);
+  };
+
+  // Handle HEX input change
+  const handleHexChange = (inputValue: string) => {
+    let formattedValue = inputValue.toUpperCase();
+    if (!formattedValue.startsWith("#")) {
+      formattedValue = `#${formattedValue}`;
+    }
+
+    const maxLength = alpha ? 9 : 7;
+    if (
+      formattedValue.length <= maxLength &&
+      HEX_COLOR_REGEX.test(formattedValue)
+    ) {
+      setHexInputValue(formattedValue);
+      onChange(formattedValue);
+      updateColorValues(formattedValue);
+      const validationError = validateHexColor(formattedValue, maxLength);
+      setHexInputError(validationError);
+    }
+  };
+
+  // Handle RGB input change
+  const handleRgbChange = (component: "r" | "g" | "b", inputValue: string) => {
+    const numValue = Number.parseInt(inputValue, 10) || 0;
+    const clampedValue = Math.max(0, Math.min(255, numValue));
+    const newRgb = { ...colorValues.rgb, [component]: clampedValue };
+    const hexValue = rgbToHex(newRgb.r, newRgb.g, newRgb.b);
+    const hslValue = rgbToHsl(newRgb.r, newRgb.g, newRgb.b);
+
+    setColorValues({
+      ...colorValues,
+      hex: hexValue,
+      rgb: newRgb,
+      hsl: hslValue,
+    });
+    onChange(hexValue);
+  };
+
+  // Handle RGBA input change
+  const handleRgbaChange = (
+    component: "r" | "g" | "b" | "a",
+    inputValue: string
+  ) => {
+    if (!(alpha && colorValues.rgba)) {
+      return;
+    }
+
+    const numValue = Number.parseFloat(inputValue) || 0;
+    let clampedValue: number;
+
+    if (component === "a") {
+      clampedValue = Math.max(0, Math.min(1, numValue));
+    } else {
+      clampedValue = Math.max(0, Math.min(255, Math.floor(numValue)));
+    }
+
+    const newRgba = { ...colorValues.rgba, [component]: clampedValue };
+    const hexValue = rgbaToHex(newRgba.r, newRgba.g, newRgba.b, newRgba.a);
+    const hslaValue = rgbaToHsla(newRgba.r, newRgba.g, newRgba.b, newRgba.a);
+
+    setColorValues({
+      ...colorValues,
+      hex: hexValue.slice(0, 7),
+      rgb: { r: newRgba.r, g: newRgba.g, b: newRgba.b },
+      hsl: rgbToHsl(newRgba.r, newRgba.g, newRgba.b),
+      rgba: newRgba,
+      hsla: hslaValue,
+    });
+    onChange(hexValue);
+  };
+
+  // Handle HSL input change
+  const handleHslChange = (component: "h" | "s" | "l", inputValue: string) => {
+    const numValue = Number.parseInt(inputValue, 10) || 0;
+    let clampedValue: number;
+    if (component === "h") {
+      clampedValue = Math.max(0, Math.min(360, numValue));
+    } else {
+      clampedValue = Math.max(0, Math.min(100, numValue));
+    }
+    const newHsl = { ...colorValues.hsl, [component]: clampedValue };
+    const rgbValue = hslToRgb(newHsl.h, newHsl.s, newHsl.l);
+    const hexValue = rgbToHex(rgbValue.r, rgbValue.g, rgbValue.b);
+
+    setColorValues({
+      ...colorValues,
+      hex: hexValue,
+      rgb: rgbValue,
+      hsl: newHsl,
+    });
+    onChange(hexValue);
+  };
+
+  // Handle HSLA input change
+  const handleHslaChange = (
+    component: "h" | "s" | "l" | "a",
+    inputValue: string
+  ) => {
+    if (!(alpha && colorValues.hsla)) {
+      return;
+    }
+
+    const numValue = Number.parseFloat(inputValue) || 0;
+    let clampedValue: number;
+
+    if (component === "a") {
+      clampedValue = Math.max(0, Math.min(1, numValue));
+    } else if (component === "h") {
+      clampedValue = Math.max(0, Math.min(360, numValue));
+    } else {
+      clampedValue = Math.max(0, Math.min(100, numValue));
+    }
+
+    const newHsla = { ...colorValues.hsla, [component]: clampedValue };
+    const rgbaValue = hslaToRgba(newHsla.h, newHsla.s, newHsla.l, newHsla.a);
+    const hexValue = rgbaToHex(
+      rgbaValue.r,
+      rgbaValue.g,
+      rgbaValue.b,
+      rgbaValue.a
+    );
+
+    setColorValues({
+      ...colorValues,
+      hex: hexValue.slice(0, 7),
+      rgb: { r: rgbaValue.r, g: rgbaValue.g, b: rgbaValue.b },
+      hsl: { h: newHsla.h, s: newHsla.s, l: newHsla.l },
+      rgba: rgbaValue,
+      hsla: newHsla,
+    });
+    onChange(hexValue);
+  };
+
+  // Handle popover close
+  const handlePopoverChange = (open: boolean) => {
+    if (!open) {
+      setColorFormat(alpha ? "HEXA" : "HEX");
+      onBlur?.();
+    }
+  };
+
+  // Check if EyeDropper API is available
+  const isEyeDropperAvailable = () =>
+    typeof window !== "undefined" && "EyeDropper" in window;
+
+  // Handle eyedropper click
+  const handleEyeDropper = async () => {
+    if (!isEyeDropperAvailable()) {
+      console.warn("Eyedropper is not supported in your browser");
+      return;
+    }
+    try {
+      // @ts-expect-error - TypeScript doesn't have types for EyeDropper yet
+      const eyeDropper = new window.EyeDropper();
+      const result = await eyeDropper.open();
+      const pickedColor = result.sRGBHex;
+      updateColorValues(pickedColor);
+      onChange(pickedColor);
+    } catch {
+      console.log("User canceled the eyedropper");
+    }
+  };
+
+  // Initialize color values on mount and when value changes from outside
+  useEffect(() => {
+    updateColorValues(value);
+    setHexInputValue(value.toUpperCase());
+  }, [value, updateColorValues]);
+
+  // Get current hex value for display
+  const getCurrentHexValue = () => {
+    if (colorFormat === "HEX" || colorFormat === "HEXA") {
+      return hexInputValue;
+    }
+    if (alpha && colorValues.rgba) {
+      return rgbaToHex(
+        colorValues.rgba.r,
+        colorValues.rgba.g,
+        colorValues.rgba.b,
+        colorValues.rgba.a
+      );
+    }
+    return colorValues.hex;
+  };
+
+  return (
+    <div className={cn(className)}>
+      {label && <Label className="mb-3">{label}</Label>}
+      <div className="flex items-center gap-4">
+        <Popover onOpenChange={handlePopoverChange}>
+          <PopoverTrigger>
+            <div
+              className={cn(
+                "group relative flex cursor-pointer items-center justify-center rounded-md border border-input p-[2px] shadow-sm transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 hover:border-primary hover:shadow-md active:scale-95"
+              )}
+            >
+              <div className="relative h-6 w-6 overflow-hidden rounded-[4px]">
+                {/* 棋盘格背景层 - 仅在启用 alpha 时显示 */}
+                {alpha && colorValues.rgba && colorValues.rgba.a < 1 && (
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      backgroundImage: `
+                        linear-gradient(45deg, #d0d0d0 25%, transparent 25%),
+                        linear-gradient(-45deg, #d0d0d0 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #d0d0d0 75%),
+                        linear-gradient(-45deg, transparent 75%, #d0d0d0 75%)
+                      `,
+                      backgroundSize: "8px 8px",
+                      backgroundPosition: "0 0, 0 4px, 4px -4px, -4px 0px",
+                    }}
+                  />
+                )}
+                {/* 颜色显示层 */}
+                <div
+                  className="absolute inset-0 transition-transform group-hover:scale-105"
+                  style={{
+                    backgroundColor: hexInputValue,
+                  }}
+                />
+              </div>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent align="start" className="w-auto p-3">
+            <div className="color-picker space-y-3">
+              <div className="relative">
+                <Button
+                  className="absolute -top-1.5 -left-1 z-10 flex h-7 w-7 items-center gap-1 bg-transparent hover:bg-transparent"
+                  disabled={!isEyeDropperAvailable()}
+                  onClick={handleEyeDropper}
+                  size="icon"
+                  variant="ghost"
+                >
+                  <PipetteIcon className="h-3 w-3" />
+                </Button>
+                {alpha ? (
+                  <HexAlphaColorPicker
+                    className="aspect-square! h-[244.79px]! w-[244.79px]!"
+                    color={value}
+                    onChange={handleColorChange}
+                  />
+                ) : (
+                  <HexColorPicker
+                    className="aspect-square! h-[244.79px]! w-[244.79px]!"
+                    color={value}
+                    onChange={handleColorChange}
+                  />
+                )}
+              </div>
+              <div className="flex gap-2">
+                <Select onValueChange={setColorFormat} value={colorFormat}>
+                  <SelectTrigger className="h-7! w-[4.8rem]! rounded-sm px-2 py-1 text-sm!">
+                    <SelectValue placeholder="Color" />
+                  </SelectTrigger>
+                  <SelectContent className="min-w-20">
+                    {renderFormatOptions(alpha)}
+                  </SelectContent>
+                </Select>
+                {renderColorInputFields({
+                  colorFormat,
+                  alpha,
+                  colorValues,
+                  handlers: {
+                    handleHexChange,
+                    handleRgbChange,
+                    handleRgbaChange,
+                    handleHslChange,
+                    handleHslaChange,
+                    getCurrentHexValue,
+                  },
+                })}
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+        {showInput && (
+          <div className="relative flex-1 sm:flex-none">
+            <Input
+              className={`h-7 uppercase ${error ? "border-destructive" : ""}`}
+              onBlur={() => onBlur?.()}
+              onChange={(e) => handleHexChange(e.target.value)}
+              placeholder={label}
+              value={getCurrentHexValue()}
+            />
+            {isLoading && (
+              <span className="absolute inset-y-0 right-0 flex items-center pr-4">
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+      {error && <p className="mt-1.5 text-destructive text-sm">{error}</p>}
+      {hexInputError && (
+        <p className="mt-1.5 text-destructive text-sm">{hexInputError}</p>
+      )}
+    </div>
+  );
+}

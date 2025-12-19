@@ -51,6 +51,9 @@ export type SettingsType = {
   companyName: string;
   companySiteLink: string;
   pageTransition: PageTransitionType;
+  watermarkEnabled: boolean;
+  watermarkContent: string;
+  watermarkColor: string;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -92,6 +95,9 @@ const useSettingStore = create<SettingStore>()(
         companyName: "Bug Admin",
         companySiteLink: "https://react-admin-rolldown.vercel.app/",
         pageTransition: "fadeInLeft",
+        watermarkEnabled: false,
+        watermarkContent: "Bug Admin",
+        watermarkColor: "#ec4899",
       },
       actions: {
         setAppSettings: (appSettings) => {
