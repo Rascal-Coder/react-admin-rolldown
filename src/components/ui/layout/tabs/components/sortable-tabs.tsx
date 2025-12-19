@@ -1,3 +1,4 @@
+import { arrayMove } from "@dnd-kit/sortable";
 import { AnimatePresence } from "motion/react";
 import {
   Sortable,
@@ -19,18 +20,37 @@ export function SortableTabs({
 }: SortableTabsProps & {
   onTabClick: (item: LayoutTabItem) => void;
 }) {
-  const handleTabsSort = (newTabs: LayoutTabItem[]) => {
-    // 将固定标签页始终放在前面
-    const pinnedTabs = newTabs.filter((tab) => tab.pinned);
-    const nonPinnedTabs = newTabs.filter((tab) => !tab.pinned);
-    const sortedTabs = [...pinnedTabs, ...nonPinnedTabs];
-    setTabs(sortedTabs);
+  const handleTabsMove = (event: {
+    activeIndex: number;
+    overIndex: number;
+  }) => {
+    const { activeIndex, overIndex } = event;
+
+    // 获取被拖拽的标签项
+    const activeItem = tabs[activeIndex];
+
+    // 如果被拖拽项不存在，直接返回
+    if (!activeItem) {
+      return;
+    }
+
+    // 计算固定标签的数量
+    const pinnedCount = tabs.filter((tab) => tab.pinned).length;
+
+    // 如果是非固定标签试图移动到固定标签区域之前，阻止移动
+    if (!activeItem.pinned && overIndex < pinnedCount) {
+      return;
+    }
+
+    // 执行移动操作
+    const newTabs = arrayMove(tabs, activeIndex, overIndex);
+    setTabs(newTabs);
   };
 
   return (
     <Sortable
       getItemValue={(item) => item.key}
-      onValueChange={handleTabsSort}
+      onMove={handleTabsMove}
       orientation="horizontal"
       value={tabs}
     >
