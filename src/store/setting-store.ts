@@ -54,6 +54,7 @@ export type SettingsType = {
   watermarkEnabled: boolean;
   watermarkContent: string;
   watermarkColor: string;
+  checkUpdateEnabled: boolean;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -98,6 +99,7 @@ const useSettingStore = create<SettingStore>()(
         watermarkEnabled: false,
         watermarkContent: "Bug Admin",
         watermarkColor: "#ec4899",
+        checkUpdateEnabled: true,
       },
       actions: {
         setAppSettings: (appSettings) => {

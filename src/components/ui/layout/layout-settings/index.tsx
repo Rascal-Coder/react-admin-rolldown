@@ -20,6 +20,7 @@ import { useDirection } from "@/context/direction-context";
 import { cn } from "@/utils";
 import AnimationSettings from "./modules/animation-settings";
 import BreadcrumbSettings from "./modules/breadcrumb-settings";
+import CheckUpdateSettings from "./modules/check-update-settings";
 import ContentSettings from "./modules/content-settings";
 import CopyrightSettings from "./modules/copyright-settings";
 import DirectionSettings from "./modules/direction-settings";
@@ -76,7 +77,6 @@ export default function LayoutSettingsComponent() {
         ref={triggerRef}
         tabIndex={open ? -1 : 0}
         tooltip="偏好设置"
-        tooltipTriggerMode="hover"
       />
       <Sheet onOpenChange={handleOpenChange} open={open}>
         <SheetContent
@@ -145,6 +145,8 @@ export default function LayoutSettingsComponent() {
               <AnimationSettings />
               {/* 水印设置 */}
               <WatermarkSettings />
+              {/* 版本更新检测 */}
+              <CheckUpdateSettings />
             </TabsContent>
           </Tabs>
         </SheetContent>

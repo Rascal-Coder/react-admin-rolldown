@@ -1,7 +1,6 @@
 import { Settings } from "lucide-react";
 import { type HTMLMotionProps, m } from "motion/react";
 import type { ReactNode, Ref } from "react";
-import { useState } from "react";
 
 import {
   Tooltip,
@@ -14,7 +13,6 @@ interface FloatSettingsButtonProps
   extends Omit<HTMLMotionProps<"button">, "children"> {
   icon?: ReactNode;
   tooltip?: string;
-  tooltipTriggerMode?: "hover" | "always";
   ref?: Ref<HTMLButtonElement>;
 }
 
@@ -22,11 +20,11 @@ export default function FloatSettingsButton({
   className,
   icon,
   tooltip,
-  tooltipTriggerMode = "always",
+  // tooltipTriggerMode = "always",
   ref,
   ...props
 }: FloatSettingsButtonProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
 
   const Button = (
     <m.button
@@ -50,27 +48,27 @@ export default function FloatSettingsButton({
   );
 
   if (tooltip) {
-    if (tooltipTriggerMode === "hover") {
-      return (
-        <Tooltip
-          onOpenChange={(open) => {
-            if (!open) {
-              setIsOpen(false);
-            }
-          }}
-          open={isOpen}
-        >
-          <TooltipTrigger
-            asChild
-            onMouseEnter={() => setIsOpen(true)}
-            onMouseLeave={() => setIsOpen(false)}
-          >
-            {Button}
-          </TooltipTrigger>
-          <TooltipContent side="left">{tooltip}</TooltipContent>
-        </Tooltip>
-      );
-    }
+    // if (tooltipTriggerMode === "hover") {
+    //   return (
+    //     <Tooltip
+    //       onOpenChange={(open) => {
+    //         if (!open) {
+    //           setIsOpen(false);
+    //         }
+    //       }}
+    //       open={isOpen}
+    //     >
+    //       <TooltipTrigger
+    //         asChild
+    //         onMouseEnter={() => setIsOpen(true)}
+    //         onMouseLeave={() => setIsOpen(false)}
+    //       >
+    //         {Button}
+    //       </TooltipTrigger>
+    //       <TooltipContent side="left">{tooltip}</TooltipContent>
+    //     </Tooltip>
+    //   );
+    // }
     return (
       <Tooltip>
         <TooltipTrigger asChild>{Button}</TooltipTrigger>

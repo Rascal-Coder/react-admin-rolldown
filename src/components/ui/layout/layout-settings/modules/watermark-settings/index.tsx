@@ -1,4 +1,5 @@
 import { useDebounceFn } from "ahooks";
+import { AnimatePresence, m } from "motion/react";
 import { Text } from "@/components/base/typography";
 import InputColor from "@/components/ui/input-color";
 import { useAppSettings, useSettingsActions } from "@/store/setting-store";
@@ -35,31 +36,43 @@ export default function WatermarkSettings() {
       <div className="sr-only" id="watermark-enabled-description">
         Enable watermark to display on the page
       </div>
-      <InputItem
-        onChange={(inputVal) =>
-          updateAppSettings({ watermarkContent: inputVal })
-        }
-        value={watermarkContent}
-      >
-        水印内容
-      </InputItem>
-      <div className="sr-only" id="watermark-content-description">
-        Enter the watermark content to display on the page
-      </div>
-      <div className="my-1 flex w-full cursor-default items-center justify-between rounded-md px-2 py-1 text-left hover:bg-accent">
-        <span className="flex flex-1 shrink items-center text-foreground text-sm">
-          水印颜色
-        </span>
-        <InputColor
-          className="mt-0"
-          onChange={debouncedUpdateColor}
-          showInput={false}
-          value={watermarkColor}
-        />
-      </div>
-      <div className="sr-only" id="watermark-color-description">
-        Enter the watermark color to display on the page
-      </div>
+      <AnimatePresence mode="wait">
+        {watermarkEnabled && (
+          <m.div
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -10 }}
+            key="watermark-config"
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <InputItem
+              onChange={(inputVal) =>
+                updateAppSettings({ watermarkContent: inputVal })
+              }
+              value={watermarkContent}
+            >
+              水印内容
+            </InputItem>
+            <div className="sr-only" id="watermark-content-description">
+              Enter the watermark content to display on the page
+            </div>
+            <div className="my-1 flex w-full cursor-default items-center justify-between rounded-md px-2 py-1 text-left hover:bg-accent">
+              <span className="flex flex-1 shrink items-center text-foreground text-sm">
+                水印颜色
+              </span>
+              <InputColor
+                className="mt-0"
+                onChange={debouncedUpdateColor}
+                showInput={false}
+                value={watermarkColor}
+              />
+            </div>
+            <div className="sr-only" id="watermark-color-description">
+              Enter the watermark color to display on the page
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
