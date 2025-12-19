@@ -3,13 +3,18 @@ import { GLOBAL_CONFIG } from "@/global-config";
 
 export interface UseCheckUpdateOptions {
   /**
+   * 是否启用更新检测
+   * @default true
+   */
+  enabled?: boolean;
+  /**
    * 轮询间隔时间（分钟）
    * @default 1
    */
   interval?: number;
   /**
    * 检查更新的 URL
-   * @default import.meta.env.BASE_URL || '/'
+   * @default import.meta.env.VITE_APP_BASENAME || '/'
    */
   checkUrl?: string;
   /**
@@ -22,10 +27,6 @@ export interface UseCheckUpdateOptions {
 export interface UseCheckUpdateReturn {
   /** 是否有新版本 */
   hasUpdate: boolean;
-  /** 当前版本标识 */
-  currentVersion: string;
-  /** 手动检查更新 */
-  checkNow: () => Promise<void>;
   /** 刷新页面 */
   refresh: () => void;
   /** 忽略本次更新 */
@@ -40,7 +41,9 @@ export function useCheckUpdate(
   options: UseCheckUpdateOptions = {}
 ): UseCheckUpdateReturn {
   const basename = GLOBAL_CONFIG.basename;
+
   const {
+    enabled = true,
     interval = 1,
     checkUrl = basename || "/",
     disableInDev = true,
@@ -70,7 +73,6 @@ export function useCheckUpdate(
         method: "HEAD",
         redirect: "manual",
       });
-
       return (
         response.headers.get("etag") || response.headers.get("last-modified")
       );
@@ -90,7 +92,6 @@ export function useCheckUpdate(
 
     try {
       const versionTag = await getVersionTag();
-
       if (!versionTag) {
         return;
       }
@@ -118,10 +119,9 @@ export function useCheckUpdate(
 
   // 启动轮询
   const startPolling = useCallback(() => {
-    if (interval <= 0 || (disableInDev && isDev)) {
+    if (!enabled || interval <= 0 || (disableInDev && isDev)) {
       return;
     }
-
     // 清除已有定时器
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -131,7 +131,7 @@ export function useCheckUpdate(
       checkForUpdates,
       interval * 60 * 1000 // 转换为毫秒
     );
-  }, [interval, checkForUpdates, disableInDev, isDev]);
+  }, [enabled, interval, checkForUpdates, disableInDev, isDev]);
 
   // 停止轮询
   const stopPolling = useCallback(() => {
@@ -168,26 +168,30 @@ export function useCheckUpdate(
     startPolling();
   }, [currentVersion, startPolling]);
 
-  // 手动检查
-  const checkNow = useCallback(async () => {
-    await checkForUpdates();
-  }, [checkForUpdates]);
+  // 监听 enabled 变化，控制轮询启停
+  useEffect(() => {
+    if (enabled) {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+  }, [enabled, startPolling, stopPolling]);
 
   // 初始化
   useEffect(() => {
-    startPolling();
+    if (enabled) {
+      startPolling();
+    }
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       stopPolling();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [startPolling, stopPolling, handleVisibilityChange]);
+  }, [enabled, startPolling, stopPolling, handleVisibilityChange]);
 
   return {
     hasUpdate,
-    currentVersion,
-    checkNow,
     refresh,
     dismiss,
   };

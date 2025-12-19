@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 import { Text } from "@/components/base/typography";
-import { useDirection } from "@/context/direction-context";
+import { useDirection } from "@/context/direction/direction-context";
 import { Direction } from "@/types/enum";
 import { cn } from "@/utils";
 import { RadioGroup } from "../../components/radio-group";

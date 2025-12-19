@@ -26,7 +26,7 @@ import {
 import { Sidebar } from "@/components/ui/layout/sidebar";
 import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
-import { useDirection } from "@/context/direction-context";
+import { useDirection } from "@/context/direction/direction-context";
 import { useElementHeight } from "@/hooks/use-element-height";
 import { useWatermark } from "@/hooks/use-watermark";
 import {

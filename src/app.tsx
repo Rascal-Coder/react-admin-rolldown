@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useRoutes } from "react-router";
-import { DirectionProvider } from "@/context/direction-provider";
+import { DirectionProvider } from "@/context/direction/direction-provider";
 import { MotionLazy } from "./components/ui/animate/motion-lazy";
+import { CheckUpdate } from "./components/ui/check-update";
 import { ErrorFallback } from "./components/ui/error-fallback";
 import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
 import { GLOBAL_CONFIG } from "./global-config";
@@ -33,7 +34,10 @@ function App() {
         </Helmet>
         <RouteLoadingProgress />
         <DirectionProvider>
-          <MotionLazy>{element}</MotionLazy>
+          <MotionLazy>
+            <CheckUpdate />
+            {element}
+          </MotionLazy>
         </DirectionProvider>
       </HelmetProvider>
     </ErrorBoundary>

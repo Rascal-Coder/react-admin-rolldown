@@ -6,7 +6,7 @@ import { visualizer as viteVisualizerPlugin } from "rollup-plugin-visualizer";
 import { defineConfig, loadEnv, type PluginOption } from "vite";
 import viteCompressPlugin from "vite-plugin-compression";
 import { createHtmlPlugin as viteHtmlPlugin } from "vite-plugin-html";
-import removeConsole from "vite-plugin-remove-console";
+// import removeConsole from "vite-plugin-remove-console";
 import { viteArchiverPlugin } from "./src/vite-plugins/archiver";
 
 const vendorcoreReg =
@@ -53,7 +53,7 @@ export default defineConfig(({ mode }) => {
         identifiers: ({ debugId }) => `${debugId}`,
       }),
       tailwindcss(),
-      removeConsole(),
+      // removeConsole(),
       visualizer &&
         viteVisualizerPlugin({
           filename: "./node_modules/.cache/visualizer/stats.html",

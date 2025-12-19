@@ -16,7 +16,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/animated-tabs";
 import FloatButton from "@/components/ui/float-button";
-import { useDirection } from "@/context/direction-context";
+import { useDirection } from "@/context/direction/direction-context";
 import { cn } from "@/utils";
 import AnimationSettings from "./modules/animation-settings";
 import BreadcrumbSettings from "./modules/breadcrumb-settings";
