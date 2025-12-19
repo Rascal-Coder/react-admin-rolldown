@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GLOBAL_CONFIG } from "@/global-config";
 
 export interface UseCheckUpdateOptions {
   /**
@@ -38,9 +39,10 @@ export interface UseCheckUpdateReturn {
 export function useCheckUpdate(
   options: UseCheckUpdateOptions = {}
 ): UseCheckUpdateReturn {
+  const basename = GLOBAL_CONFIG.basename;
   const {
     interval = 1,
-    checkUrl = import.meta.env.BASE_URL || "/",
+    checkUrl = basename || "/",
     disableInDev = true,
   } = options;
 

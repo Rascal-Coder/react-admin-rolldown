@@ -1,8 +1,26 @@
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { Text } from "@/components/base/typography";
 import Icon from "@/components/ui/icon/icon";
 import { useAppSettings, useSettingsActions } from "@/store/setting-store";
 import { ThemeMode } from "@/types/enum";
 import { RadioGroup } from "../../components/radio-group";
+
+function ThemeIcon({ icon }: { icon: string }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className="flex min-h-6 min-w-6 items-center justify-center">
+      {!loaded && <Loader2 className="size-4 animate-spin" />}
+      <Icon
+        className={loaded ? "" : "hidden"}
+        icon={icon}
+        onLoad={() => setLoaded(true)}
+        size="24"
+      />
+    </div>
+  );
+}
 
 /**
  * 主题模式选择组件
@@ -21,22 +39,19 @@ export default function ThemeModeSelector() {
           {
             value: ThemeMode.Light,
             label: "light",
-            content: <Icon icon="line-md:sun-rising-filled-loop" size="24" />,
+            content: <ThemeIcon icon="line-md:sun-rising-filled-loop" />,
           },
           {
             value: ThemeMode.Dark,
             label: "dark",
             content: (
-              <Icon
-                icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition"
-                size="24"
-              />
+              <ThemeIcon icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition" />
             ),
           },
           {
             value: ThemeMode.System,
             label: "system",
-            content: <Icon icon="material-symbols-light:hdr-auto" size="24" />,
+            content: <ThemeIcon icon="material-symbols-light:hdr-auto" />,
           },
         ]}
         onValueChange={(value) => updateAppSettings({ themeMode: value })}
