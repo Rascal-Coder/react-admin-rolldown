@@ -8,6 +8,12 @@
     );
   }
 
+  .bell-button {
+    &:hover svg {
+      animation: bell-ring 1s both;
+    }
+  }
+
   .flex-center {
     @apply flex items-center justify-center;
   }

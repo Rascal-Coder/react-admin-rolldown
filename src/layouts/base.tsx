@@ -14,9 +14,11 @@ import { Button } from "@/components/base/button";
 import { getVariant } from "@/components/ui/animate/variants";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import { Footer } from "@/components/ui/layout/footer";
+import FullscreenButton from "@/components/ui/layout/fullscreen-button";
 import { Header } from "@/components/ui/layout/header";
 import LayoutSettings from "@/components/ui/layout/layout-settings";
 import HorizontalMenu from "@/components/ui/layout/menu/horizontal";
+import NoticeButton from "@/components/ui/layout/notice";
 import { ProfileDropdown } from "@/components/ui/layout/profile-dropdown";
 import {
   SidebarInset,
@@ -170,6 +172,8 @@ const BaseLayout = () => {
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <ThemeSwitch />
+              <FullscreenButton />
+              <NoticeButton />
               <ProfileDropdown
                 user={{ name: "Bug", email: "bug@bug.com", avatar }}
               />
