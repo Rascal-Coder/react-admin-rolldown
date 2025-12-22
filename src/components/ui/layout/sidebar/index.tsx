@@ -29,7 +29,7 @@ export function Sidebar({ ...props }: SidebarProps) {
   return (
     <BaseSidebar {...props}>
       <SidebarHeader>
-        <Logo onClick={() => {}} />
+        <Logo />
       </SidebarHeader>
       <SidebarContent>
         <Nav data={menuData.menuItems} />

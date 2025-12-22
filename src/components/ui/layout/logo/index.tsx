@@ -2,7 +2,7 @@ import { useSidebar } from "@/components/ui/layout/resizable-sidebar";
 import { cn } from "@/utils";
 import type { LogoProps } from "./types";
 
-const LogoSvg = ({
+export const LogoSvg = ({
   width = 35,
   height = 35,
   className,

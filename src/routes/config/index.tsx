@@ -149,6 +149,29 @@ export const routesConfig: RouteConfig[] = [
           },
         ],
       },
+      {
+        path: "error",
+        icon: "bxs:error-alt",
+        name: "错误页面",
+        children: [
+          { path: "", redirect: "404" },
+          {
+            path: "403",
+            component: () => import("@/pages/_built/page-403"),
+            name: "403",
+          },
+          {
+            path: "404",
+            component: () => import("@/pages/_built/page-404"),
+            name: "404",
+          },
+          {
+            path: "500",
+            component: () => import("@/pages/_built/page-500"),
+            name: "500",
+          },
+        ],
+      },
     ],
   },
   {
@@ -158,8 +181,18 @@ export const routesConfig: RouteConfig[] = [
     icon: "lucide:square",
   },
   {
+    path: "/403",
+    component: () => import("@/pages/_built/page-403"),
+    flatten: true,
+  },
+  {
+    path: "/500",
+    component: () => import("@/pages/_built/page-500"),
+    flatten: true,
+  },
+  {
     path: "*",
-    component: () => import("@/pages/_built/404"),
+    component: () => import("@/pages/_built/page-404"),
     flatten: true,
   },
 ];
