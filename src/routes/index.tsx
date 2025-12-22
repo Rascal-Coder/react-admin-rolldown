@@ -11,3 +11,11 @@ export const routes = new Router(routesConfig, {
 
 // 初始化 keepAlive 路由的缓存键
 initCacheRoutesFromRouter(routes.flattenRoutes);
+
+// 调试：打印所有路由信息
+console.log("=== All Routes Debug ===");
+routes.flattenRoutes.forEach((route, pathname) => {
+  console.log(
+    `Path: ${pathname}, keepAlive: ${route.keepAlive}, name: ${route.name}`
+  );
+});

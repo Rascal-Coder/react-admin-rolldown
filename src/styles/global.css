@@ -7,8 +7,8 @@
 @import "tw-animate-css";
 
 /* import custom styles */
-@import "./utility.css";
 @import "./animate.css";
+@import "./utility.css";
 @import "./other.css";
 @import "./components.css";
 

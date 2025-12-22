@@ -1,7 +1,6 @@
 import { useMount, useUpdateEffect } from "ahooks";
 import { KeepAlive, useKeepAliveRef } from "keepalive-for-react";
 import { Home } from "lucide-react";
-import { m, type Variants } from "motion/react";
 import { useCallback } from "react";
 import {
   useLocation,
@@ -10,8 +9,8 @@ import {
   useOutletContext,
 } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
+import "./page-transitions.css";
 import { Button } from "@/components/base/button";
-import { getVariant } from "@/components/ui/animate/variants";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import { Footer } from "@/components/ui/layout/footer";
 import FullscreenButton from "@/components/ui/layout/fullscreen-button";
@@ -25,6 +24,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/layout/resizable-sidebar";
+import SearchBar from "@/components/ui/layout/search-bar";
 import { Sidebar } from "@/components/ui/layout/sidebar";
 import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
@@ -176,6 +176,7 @@ const BaseLayout = () => {
               )}
             </div>
             <div className="flex shrink-0 items-center gap-2">
+              <SearchBar />
               <ThemeSwitch />
               <FullscreenButton />
               <NoticeButton />
@@ -203,24 +204,18 @@ const BaseLayout = () => {
             marginBottom: footerFixed && showFooter ? footerHeight : 0,
           }}
         >
-          <m.div
-            animate="animate"
-            className="h-full"
-            exit="exit"
-            initial="initial"
-            key={pathname}
-            variants={getVariant(pageTransition) as Variants}
+          <KeepAlive
+            activeCacheKey={pathname}
+            aliveRef={aliveRef}
+            cacheNodeClassName={cn(
+              "h-full rounded-xl bg-muted p-4",
+              `page-animate-${pageTransition}`
+            )}
+            enableActivity
+            include={cacheKeys}
           >
-            <KeepAlive
-              activeCacheKey={pathname}
-              aliveRef={aliveRef}
-              cacheNodeClassName="h-full rounded-xl bg-muted p-4"
-              enableActivity
-              include={cacheKeys}
-            >
-              {outlet}
-            </KeepAlive>
-          </m.div>
+            {outlet}
+          </KeepAlive>
         </main>
 
         {showFooter && (

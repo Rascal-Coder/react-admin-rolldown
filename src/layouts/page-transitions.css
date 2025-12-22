@@ -1,0 +1,148 @@
+/* Page Transition Animations */
+
+/* Fade animations */
+.page-animate-fadeInLeft {
+  animation: fadeInLeft 0.3s ease-in-out;
+}
+
+.page-animate-fadeInRight {
+  animation: fadeInRight 0.3s ease-in-out;
+}
+
+.page-animate-fadeInUp {
+  animation: fadeInUp 0.3s ease-in-out;
+}
+
+.page-animate-fadeInDown {
+  animation: fadeInDown 0.3s ease-in-out;
+}
+
+/* Zoom animation */
+.page-animate-zoomIn {
+  animation: zoomIn 0.3s ease-in-out;
+}
+
+/* Bounce animation */
+.page-animate-bounceIn {
+  animation: bounceIn 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+/* Flip animation */
+.page-animate-flipInX {
+  animation: flipInX 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  backface-visibility: visible;
+}
+
+/* Scale animation */
+.page-animate-scaleInX {
+  animation: scaleInX 0.3s ease-in-out;
+  transform-origin: center;
+}
+
+/* Keyframes */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-120px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(120px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(120px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-120px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  20% {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+  40% {
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+  80% {
+    transform: scale3d(0.97, 0.97, 0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes flipInX {
+  0% {
+    transform: perspective(400px) rotateX(90deg);
+    opacity: 0;
+  }
+  40% {
+    transform: perspective(400px) rotateX(-10deg);
+  }
+  70% {
+    transform: perspective(400px) rotateX(10deg);
+  }
+  100% {
+    transform: perspective(400px) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleInX {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
