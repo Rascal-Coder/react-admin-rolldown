@@ -5,8 +5,25 @@ import { AnimatedBreadcrumbItem } from "./animated-breadcrumb-item";
 import { AnimatedBreadcrumbList } from "./animated-breadcrumb-list";
 import type { BreadcrumbItem } from "./types";
 
-export function CapsuleBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
+export function CapsuleBreadcrumb({
+  list,
+  currentPath,
+  resolveFinalPath,
+}: {
+  list: BreadcrumbItem[];
+  currentPath: string;
+  resolveFinalPath: (path: string) => string;
+}) {
   const navigate = useNavigate();
+
+  const handleNavigate = (href: string) => {
+    const finalPath = resolveFinalPath(href);
+    // 如果解析后的目标路径就是当前路径，则不导航
+    if (finalPath === currentPath) {
+      return;
+    }
+    navigate(href);
+  };
 
   return (
     <BreadcrumbBase className="p-1">
@@ -23,11 +40,11 @@ export function CapsuleBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
                   : "group-not-first:capsule-breadcrumb mr-[-0.52lh] inline-flex cursor-pointer items-center gap-0.5 rounded-r-full bg-muted px-4 pl-5 text-sm leading-loose transition-all duration-300 hover:bg-accent group-first:rounded-full group-not-first:pl-8 dark:hover:bg-accent-foreground/60"
               }
               {...(index !== list.length - 1 && {
-                onClick: () => navigate(item.href),
+                onClick: () => handleNavigate(item.href),
                 onKeyDown: (e: React.KeyboardEvent) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
-                    navigate(item.href);
+                    handleNavigate(item.href);
                   }
                 },
                 role: "button",

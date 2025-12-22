@@ -6,8 +6,25 @@ import { AnimatedBreadcrumbItem } from "./animated-breadcrumb-item";
 import { AnimatedBreadcrumbList } from "./animated-breadcrumb-list";
 import type { BreadcrumbItem } from "./types";
 
-export function RibbonBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
+export function RibbonBreadcrumb({
+  list,
+  currentPath,
+  resolveFinalPath,
+}: {
+  list: BreadcrumbItem[];
+  currentPath: string;
+  resolveFinalPath: (path: string) => string;
+}) {
   const navigate = useNavigate();
+
+  const handleNavigate = (href: string) => {
+    const finalPath = resolveFinalPath(href);
+    // 如果解析后的目标路径就是当前路径，则不导航
+    if (finalPath === currentPath) {
+      return;
+    }
+    navigate(href);
+  };
   return (
     <BreadcrumbBase className="p-1">
       <AnimatedBreadcrumbList className="w-max flex-y-center overflow-hidden rounded-sm">
@@ -38,11 +55,11 @@ export function RibbonBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
                 className={getClassName()}
                 {...(isClickable
                   ? {
-                      onClick: () => navigate(item.href),
+                      onClick: () => handleNavigate(item.href),
                       onKeyDown: (e: React.KeyboardEvent) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
-                          navigate(item.href);
+                          handleNavigate(item.href);
                         }
                       },
                       role: "button",

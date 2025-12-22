@@ -1,6 +1,8 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+  /** Home route path for the application */
+  readonly VITE_APP_HOME_ROUTE: string;
   /** Login route path for the application */
   //   readonly VITE_APP_LOGIN_ROUTE: string;
   /** Base URL for API endpoints */

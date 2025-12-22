@@ -4,8 +4,26 @@ import Icon from "@/components/ui/icon/icon";
 import { AnimatedBreadcrumbItem } from "./animated-breadcrumb-item";
 import { AnimatedBreadcrumbList } from "./animated-breadcrumb-list";
 import type { BreadcrumbItem } from "./types";
-export function ParallelogramBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
+
+export function ParallelogramBreadcrumb({
+  list,
+  currentPath,
+  resolveFinalPath,
+}: {
+  list: BreadcrumbItem[];
+  currentPath: string;
+  resolveFinalPath: (path: string) => string;
+}) {
   const navigate = useNavigate();
+
+  const handleNavigate = (href: string) => {
+    const finalPath = resolveFinalPath(href);
+    // 如果解析后的目标路径就是当前路径，则不导航
+    if (finalPath === currentPath) {
+      return;
+    }
+    navigate(href);
+  };
   return (
     <BreadcrumbBase className="p-1">
       <AnimatedBreadcrumbList className="w-max flex-y-center gap-0 overflow-hidden sm:gap-0">
@@ -17,11 +35,11 @@ export function ParallelogramBreadcrumb({ list }: { list: BreadcrumbItem[] }) {
               }`}
               {...(index !== list.length - 1
                 ? {
-                    onClick: () => navigate(item.href),
+                    onClick: () => handleNavigate(item.href),
                     onKeyDown: (e: React.KeyboardEvent) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
-                        navigate(item.href);
+                        handleNavigate(item.href);
                       }
                     },
                     role: "button",

@@ -10,7 +10,8 @@
       "suspicious": {
         "noExplicitAny": "off",
         "noEmptyBlockStatements": "off",
-        "noDocumentCookie": "off"
+        "noDocumentCookie": "off",
+        "noArrayIndexKey": "warn"
       },
       "performance": {
         "noNamespaceImport": "off"

@@ -29,6 +29,7 @@ import { Sidebar } from "@/components/ui/layout/sidebar";
 import { LayoutTabs } from "@/components/ui/layout/tabs";
 import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { useDirection } from "@/context/direction/direction-context";
+import { GLOBAL_CONFIG } from "@/global-config";
 import { useElementHeight } from "@/hooks/use-element-height";
 import { useWatermark } from "@/hooks/use-watermark";
 import {
@@ -152,7 +153,11 @@ const BaseLayout = () => {
               )}
               <Button
                 className="size-7 shrink-0 max-md:scale-125"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => {
+                  if (pathname !== GLOBAL_CONFIG.defaultRoute) {
+                    navigate(GLOBAL_CONFIG.defaultRoute);
+                  }
+                }}
                 size="icon"
                 variant="outline"
               >

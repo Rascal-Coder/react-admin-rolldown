@@ -32,7 +32,8 @@ export type GlobalConfig = {
 export const GLOBAL_CONFIG: GlobalConfig = {
   appName: "Bug Admin",
   appVersion: packageJson.version,
-  defaultRoute: import.meta.env.VITE_APP_DEFAULT_ROUTE || "/workbench",
+  defaultRoute:
+    import.meta.env.VITE_APP_DEFAULT_ROUTE || "/dashboard/workbench",
   basename: import.meta.env.VITE_APP_BASENAME || "/",
   routerMode: import.meta.env.VITE_APP_ROUTER_MODE || "frontend",
   visualizer: import.meta.env.VITE_APP_VISUALIZER || "false",
