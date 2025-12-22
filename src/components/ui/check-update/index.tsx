@@ -7,7 +7,6 @@ export function CheckUpdate() {
 
   const { hasUpdate, refresh, dismiss } = useCheckUpdate({
     enabled: checkUpdateEnabled,
-    interval: 5,
   });
   return (
     <UpdateDialog onDismiss={dismiss} onRefresh={refresh} open={hasUpdate} />

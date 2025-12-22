@@ -55,6 +55,14 @@ export function useCheckUpdate(
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isCheckingRef = useRef(false);
 
+  // 日志输出：Hook 初始化
+  console.log("[CheckUpdate] Hook 初始化", {
+    enabled,
+    interval: `${interval} 分钟`,
+    checkUrl,
+    disableInDev,
+  });
+
   // 判断是否为开发环境
   const isDev =
     typeof window !== "undefined" &&
@@ -85,32 +93,44 @@ export function useCheckUpdate(
   // 检查更新
   const checkForUpdates = useCallback(async () => {
     if (isCheckingRef.current) {
+      console.log("[CheckUpdate] 跳过检查：上一次检查仍在进行中");
       return;
     }
 
+    console.log("[CheckUpdate] 开始检查更新...");
     isCheckingRef.current = true;
 
     try {
       const versionTag = await getVersionTag();
       if (!versionTag) {
+        console.log("[CheckUpdate] 未获取到版本标识");
         return;
       }
+      console.log("[CheckUpdate] 获取到版本标识:", versionTag);
 
       // 首次运行时记录版本，不提示更新
       if (!lastVersionRef.current) {
         lastVersionRef.current = versionTag;
+        console.log("[CheckUpdate] 首次运行，记录初始版本");
         return;
       }
 
       // 版本变化时提示更新
       if (lastVersionRef.current !== versionTag) {
+        console.log("[CheckUpdate] 检测到版本变化！", {
+          旧版本: lastVersionRef.current,
+          新版本: versionTag,
+        });
         setCurrentVersion(versionTag);
         setHasUpdate(true);
         // 停止轮询
         if (timerRef.current) {
           clearInterval(timerRef.current);
           timerRef.current = null;
+          console.log("[CheckUpdate] 已停止轮询");
         }
+      } else {
+        console.log("[CheckUpdate] 版本未变化，无需更新");
       }
     } finally {
       isCheckingRef.current = false;
@@ -120,6 +140,12 @@ export function useCheckUpdate(
   // 启动轮询
   const startPolling = useCallback(() => {
     if (!enabled || interval <= 0 || (disableInDev && isDev)) {
+      console.log("[CheckUpdate] 轮询未启动", {
+        enabled,
+        interval,
+        isDev,
+        disableInDev,
+      });
       return;
     }
     // 清除已有定时器
@@ -127,6 +153,7 @@ export function useCheckUpdate(
       clearInterval(timerRef.current);
     }
 
+    console.log(`[CheckUpdate] 启动轮询，间隔: ${interval} 分钟`);
     timerRef.current = setInterval(
       checkForUpdates,
       interval * 60 * 1000 // 转换为毫秒
@@ -136,6 +163,7 @@ export function useCheckUpdate(
   // 停止轮询
   const stopPolling = useCallback(() => {
     if (timerRef.current) {
+      console.log("[CheckUpdate] 停止轮询");
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
@@ -144,8 +172,10 @@ export function useCheckUpdate(
   // 页面可见性变化处理
   const handleVisibilityChange = useCallback(() => {
     if (document.hidden) {
+      console.log("[CheckUpdate] 页面已隐藏，停止轮询");
       stopPolling();
     } else {
+      console.log("[CheckUpdate] 页面已显示，立即检查更新");
       // 页面可见时立即检查一次，然后恢复轮询
       checkForUpdates().finally(() => {
         if (!hasUpdate) {
@@ -157,12 +187,18 @@ export function useCheckUpdate(
 
   // 刷新页面
   const refresh = useCallback(() => {
+    console.log("[CheckUpdate] 用户确认刷新页面", {
+      版本: currentVersion,
+    });
     lastVersionRef.current = currentVersion;
     window.location.reload();
   }, [currentVersion]);
 
   // 忽略本次更新
   const dismiss = useCallback(() => {
+    console.log("[CheckUpdate] 用户忽略本次更新", {
+      版本: currentVersion,
+    });
     lastVersionRef.current = currentVersion;
     setHasUpdate(false);
     startPolling();
