@@ -28,7 +28,27 @@ export default function HistoryRouter({
   const [isHydrating, setIsHydrating] = useState(true);
 
   // 监听路由变化
-  useLayoutEffect(() => history.listen(setState), [history]);
+  useLayoutEffect(() => {
+    console.log(
+      "[HistoryRouter] 初始化 history.listen，当前 location:",
+      history.location.pathname
+    );
+
+    const unlisten = history.listen((update) => {
+      console.log("[HistoryRouter] 检测到路由变化:", {
+        action: update.action,
+        pathname: update.location.pathname,
+        search: update.location.search,
+        hash: update.location.hash,
+      });
+      setState(update);
+    });
+
+    return () => {
+      console.log("[HistoryRouter] 清理 history.listen 监听器");
+      unlisten();
+    };
+  }, [history]);
 
   // 在组件挂载后完成 hydration
   useLayoutEffect(() => {

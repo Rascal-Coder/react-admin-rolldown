@@ -77,6 +77,7 @@ const BaseLayout = () => {
   const removeCacheKey = useRemoveCacheKey();
   const { setRemoveCacheKey } = useCacheActions();
   const { destroyWatermark, updateWatermark } = useWatermark();
+
   const handleWatermark = useCallback(() => {
     if (watermarkEnabled) {
       updateWatermark({

@@ -52,17 +52,22 @@ export function useTabs(options?: UseTabsOptions) {
   // 激活 tab 并导航
   const activateTabAndNavigate = useCallback(
     (tabKey: string) => {
+      // 更新当前激活的 tab
       setActiveTab(tabKey);
-      if (onNavigate) {
+
+      // 只有当目标路径与当前路径不一致时才执行导航，避免重复 push
+      if (onNavigate && pathname !== tabKey) {
         onNavigate(tabKey);
       }
+
+      // 滚动到对应的 tab
       if (onScrollToTab) {
         requestAnimationFrame(() => {
           onScrollToTab(tabKey);
         });
       }
     },
-    [onNavigate, setActiveTab, onScrollToTab]
+    [onNavigate, onScrollToTab, pathname, setActiveTab]
   );
 
   // 添加或更新tab
