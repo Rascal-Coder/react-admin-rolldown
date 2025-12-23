@@ -1,5 +1,5 @@
 import type { RouteConfig } from "@/lib/router-toolset/types";
-import { Component, LayoutBase } from "../utils";
+import { Component, LayoutBase, LayoutSimple } from "../utils";
 
 export const routesConfig: RouteConfig[] = [
   {
@@ -209,10 +209,11 @@ export const routesConfig: RouteConfig[] = [
   },
   {
     path: "/auth",
-    component: Component("/pages/_built/auth/sign-in"),
+    component: <LayoutSimple />,
     name: "登录",
     icon: "lucide:lock",
     hidden: true,
+    flatten: true,
     children: [
       { path: "", redirect: "sign-in" },
       {
@@ -234,6 +235,7 @@ export const routesConfig: RouteConfig[] = [
     component: Component("/pages/separation"),
     name: "独立布局",
     icon: "lucide:square",
+    flatten: true,
   },
   {
     path: "/403",

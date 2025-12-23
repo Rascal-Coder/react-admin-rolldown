@@ -1,10 +1,5 @@
-import type React from "react";
+import { useOutlet } from "react-router";
 import { LogoSvg } from "@/components/ui/layout/logo";
-
-type Props = {
-  children: React.ReactNode;
-  showHeader?: boolean;
-};
 
 function HeaderSimple() {
   return (
@@ -19,11 +14,12 @@ function HeaderSimple() {
   );
 }
 
-export default function SimpleLayout({ children, showHeader = true }: Props) {
+export default function SimpleLayout() {
+  const outlet = useOutlet();
   return (
     <div className="flex h-screen w-full flex-col bg-bg text-text-base">
-      {showHeader && <HeaderSimple />}
-      {children}
+      <HeaderSimple />
+      {outlet}
     </div>
   );
 }

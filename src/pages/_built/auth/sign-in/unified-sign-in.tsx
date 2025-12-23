@@ -3,7 +3,6 @@ import { varFade } from "@/components/ui/animate/variants/fade";
 import { varSlide } from "@/components/ui/animate/variants/slide";
 import { cn } from "@/utils";
 import { FormContainer } from "./components/form-container";
-import { LogoHeader } from "./components/logo-header";
 import { useSignInContext } from "./providers/sign-in-provider";
 
 function CenterSignIn() {
@@ -22,7 +21,6 @@ function CenterSignIn() {
         className="mx-auto flex w-full flex-col justify-center space-y-2 py-8 sm:w-[480px] sm:p-8"
         variants={varFade().inUp}
       >
-        <LogoHeader />
         <FormContainer signInState={signInState} />
       </m.div>
     </m.div>
@@ -56,13 +54,6 @@ function SplitSignIn({ layout }: { layout: "left" | "right" }) {
         className="lg:p-8"
         variants={layout === "left" ? varSlide().inLeft : varSlide().inRight}
       >
-        <m.div
-          className="mx-auto flex w-full flex-col justify-center space-y-2 py-8 sm:w-[480px] sm:p-8"
-          variants={varFade().inUp}
-        >
-          <LogoHeader />
-        </m.div>
-
         <m.div
           className="mx-auto flex w-full max-w-md flex-col justify-center space-y-2"
           variants={varFade().inDown}

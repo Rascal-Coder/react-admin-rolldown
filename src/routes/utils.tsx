@@ -26,3 +26,4 @@ export const Component = (path = "", props?: any): React.ReactNode => {
 };
 
 export const LayoutBase = lazy(() => import("@/layouts/base"));
+export const LayoutSimple = lazy(() => import("@/layouts/simple"));
