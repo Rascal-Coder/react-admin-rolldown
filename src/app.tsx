@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
@@ -6,7 +7,7 @@ import { DirectionProvider } from "@/context/direction/direction-provider";
 import { MotionLazy } from "./components/ui/animate/motion-lazy";
 import { CheckUpdate } from "./components/ui/check-update";
 import { ErrorFallback } from "./components/ui/error-fallback";
-// import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
+import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
 import { GLOBAL_CONFIG } from "./global-config";
 import { useRouter } from "./lib/router-toolset/history-router";
 import { routes } from "./routes";
@@ -23,23 +24,25 @@ function App() {
   }, [routerRoutes, setMenuData]);
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <HelmetProvider>
-        <Helmet>
-          <title>
-            {curRoute?.name
-              ? `${curRoute.name} | ${GLOBAL_CONFIG.appName}`
-              : GLOBAL_CONFIG.appName}
-          </title>
-          <link href={"/logo.svg"} rel="icon" />
-        </Helmet>
-        {/* <RouteLoadingProgress /> */}
-        <DirectionProvider>
-          <MotionLazy>
-            <CheckUpdate />
-            {element}
-          </MotionLazy>
-        </DirectionProvider>
-      </HelmetProvider>
+      <QueryClientProvider client={new QueryClient()}>
+        <HelmetProvider>
+          <Helmet>
+            <title>
+              {curRoute?.name
+                ? `${curRoute.name} | ${GLOBAL_CONFIG.appName}`
+                : GLOBAL_CONFIG.appName}
+            </title>
+            <link href={"/logo.svg"} rel="icon" />
+          </Helmet>
+          <RouteLoadingProgress />
+          <DirectionProvider>
+            <MotionLazy>
+              <CheckUpdate />
+              {element}
+            </MotionLazy>
+          </DirectionProvider>
+        </HelmetProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }

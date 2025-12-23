@@ -6,12 +6,20 @@ import GlobalLoading from "@/components/ui/loading/global-loading";
 import history from "@/lib/router-toolset/history";
 import HistoryRouter from "@/lib/router-toolset/router-comp";
 import { ThemeProvider } from "@/theme/theme-provider";
-import { initCopyRight } from "@/utils";
+import { initCopyRight, urlJoin } from "@/utils";
+import { worker } from "./_mock";
 import App from "./app";
 import { GLOBAL_CONFIG } from "./global-config";
 
 const container = document.getElementById("root");
 const basename = GLOBAL_CONFIG.basename;
+
+await worker.start({
+  onUnhandledRequest: "bypass",
+  serviceWorker: {
+    url: urlJoin(GLOBAL_CONFIG.basename, "mockServiceWorker.js"),
+  },
+});
 function setupApp() {
   registerLocalIcons();
   initCopyRight();

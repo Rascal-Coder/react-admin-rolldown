@@ -1,3 +1,5 @@
+import type { BasicStatus } from "./enum";
+
 type UserProps = {
   user: {
     name: string;
@@ -5,4 +7,17 @@ type UserProps = {
     avatar: string;
   };
 };
-export type { UserProps };
+
+interface UserToken {
+  accessToken?: string;
+  refreshToken?: string;
+}
+interface UserInfo {
+  id: string;
+  email: string;
+  username: string;
+  password?: string;
+  avatar?: string;
+  status?: BasicStatus;
+}
+export type { UserProps, UserToken, UserInfo };

@@ -208,6 +208,28 @@ export const routesConfig: RouteConfig[] = [
     ],
   },
   {
+    path: "/auth",
+    component: Component("/pages/_built/auth/sign-in"),
+    name: "登录",
+    icon: "lucide:lock",
+    hidden: true,
+    children: [
+      { path: "", redirect: "sign-in" },
+      {
+        path: "sign-in",
+        component: Component("/pages/_built/auth/sign-in"),
+      },
+      {
+        path: "sign-up",
+        component: Component("/pages/_built/auth/sign-up"),
+      },
+      {
+        path: "forgot-password",
+        component: Component("/pages/_built/auth/forgot-password"),
+      },
+    ],
+  },
+  {
     path: "/separation",
     component: Component("/pages/separation"),
     name: "独立布局",

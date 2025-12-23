@@ -13,6 +13,11 @@
         "noDocumentCookie": "off",
         "noArrayIndexKey": "warn"
       },
+      "a11y": {
+        "noNoninteractiveElementInteractions": "warn",
+        "useKeyWithClickEvents": "warn",
+        "noStaticElementInteractions": "warn"
+      },
       "performance": {
         "noNamespaceImport": "off"
       }
