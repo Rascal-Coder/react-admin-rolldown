@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { ReactNode } from "react";
 import type { BadgeProps } from "@/components/base/dot-badge/types";
 import type { MenuItemData } from "@/components/ui/layout/menu/vertical/types";
 
@@ -6,7 +6,9 @@ export type RouteConfig = {
   /** 是否缓存 */
   keepAlive?: boolean;
   /** 页面组件 */
-  component?: () => Promise<{ default: () => JSX.Element }>;
+  component?: // | (() => Promise<{ default: () => JSX.Element }>)
+  // | JSX.Element
+  ReactNode;
   /** 是否固定在标签页 */
   pinned?: boolean;
   /** 路径，同react-router */

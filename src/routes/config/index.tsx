@@ -1,4 +1,5 @@
 import type { RouteConfig } from "@/lib/router-toolset/types";
+import { Component, LayoutBase } from "../utils";
 
 export const routesConfig: RouteConfig[] = [
   {
@@ -8,7 +9,7 @@ export const routesConfig: RouteConfig[] = [
   {
     path: "/",
     flatten: true,
-    component: () => import("@/layouts/base"),
+    component: <LayoutBase />,
     children: [
       {
         path: "dashboard",
@@ -18,14 +19,14 @@ export const routesConfig: RouteConfig[] = [
           { path: "", redirect: "workbench" },
           {
             path: "workbench",
-            component: () => import("@/pages/dashboard/workbench"),
+            component: Component("/pages/dashboard/workbench"),
             name: "工作台",
             pinned: true,
             icon: "lucide:workflow",
           },
           {
             path: "analysis",
-            component: () => import("@/pages/dashboard/analysis"),
+            component: Component("/pages/dashboard/analysis"),
             icon: "lucide:bar-chart-3",
             name: "分析",
           },
@@ -33,20 +34,20 @@ export const routesConfig: RouteConfig[] = [
       },
       {
         path: "menu_level",
-        component: () => import("@/pages/menu-level"),
+        component: Component("/pages/menu-level"),
         name: "多级菜单",
         icon: "lucide:layers",
         children: [
           { path: "", redirect: "1a" },
           {
             path: "1a",
-            component: () => import("@/pages/menu-level/menu-level-1a"),
+            component: Component("/pages/menu-level/menu-level-1a"),
             name: "多级菜单1a",
             icon: "lucide:menu",
           },
           {
             path: "1b",
-            component: () => import("@/pages/menu-level/menu-level-1b"),
+            component: Component("/pages/menu-level/menu-level-1b"),
             name: "多级菜单1b",
             icon: "lucide:menu",
             children: [
@@ -56,15 +57,17 @@ export const routesConfig: RouteConfig[] = [
               },
               {
                 path: "2a",
-                component: () =>
-                  import("@/pages/menu-level/menu-level-1b/menu-level-1b-2a"),
+                component: Component(
+                  "/pages/menu-level/menu-level-1b/menu-level-1b-2a"
+                ),
                 name: "多级菜单2a",
                 icon: "lucide:file-text",
               },
               {
                 path: "2b",
-                component: () =>
-                  import("@/pages/menu-level/menu-level-1b/menu-level-1b-2b"),
+                component: Component(
+                  "/pages/menu-level/menu-level-1b/menu-level-1b-2b"
+                ),
                 name: "多级菜单2b",
                 icon: "lucide:menu",
                 children: [
@@ -74,19 +77,17 @@ export const routesConfig: RouteConfig[] = [
                   },
                   {
                     path: "3a",
-                    component: () =>
-                      import(
-                        "@/pages/menu-level/menu-level-1b/menu-level-1b-2b/menu-level-1b-2b-3a"
-                      ),
+                    component: Component(
+                      "/pages/menu-level/menu-level-1b/menu-level-1b-2b/menu-level-1b-2b-3a"
+                    ),
                     name: "多级菜单3a",
                     icon: "lucide:file-text",
                   },
                   {
                     path: "3b",
-                    component: () =>
-                      import(
-                        "@/pages/menu-level/menu-level-1b/menu-level-1b-2b/menu-level-1b-2b-3b"
-                      ),
+                    component: Component(
+                      "/pages/menu-level/menu-level-1b/menu-level-1b-2b/menu-level-1b-2b-3b"
+                    ),
                     name: "多级菜单3b",
                     icon: "lucide:file-text",
                   },
@@ -100,7 +101,7 @@ export const routesConfig: RouteConfig[] = [
         path: "first_level",
         name: "一级菜单",
         icon: "local:file-ai",
-        component: () => import("@/pages/first-level"),
+        component: Component("/pages/first-level"),
       },
       {
         path: "test_badge",
@@ -113,7 +114,7 @@ export const routesConfig: RouteConfig[] = [
           { path: "", redirect: "1" },
           {
             path: "1",
-            component: () => import("@/pages/test-badge/test-badge-1"),
+            component: Component("/pages/test-badge/test-badge-1"),
             name: "测试徽章2222222",
             icon: "lucide:sparkles",
             badgeType: "normal",
@@ -123,7 +124,7 @@ export const routesConfig: RouteConfig[] = [
       },
       {
         path: "alive",
-        component: () => import("@/pages/alive"),
+        component: Component("/pages/alive"),
         name: "KeepAlive",
         icon: "local:kun",
         keepAlive: true,
@@ -136,13 +137,13 @@ export const routesConfig: RouteConfig[] = [
           { path: "", redirect: "list" },
           {
             path: "list",
-            component: () => import("@/pages/user/list"),
+            component: Component("/pages/user/list"),
             name: "用户列表",
             icon: "lucide:users",
           },
           {
             path: ":id",
-            component: () => import("@/pages/user/detail"),
+            component: Component("/pages/user/detail"),
             name: "用户详情",
             icon: "lucide:user-circle",
             hidden: true, // 动态路由通常隐藏在菜单中
@@ -157,18 +158,50 @@ export const routesConfig: RouteConfig[] = [
           { path: "", redirect: "404" },
           {
             path: "403",
-            component: () => import("@/pages/_built/page-403"),
+            component: Component("/pages/_built/page-403"),
             name: "403",
           },
           {
             path: "404",
-            component: () => import("@/pages/_built/page-404"),
+            component: Component("/pages/_built/page-404"),
             name: "404",
           },
           {
             path: "500",
-            component: () => import("@/pages/_built/page-500"),
+            component: Component("/pages/_built/page-500"),
             name: "500",
+          },
+        ],
+      },
+      {
+        path: "link",
+        name: "链接",
+        icon: "lucide:link",
+        children: [
+          { path: "", redirect: "ant-design-iframe" },
+          {
+            name: "Ant Design (内嵌)",
+            icon: "lucide:monitor",
+            path: "ant-design-iframe",
+            component: Component("/pages/_built/link/iframe", {
+              src: "https://ant.design/index-cn",
+            }),
+          },
+          {
+            name: "Ant Design (外部链接)",
+            icon: "lucide:external-link",
+            path: "ant-design-external-link",
+            component: Component("/pages/_built/link/external-link", {
+              src: "https://ant.design/index-cn",
+            }),
+          },
+          {
+            name: "shadcn",
+            icon: "lucide:monitor",
+            path: "shadcn-iframe",
+            component: Component("/pages/_built/link/iframe", {
+              src: "https://ui.shadcn.com/docs",
+            }),
           },
         ],
       },
@@ -176,23 +209,23 @@ export const routesConfig: RouteConfig[] = [
   },
   {
     path: "/separation",
-    component: () => import("@/pages/separation"),
+    component: Component("/pages/separation"),
     name: "独立布局",
     icon: "lucide:square",
   },
   {
     path: "/403",
-    component: () => import("@/pages/_built/page-403"),
+    component: Component("/pages/_built/page-403"),
     flatten: true,
   },
   {
     path: "/500",
-    component: () => import("@/pages/_built/page-500"),
+    component: Component("/pages/_built/page-500"),
     flatten: true,
   },
   {
     path: "*",
-    component: () => import("@/pages/_built/page-404"),
+    component: Component("/pages/_built/page-404"),
     flatten: true,
   },
 ];

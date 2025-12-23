@@ -1,5 +1,3 @@
-"use client";
-
 import { Loader2, PipetteIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { HexAlphaColorPicker, HexColorPicker } from "react-colorful";

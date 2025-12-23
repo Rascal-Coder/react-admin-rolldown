@@ -1,6 +1,7 @@
 import { Button } from "@/components/base/button";
 import { Card, CardContent } from "@/components/base/card";
 import { routes } from "@/routes";
+import { Component } from "@/routes/utils";
 
 /**
  * 获取随机字符串
@@ -22,7 +23,7 @@ export default function FirstLevel() {
     const newRoute = {
       path: newPath,
       name: `临时路由-${newPath}`,
-      component: () => import("@/pages/temp"),
+      component: Component("/pages/temp"),
     };
     return newRoute;
   }

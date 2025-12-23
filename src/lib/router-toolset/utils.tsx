@@ -1,4 +1,4 @@
-import { lazy, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { RouteObject } from "react-router";
 import { Navigate, useParams } from "react-router";
 import type { RouteConfig } from "./types";
@@ -17,8 +17,15 @@ export function generateReactRoutes(configs?: RouteConfig[]) {
       if (redirect) {
         element = <Navigate to={redirect} />;
       } else if (component) {
-        const LoadedElement = lazy(component);
-        element = <LoadedElement />;
+        // 如果 component 是 ReactNode，直接使用
+        element = component;
+        // if (typeof component !== "function") {
+
+        // } else {
+        //   // 如果 component 是函数，使用 lazy 加载
+        //   const LoadedElement = lazy(component);
+        //   element = <LoadedElement />;
+        // }
       }
       const routeObject: RouteObject = {
         path: configItem.path,
