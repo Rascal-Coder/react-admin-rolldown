@@ -48,7 +48,10 @@ const useUserStore = create<UserStore>()(
 export const useUserInfo = () => useUserStore((state) => state.userInfo);
 export const useUserToken = () => useUserStore((state) => state.userToken);
 export const useUserActions = () => useUserStore((state) => state.actions);
-
+export const useUserPermissions = () =>
+  useUserStore((state) => state.userInfo.permissions || []);
+export const useUserRoles = () =>
+  useUserStore((state) => state.userInfo.roles || []);
 export const useSignIn = () => {
   const { setUserToken, setUserInfo } = useUserActions();
 

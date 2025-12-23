@@ -10,6 +10,7 @@ import {
 } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
 import "./page-transitions.css";
+import { AuthGuard } from "@/components/advanced/auth/auth-guard";
 import { Button } from "@/components/base/button";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import { Footer } from "@/components/ui/layout/footer";
@@ -32,6 +33,7 @@ import { useDirection } from "@/context/direction/direction-context";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { useElementHeight } from "@/hooks/use-element-height";
 import { useWatermark } from "@/hooks/use-watermark";
+import Page403 from "@/pages/_built/page-403";
 import {
   useCacheActions,
   useCacheRoutes,
@@ -187,38 +189,38 @@ const BaseLayout = () => {
             </div>
           </div>
         </Header>
-
-        <main
-          className={cn(
-            "flex w-full flex-auto flex-col text-foreground",
-            "transition-[max-width] duration-300 ease-in-out",
-            "mx-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6",
-            {
-              "max-w-full": themeStretch,
-              "xl:max-w-screen-xl": !themeStretch,
-            }
-          )}
-          data-layout="bug-admin-layout"
-          style={{
-            willChange: "max-width",
-            marginTop: headerFixed ? headerHeight : 0,
-            marginBottom: footerFixed && showFooter ? footerHeight : 0,
-          }}
-        >
-          <KeepAlive
-            activeCacheKey={pathname}
-            aliveRef={aliveRef}
-            cacheNodeClassName={cn(
-              "h-full rounded-xl bg-muted p-4",
-              `page-animate-${pageTransition}`
+        <AuthGuard fallback={<Page403 />}>
+          <main
+            className={cn(
+              "flex w-full flex-auto flex-col text-foreground",
+              "transition-[max-width] duration-300 ease-in-out",
+              "mx-auto px-2 py-2 sm:px-4 sm:py-4 md:px-6",
+              {
+                "max-w-full": themeStretch,
+                "xl:max-w-screen-xl": !themeStretch,
+              }
             )}
-            enableActivity
-            include={cacheKeys}
+            data-layout="bug-admin-layout"
+            style={{
+              willChange: "max-width",
+              marginTop: headerFixed ? headerHeight : 0,
+              marginBottom: footerFixed && showFooter ? footerHeight : 0,
+            }}
           >
-            {outlet}
-          </KeepAlive>
-        </main>
-
+            <KeepAlive
+              activeCacheKey={pathname}
+              aliveRef={aliveRef}
+              cacheNodeClassName={cn(
+                "h-full rounded-xl bg-muted p-4",
+                `page-animate-${pageTransition}`
+              )}
+              enableActivity
+              include={cacheKeys}
+            >
+              {outlet}
+            </KeepAlive>
+          </main>
+        </AuthGuard>
         {showFooter && (
           <Footer
             companyName={companyName}

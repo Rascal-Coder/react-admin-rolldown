@@ -1,3 +1,4 @@
+import type { Permission, Role } from "@/_mock/assets";
 import type { BasicStatus } from "./enum";
 
 type UserProps = {
@@ -19,5 +20,7 @@ interface UserInfo {
   password?: string;
   avatar?: string;
   status?: BasicStatus;
+  roles?: Role[];
+  permissions?: Permission[];
 }
 export type { UserProps, UserToken, UserInfo };

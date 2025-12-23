@@ -18,7 +18,7 @@ import { Input } from "@/components/base/input";
 import Icon from "@/components/ui/icon/icon";
 import { PasswordInput } from "@/components/ui/password-input";
 import { GLOBAL_CONFIG } from "@/global-config";
-import { useSignIn } from "@/store/user-tore";
+import { useSignIn } from "@/store/user-store";
 import { cn, sleep } from "@/utils";
 import {
   SignInStateEnum,
