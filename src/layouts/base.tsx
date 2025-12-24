@@ -29,6 +29,7 @@ import { GLOBAL_CONFIG } from "@/global-config";
 import { useElementHeight } from "@/hooks/use-element-height";
 import { useRouterNavigation } from "@/hooks/use-router";
 import { useWatermark } from "@/hooks/use-watermark";
+import { useRouter } from "@/lib/router-toolset/router";
 import Page403 from "@/pages/_built/page-403";
 import {
   useCacheActions,
@@ -40,6 +41,7 @@ import { useAppSettings } from "@/store/setting-store";
 import { cn } from "@/utils";
 
 const BaseLayout = () => {
+  const { curRoute } = useRouter();
   const { goHome } = useRouterNavigation();
   const { dir } = useDirection();
   const {
@@ -63,6 +65,7 @@ const BaseLayout = () => {
     watermarkEnabled,
     watermarkContent,
     watermarkColor,
+    showAllMenuWith403,
   } = useAppSettings();
   const [headerRef, headerHeight] = useElementHeight<HTMLElement>();
   const [footerRef, footerHeight] = useElementHeight<HTMLElement>();
@@ -185,7 +188,11 @@ const BaseLayout = () => {
             </div>
           </div>
         </Header>
-        <AuthGuard fallback={<Page403 />}>
+        <AuthGuard
+          baseOn="role"
+          check={showAllMenuWith403 ? curRoute?.permission : undefined}
+          fallback={<Page403 />}
+        >
           <main
             className={cn(
               "flex w-full flex-auto flex-col text-foreground",

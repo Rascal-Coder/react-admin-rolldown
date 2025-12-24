@@ -17,6 +17,7 @@ const userRoutes: RouteConfig[] = [
         lazy: createLazyComponent("/pages/user/list"),
         name: "用户列表",
         icon: "lucide:users",
+        permission: "SUPER_ADMIN",
       },
       {
         path: ":id",

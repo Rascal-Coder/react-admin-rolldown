@@ -4,7 +4,7 @@ import { GLOBAL_CONFIG } from "@/global-config";
 
 export default function Page404() {
   return (
-    <div className="flex h-screen w-full flex-col bg-bg text-text-base">
+    <div className="m-auto flex h-full max-w-[400px] items-center justify-center">
       <ErrorLayout
         desc="The page you’re looking for doesn’t exist or has been moved."
         helmetTitle={`404 - ${GLOBAL_CONFIG.appName}`}

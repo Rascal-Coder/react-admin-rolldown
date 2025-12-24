@@ -4,7 +4,7 @@ import { GLOBAL_CONFIG } from "@/global-config";
 
 export default function Page500() {
   return (
-    <div className="flex h-screen w-full flex-col bg-bg text-text-base">
+    <div className="m-auto flex h-full max-w-[400px] items-center justify-center">
       <ErrorLayout
         desc="Sorry for the inconvenience."
         helmetTitle={`500 - ${GLOBAL_CONFIG.appName}`}

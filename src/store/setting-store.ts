@@ -56,6 +56,12 @@ export type SettingsType = {
   watermarkContent: string;
   watermarkColor: string;
   checkUpdateEnabled: boolean;
+  /**
+   * 是否在菜单中展示所有路由，但无权限时仅内容区域 fallback 到 403
+   * false: 按角色过滤菜单
+   * true: 菜单展示所有路由，权限由布局 AuthGuard 控制并显示 403
+   */
+  showAllMenuWith403: boolean;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -101,6 +107,7 @@ const useSettingStore = create<SettingStore>()(
         watermarkContent: GLOBAL_CONFIG.appName,
         watermarkColor: "#ec4899",
         checkUpdateEnabled: true,
+        showAllMenuWith403: false,
       },
       actions: {
         setAppSettings: (appSettings) => {

@@ -1,4 +1,3 @@
-import { useOutlet } from "react-router";
 import { LogoSvg } from "@/components/ui/layout/logo";
 import { GLOBAL_CONFIG } from "@/global-config";
 
@@ -15,12 +14,15 @@ function HeaderSimple() {
   );
 }
 
-export default function SimpleLayout() {
-  const outlet = useOutlet();
+export default function SimpleLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex h-screen w-full flex-col bg-bg text-text-base">
       <HeaderSimple />
-      {outlet}
+      {children}
     </div>
   );
 }

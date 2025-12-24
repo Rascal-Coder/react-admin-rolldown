@@ -73,17 +73,47 @@ export const staticRoutes: RouteConfig[] = [
   // 错误页面路由
   {
     path: "/403",
-    lazy: createLazyComponent("/pages/_built/page-403"),
+    lazy: async () => {
+      const SimpleLayout = (await import("@/layouts/simple")).default;
+      const Page403 = (await import("@/pages/_built/page-403")).default;
+      return {
+        Component: () => (
+          <SimpleLayout>
+            <Page403 />
+          </SimpleLayout>
+        ),
+      };
+    },
     flatten: true,
   },
   {
     path: "/500",
-    lazy: createLazyComponent("/pages/_built/page-500"),
+    lazy: async () => {
+      const SimpleLayout = (await import("@/layouts/simple")).default;
+      const Page500 = (await import("@/pages/_built/page-500")).default;
+      return {
+        Component: () => (
+          <SimpleLayout>
+            <Page500 />
+          </SimpleLayout>
+        ),
+      };
+    },
     flatten: true,
   },
   {
     path: "*",
-    lazy: createLazyComponent("/pages/_built/page-404"),
+    lazy: async () => {
+      const SimpleLayout = (await import("@/layouts/simple")).default;
+      const Page404 = (await import("@/pages/_built/page-404")).default;
+      return {
+        Component: () => (
+          <SimpleLayout>
+            <Page404 />
+          </SimpleLayout>
+        ),
+      };
+    },
     flatten: true,
   },
 ];

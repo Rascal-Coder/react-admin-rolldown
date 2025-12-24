@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Outlet } from "react-router";
@@ -12,26 +12,26 @@ import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
 import { GLOBAL_CONFIG } from "./global-config";
 import { useRouter } from "./lib/router-toolset/router";
 import { useMenuActions } from "./store/menu-store";
+import { useAppSettings } from "./store/setting-store";
 import { useUserRoles } from "./store/user-store";
 import { generateMenuItems } from "./utils/menu";
 
 function App() {
   const { curRoute, routes: routerRoutes } = useRouter();
   const { setMenuData } = useMenuActions();
+  const { showAllMenuWith403 } = useAppSettings();
   const roles = useUserRoles();
 
-  // 根据用户角色过滤路由，用于菜单生成
-  // 注意：路由配置中的 permission 字段实际存储的是 role code
-  const filteredRoutes = useMemo(
-    () => filterRoutesByRole(routerRoutes, roles),
-    [routerRoutes, roles]
-  );
-
   useEffect(() => {
-    const menuData = generateMenuItems(filteredRoutes);
+    // 根据偏好设置决定菜单生成策略：
+    // - showAllMenuWith403 为 true：菜单展示所有路由，无权限时由布局 AuthGuard 控制并显示 403
+    // - showAllMenuWith403 为 false：按角色过滤路由，只有有权限的路由会出现在菜单中
+    const routesForMenu = showAllMenuWith403
+      ? routerRoutes
+      : filterRoutesByRole(routerRoutes, roles);
+    const menuData = generateMenuItems(routesForMenu);
     setMenuData(menuData);
-    // setMenuData 来自 Zustand store 的 actions，引用是稳定的
-  }, [filteredRoutes, setMenuData]);
+  }, [routerRoutes, roles, showAllMenuWith403, setMenuData]);
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <QueryClientProvider client={new QueryClient()}>
