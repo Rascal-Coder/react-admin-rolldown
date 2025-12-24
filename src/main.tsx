@@ -13,7 +13,7 @@ import { initCopyRight, urlJoin } from "@/utils";
 import { worker } from "./_mock";
 import App from "./app";
 import { GLOBAL_CONFIG } from "./global-config";
-import { routerInstance } from "./routes";
+import { createAppRouter } from "./routes";
 
 const container = document.getElementById("root");
 
@@ -23,12 +23,16 @@ await worker.start({
     url: urlJoin(GLOBAL_CONFIG.basename, "mockServiceWorker.js"),
   },
 });
-function setupApp() {
+
+async function setupApp() {
   registerLocalIcons();
   initCopyRight();
   if (!container) {
     return;
   }
+
+  // 根据路由模式（frontend/backend）创建路由实例
+  const routerInstance = await createAppRouter();
 
   // 创建包含 App 组件的完整路由配置
   const appRoute: import("react-router").RouteObject = {

@@ -1,3 +1,4 @@
+import { Outlet } from "react-router";
 import { LogoSvg } from "@/components/ui/layout/logo";
 import { GLOBAL_CONFIG } from "@/global-config";
 
@@ -23,6 +24,7 @@ export default function SimpleLayout({
     <div className="flex h-screen w-full flex-col bg-bg text-text-base">
       <HeaderSimple />
       {children}
+      <Outlet />
     </div>
   );
 }

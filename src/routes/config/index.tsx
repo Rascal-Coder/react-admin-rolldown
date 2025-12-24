@@ -3,15 +3,12 @@ import { dynamicRoutes } from "./dynamic";
 import { staticRoutes } from "./static";
 
 /**
- * 合并静态路由和动态路由
+ * 工具方法：合并静态路由和传入的动态路由
  *
  * 将动态路由注入到静态路由的基础布局容器中
  * 这样可以在保持向后兼容的同时，为后续的权限控制提供基础
- *
- * @param permissions 用户权限列表，用于过滤路由。如果不提供，则返回所有路由（不进行权限过滤）
- * @returns 合并后的路由配置数组
  */
-export function getRoutesConfig(): RouteConfig[] {
+function mergeStaticAndDynamic(dynamic: RouteConfig[]): RouteConfig[] {
   // 深拷贝静态路由，避免修改原始配置
   const routes: RouteConfig[] = staticRoutes.map((route) => ({
     ...route,
@@ -27,11 +24,25 @@ export function getRoutesConfig(): RouteConfig[] {
   if (baseLayoutRoute) {
     baseLayoutRoute.children = [
       ...(baseLayoutRoute.children || []),
-      ...dynamicRoutes,
+      ...dynamic,
     ];
   }
 
   return routes;
+}
+
+/**
+ * 前端路由模式下，使用本地 dynamicRoutes 合并路由
+ */
+export function getRoutesConfig(): RouteConfig[] {
+  return mergeStaticAndDynamic(dynamicRoutes);
+}
+
+/**
+ * 通用方法：使用外部传入的动态路由构建完整路由表（用于后端路由模式）
+ */
+export function buildRoutesWithDynamic(dynamic: RouteConfig[]): RouteConfig[] {
+  return mergeStaticAndDynamic(dynamic);
 }
 
 /**
