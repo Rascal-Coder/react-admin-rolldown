@@ -7,7 +7,9 @@ import {
   type RouteObject,
   useLocation,
 } from "react-router";
+import type { Subject } from "rxjs";
 import Events from "../events";
+import type { EventsRecord } from "../events/types";
 import history from "./history";
 import type { RouteConfig } from "./types";
 import {
@@ -28,24 +30,83 @@ interface RouterOptions {
 
 const regPath = /\/$/;
 
-export class Router extends Events {
-  static EVENT_NAME__onChangeRoutesConfig: "EVENT_NAME__onChangeRoutesConfig";
-  routesConfig: RouteConfig[] = [];
-  reactRoutes: RouteObject[] = [];
-  routes: RouteConfig[] = [];
-  flattenRoutes: Map<string, RouteConfig> = new Map();
+export class Router {
+  static EVENT_NAME__onChangeRoutesConfig = "EVENT_NAME__onChangeRoutesConfig";
+
+  private readonly _events: Events;
+  private _routesConfig: RouteConfig[] = [];
+  private _reactRoutes: RouteObject[] = [];
+  private _routes: RouteConfig[] = [];
+  private _flattenRoutes: Map<string, RouteConfig> = new Map();
   basename = "/";
 
   constructor(routesConfig: RouteConfig[], options?: RouterOptions) {
-    super();
-    this.routesConfig = routesConfig;
-    this.reactRoutes = generateReactRoutes(routesConfig);
-    const { routes, flattenRoutes } = formatRoutes(routesConfig);
-    this.routes = routes;
-    this.flattenRoutes = flattenRoutes;
+    this._events = new Events();
+    this._routesConfig = routesConfig;
+    this._updateRoutes();
     this.basename = options?.basename || "/";
 
     this._onChangeRoutesConfig();
+  }
+
+  /**
+   * 更新路由相关数据（reactRoutes/routes/flattenRoutes）
+   */
+  private _updateRoutes() {
+    this._reactRoutes = generateReactRoutes(this._routesConfig);
+    const { routes, flattenRoutes } = formatRoutes(this._routesConfig);
+    this._routes = routes;
+    this._flattenRoutes = flattenRoutes;
+  }
+
+  /**
+   * 获取路由配置
+   */
+  get routesConfig(): RouteConfig[] {
+    return this._routesConfig;
+  }
+
+  /**
+   * 获取 React Router 格式的路由配置（计算属性）
+   */
+  get reactRoutes(): RouteObject[] {
+    return this._reactRoutes;
+  }
+
+  /**
+   * 获取格式化后的路由配置（计算属性）
+   */
+  get routes(): RouteConfig[] {
+    return this._routes;
+  }
+
+  /**
+   * 获取扁平化的路由映射（计算属性）
+   */
+  get flattenRoutes(): Map<string, RouteConfig> {
+    return this._flattenRoutes;
+  }
+
+  /**
+   * 事件系统：订阅事件
+   */
+  on(name: string, callback: (data?: unknown) => void): Subject<unknown> {
+    // EventsRecord 是 Record<string, ...>，所以所有字符串键都是有效的
+    return this._events.on(name as keyof EventsRecord, callback);
+  }
+
+  /**
+   * 事件系统：发布事件
+   */
+  emit(name: string, data?: unknown): void {
+    this._events.emit(name as keyof EventsRecord, data);
+  }
+
+  /**
+   * 事件系统：移除事件监听
+   */
+  remove(name: string, subscription?: Subject<unknown>): void {
+    this._events.remove(name as keyof EventsRecord, subscription);
   }
   /**
    * 获取当前路由的pathname
@@ -64,13 +125,11 @@ export class Router extends Events {
     const sub = this.on(
       Router.EVENT_NAME__onChangeRoutesConfig,
       (routesConfig) => {
-        const reactRoutes = generateReactRoutes(routesConfig as RouteConfig[]);
-        const { routes, flattenRoutes } = formatRoutes(
-          routesConfig as RouteConfig[]
-        );
-        this.reactRoutes = reactRoutes;
-        this.routes = routes;
-        this.flattenRoutes = flattenRoutes;
+        // 事件回调的数据类型是 unknown，需要类型断言
+        if (Array.isArray(routesConfig)) {
+          this._routesConfig = routesConfig as RouteConfig[];
+          this._updateRoutes();
+        }
       }
     );
     return () => {
@@ -89,7 +148,7 @@ export class Router extends Events {
     const _pathname = typeof pathname === "string" ? pathname : this.pathname;
     const routePath = this.getRoutePath(_pathname);
 
-    const newRoutesConfigs = produce(this.routesConfig, (draft) => {
+    const newRoutesConfigs = produce(this._routesConfig, (draft) => {
       const routesConfigItem = findroutesConfigItem(draft, routePath);
       if (routesConfigItem) {
         if (typeof pathname === "string") {
@@ -100,7 +159,7 @@ export class Router extends Events {
       }
     });
 
-    this.routesConfig = newRoutesConfigs;
+    this._routesConfig = newRoutesConfigs;
     this.emit(Router.EVENT_NAME__onChangeRoutesConfig, newRoutesConfigs);
   };
   /**
@@ -118,7 +177,7 @@ export class Router extends Events {
     const _pathname = typeof pathname === "string" ? pathname : this.pathname;
     const routePath = this.getRoutePath(_pathname);
 
-    const parentRoute = this.flattenRoutes.get(routePath)?.parent;
+    const parentRoute = this._flattenRoutes.get(routePath)?.parent;
     if (parentRoute?.pathname) {
       this.setItem(parentRoute?.pathname, (routesConfig) => {
         if (routesConfig.children) {
@@ -137,8 +196,7 @@ export class Router extends Events {
    * @example '/123/home' -> '/:id/home'
    */
   getRoutePath = (pathname: string) => {
-    const matchedRoutes = matchRoutes(this.reactRoutes, pathname);
-    // _getRoutePathBymatchedRoutes
+    const matchedRoutes = matchRoutes(this._reactRoutes, pathname);
     const routePath =
       matchedRoutes
         ?.map((item) => {
@@ -169,7 +227,7 @@ export class Router extends Events {
   /**
    * 包含basename的history.push
    */
-  push(to: To, state?: any) {
+  push(to: To, state?: unknown) {
     if (typeof to === "string") {
       history.push(this.getFullPath(to), state);
     } else {
@@ -185,7 +243,7 @@ export class Router extends Events {
   /**
    * 包含basename的history.replace
    */
-  replace(to: To, state?: any) {
+  replace(to: To, state?: unknown) {
     if (typeof to === "string") {
       history.replace(this.getFullPath(to), state);
     } else {
@@ -234,13 +292,16 @@ export function useRouter(router: Router) {
     const sub = router.on(
       Router.EVENT_NAME__onChangeRoutesConfig,
       (newRoutesConfigs) => {
-        const configs = newRoutesConfigs as RouteConfig[];
-        const _reactRoutes = generateReactRoutes(configs);
-        const { routes: _routes, flattenRoutes: _flattenRoutes } =
-          formatRoutes(configs);
-        setReactRoutes(_reactRoutes);
-        setRoutes(_routes);
-        setFlattenRoutes(_flattenRoutes);
+        // 事件回调的数据类型是 unknown，需要类型检查
+        if (Array.isArray(newRoutesConfigs)) {
+          const configs = newRoutesConfigs as RouteConfig[];
+          const _reactRoutes = generateReactRoutes(configs);
+          const { routes: _routes, flattenRoutes: _flattenRoutes } =
+            formatRoutes(configs);
+          setReactRoutes(_reactRoutes);
+          setRoutes(_routes);
+          setFlattenRoutes(_flattenRoutes);
+        }
       }
     );
     return () => {
@@ -253,5 +314,6 @@ export function useRouter(router: Router) {
     routes,
     flattenRoutes,
     curRoute,
+    back: () => history.back(),
   };
 }

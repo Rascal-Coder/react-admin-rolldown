@@ -1,3 +1,4 @@
+import LoginAuthGuard from "@/components/advanced/auth/login-auth-guard";
 import type { RouteConfig } from "@/lib/router-toolset/types";
 import { Component, LayoutBase, LayoutSimple } from "../utils";
 
@@ -9,14 +10,18 @@ export const routesConfig: RouteConfig[] = [
   {
     path: "/",
     flatten: true,
-    component: <LayoutBase />,
+    component: (
+      <LoginAuthGuard>
+        <LayoutBase />
+      </LoginAuthGuard>
+    ),
     children: [
       {
         path: "dashboard",
         name: "仪表盘",
         icon: "lucide:layout-dashboard",
         children: [
-          { path: "", redirect: "workbench" },
+          { redirect: "workbench" },
           {
             path: "workbench",
             component: Component("/pages/dashboard/workbench"),
@@ -38,7 +43,7 @@ export const routesConfig: RouteConfig[] = [
         name: "多级菜单",
         icon: "lucide:layers",
         children: [
-          { path: "", redirect: "1a" },
+          { redirect: "1a" },
           {
             path: "1a",
             component: Component("/pages/menu-level/menu-level-1a"),
@@ -52,7 +57,6 @@ export const routesConfig: RouteConfig[] = [
             icon: "lucide:menu",
             children: [
               {
-                path: "",
                 redirect: "2a",
               },
               {
@@ -72,7 +76,6 @@ export const routesConfig: RouteConfig[] = [
                 icon: "lucide:menu",
                 children: [
                   {
-                    path: "",
                     redirect: "3a",
                   },
                   {
@@ -111,7 +114,7 @@ export const routesConfig: RouteConfig[] = [
         badgeText: "new",
         badgeVariant: "info",
         children: [
-          { path: "", redirect: "1" },
+          { redirect: "1" },
           {
             path: "1",
             component: Component("/pages/test-badge/test-badge-1"),
@@ -134,7 +137,7 @@ export const routesConfig: RouteConfig[] = [
         name: "用户管理",
         icon: "lucide:user",
         children: [
-          { path: "", redirect: "list" },
+          { redirect: "list" },
           {
             path: "list",
             component: Component("/pages/user/list"),
@@ -155,7 +158,7 @@ export const routesConfig: RouteConfig[] = [
         icon: "bxs:error-alt",
         name: "错误页面",
         children: [
-          { path: "", redirect: "404" },
+          { redirect: "404" },
           {
             path: "403",
             component: Component("/pages/_built/page-403"),
@@ -178,7 +181,7 @@ export const routesConfig: RouteConfig[] = [
         name: "链接",
         icon: "lucide:link",
         children: [
-          { path: "", redirect: "ant-design-iframe" },
+          { redirect: "ant-design-iframe" },
           {
             name: "Ant Design (内嵌)",
             icon: "lucide:monitor",
@@ -219,14 +222,17 @@ export const routesConfig: RouteConfig[] = [
       {
         path: "sign-in",
         component: Component("/pages/_built/auth/sign-in"),
+        hidden: true,
       },
       {
         path: "sign-up",
         component: Component("/pages/_built/auth/sign-up"),
+        hidden: true,
       },
       {
         path: "forgot-password",
         component: Component("/pages/_built/auth/forgot-password"),
+        hidden: true,
       },
     ],
   },

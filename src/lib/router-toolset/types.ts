@@ -6,19 +6,17 @@ export type RouteConfig = {
   /** 是否缓存 */
   keepAlive?: boolean;
   /** 页面组件 */
-  component?: // | (() => Promise<{ default: () => JSX.Element }>)
-  // | JSX.Element
-  ReactNode;
+  component?: ReactNode;
   /** 是否固定在标签页 */
   pinned?: boolean;
   /** 路径，同react-router */
-  path: string;
+  path?: string;
   /** 对应react-router的pathname，所有非父路由将会有该值 */
   pathname?: string;
   /** ['', '/layout', '/layout/layout-children1', '/layout/layout-children1/permission'] */
-  collecttedPathname?: string[];
+  collectedPathname?: string[];
   /** ['', 'layout', 'layout-children1', 'permission'] */
-  collecttedPath?: string[];
+  collectedPath?: string[];
   /** 隐藏在菜单 */
   hidden?: boolean;
   /** 菜单名称 */

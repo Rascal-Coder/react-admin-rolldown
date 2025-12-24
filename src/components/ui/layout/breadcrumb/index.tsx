@@ -32,7 +32,7 @@ export function Breadcrumb({
   };
 
   const breadcrumbList =
-    curRoute?.collecttedPathname
+    curRoute?.collectedPathname
       ?.filter((path) => path !== "")
       .map((path) => {
         const route = flattenRoutes.get(path);

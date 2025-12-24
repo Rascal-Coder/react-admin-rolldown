@@ -11,27 +11,32 @@ export function generateReactRoutes(configs?: RouteConfig[]) {
   const ret = (configs ?? [])
     .filter((configItem) => !configItem.external)
     .map((configItem) => {
-      const { redirect, component, /* progress = true,  */ children } =
-        configItem;
+      const { redirect, component, children } = configItem;
       let element: ReactNode | null;
-      if (redirect) {
-        element = <Navigate to={redirect} />;
-      } else if (component) {
-        // 如果 component 是 ReactNode，直接使用
-        element = component;
-        // if (typeof component !== "function") {
 
-        // } else {
-        //   // 如果 component 是函数，使用 lazy 加载
-        //   const LoadedElement = lazy(component);
-        //   element = <LoadedElement />;
-        // }
+      // 如果有 redirect 且没有 children，创建索引路由（不需要 path 和 caseSensitive）
+      if (redirect && !children) {
+        element = <Navigate replace to={redirect} />;
+        const routeObject: RouteObject = {
+          index: true,
+          element,
+        };
+        return routeObject;
       }
+
+      // 普通路由（需要 path 和 caseSensitive）
+      // if (redirect) {
+      //   element = <Navigate replace to={redirect} />;
+      // } else if (component) {
+
+      // }
+      element = component;
       const routeObject: RouteObject = {
         path: configItem.path,
         element,
         caseSensitive: configItem.caseSensitive ?? false,
       };
+
       if (children) {
         routeObject.children = generateReactRoutes(children);
       }
@@ -60,14 +65,14 @@ export function formatRoutes(
     _parent?: RouteConfig
   ) {
     const path = routeItem.path === "/" ? "" : (routeItem.path ?? "");
-    const { collecttedPathname: parentPathname, collecttedPath: parentPath } =
+    const { collectedPathname: parentPathname, collectedPath: parentPath } =
       _parent ?? {};
-    const collecttedPathname = parentPathname
+    const collectedPathname = parentPathname
       ? [...parentPathname, `${parentPathname.at(-1)}/${path}`]
       : [path];
-    const collecttedPath = parentPath ? [...parentPath, path] : [path];
-    const pathname = collecttedPath.join("/").replace(regPath, "") || "/";
-    return { path, collecttedPathname, collecttedPath, pathname };
+    const collectedPath = parentPath ? [...parentPath, path] : [path];
+    const pathname = collectedPath.join("/").replace(regPath, "") || "/";
+    return { path, collectedPathname, collectedPath, pathname };
   }
 
   /**

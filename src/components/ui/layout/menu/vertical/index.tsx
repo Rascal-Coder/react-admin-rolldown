@@ -12,10 +12,10 @@ const Nav = ({ data }: { data: MenuItemData[] }) => {
   const { state } = useSidebar();
   const { curRoute } = useRouter(routes);
   const routeSelectedIds = useMemo(() => {
-    const paths = curRoute?.collecttedPathname ?? [];
+    const paths = curRoute?.collectedPathname ?? [];
     // 过滤掉空字符串，只保留有效路径（如 '/dashboard', '/dashboard/workbench'）
     return paths.map((p) => (p === "" ? "/" : p)).filter((p) => p !== "");
-  }, [curRoute?.collecttedPathname]);
+  }, [curRoute?.collectedPathname]);
 
   const [selectedIds, setSelectedIds] = useState<string[]>(routeSelectedIds);
 

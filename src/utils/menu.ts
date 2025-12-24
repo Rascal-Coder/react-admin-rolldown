@@ -15,7 +15,7 @@ export function generateMenuItems(routes: RouteConfig[]): MenuItemsData {
   const flattenMenuItems: Map<React.Key, MenuItemData> = new Map();
   function createMenuItem(route: RouteConfig): MenuItemData {
     const {
-      collecttedPathname = [],
+      collectedPathname = [],
       icon,
       name,
       children,
@@ -25,7 +25,7 @@ export function generateMenuItems(routes: RouteConfig[]): MenuItemsData {
     } = route;
 
     return {
-      id: collecttedPathname.at(-1) ?? "",
+      id: collectedPathname.at(-1) ?? "",
       label: name ?? "",
       icon,
       children: children?.map((child) => ({
