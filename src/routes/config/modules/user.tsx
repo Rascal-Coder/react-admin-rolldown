@@ -9,6 +9,7 @@ const userRoutes: RouteConfig[] = [
     path: "user",
     name: "用户管理",
     icon: "lucide:user",
+    permission: "SUPER_ADMIN", // 需要 SUPER_ADMIN 角色才能访问
     children: [
       { redirect: "list" },
       {

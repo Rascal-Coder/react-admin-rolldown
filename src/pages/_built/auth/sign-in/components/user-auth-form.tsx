@@ -63,7 +63,10 @@ export function UserAuthForm({
       success: async () => {
         setIsLoading(false);
 
-        await signIn({ username: "admin", password: "demo1234" });
+        await signIn({
+          username: form.getValues("username"),
+          password: form.getValues("password"),
+        });
         // Redirect to the stored location or default to dashboard
         const targetPath = redirectTo || GLOBAL_CONFIG.defaultRoute;
         navigate.replace(targetPath);

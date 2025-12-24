@@ -1,10 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { StorageEnum } from "#/enum";
 import userService, { type SignInReq } from "@/api/services/userService";
 import type { UserInfo, UserToken } from "@/types/user";
+
+const EMPTY_ROLES: UserInfo["roles"] = [];
+const EMPTY_PERMISSIONS: UserInfo["permissions"] = [];
 
 type UserStore = {
   userInfo: Partial<UserInfo>;
@@ -48,10 +52,23 @@ const useUserStore = create<UserStore>()(
 export const useUserInfo = () => useUserStore((state) => state.userInfo);
 export const useUserToken = () => useUserStore((state) => state.userToken);
 export const useUserActions = () => useUserStore((state) => state.actions);
-export const useUserPermissions = () =>
-  useUserStore((state) => state.userInfo.permissions || []);
-export const useUserRoles = () =>
-  useUserStore((state) => state.userInfo.roles || []);
+
+/**
+ * 获取用户权限列表
+ */
+export const useUserPermissions = () => {
+  const permissions = useUserStore((state) => state.userInfo.permissions);
+  return useMemo(() => permissions || EMPTY_PERMISSIONS, [permissions]);
+};
+
+/**
+ * 获取用户角色列表
+ * 使用 useMemo 确保返回稳定的引用，避免无限循环
+ */
+export const useUserRoles = () => {
+  const roles = useUserStore((state) => state.userInfo.roles);
+  return useMemo(() => roles || EMPTY_ROLES, [roles]);
+};
 export const useSignIn = () => {
   const { setUserToken, setUserInfo } = useUserActions();
 
