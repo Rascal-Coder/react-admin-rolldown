@@ -32,7 +32,6 @@ export function generateMenuItems(routes: RouteConfig[]): MenuItemsData {
         id: child.pathname ?? "",
         label: child.name ?? "",
         icon: child.icon,
-        external: child.external,
         badgeType: child.badgeType,
         badgeText: child.badgeText,
         badgeVariant: child.badgeVariant,

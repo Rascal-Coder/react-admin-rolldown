@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import { Button } from "@/components/base/button";
 import {
   Card,
@@ -7,10 +6,10 @@ import {
   CardTitle,
 } from "@/components/base/card";
 import { Text } from "@/components/base/typography";
-import { routes } from "@/routes";
+import { useRouterNavigation } from "@/hooks/use-router";
 
 export default function UserList() {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
 
   const users = [
     { id: "1", name: "张三" },
@@ -37,11 +36,12 @@ export default function UserList() {
                 <Button
                   onClick={() => {
                     const pathname = `/user/${user.id}`;
-                    // 动态设置路由的 title
-                    routes.setItem(pathname, (route) => {
-                      route.name = `${user.name} - 用户详情`;
+                    navigate.push(pathname, {
+                      state: {
+                        title: `用户详情 - ${user.name}`,
+                        username: user.name,
+                      },
                     });
-                    navigate(pathname);
                   }}
                 >
                   查看详情
@@ -51,6 +51,7 @@ export default function UserList() {
           </div>
           <Text color="secondary" variant="caption">
             点击"查看详情"按钮可以跳转到动态路由页面，URL 参数会传递用户 ID。
+            页面标题可以在详情页组件中通过 React Helmet 动态设置。
           </Text>
         </CardContent>
       </Card>

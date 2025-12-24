@@ -1,12 +1,13 @@
-import type { ReactNode } from "react";
 import type { BadgeProps } from "@/components/base/dot-badge/types";
 import type { MenuItemData } from "@/components/ui/layout/menu/vertical/types";
 
 export type RouteConfig = {
   /** 是否缓存 */
   keepAlive?: boolean;
-  /** 页面组件 */
-  component?: ReactNode;
+  /** 页面组件路径，用于 lazy 加载（如 "/pages/dashboard/workbench"） */
+  lazy?: () => Promise<{
+    Component?: React.ComponentType<any>;
+  }>;
   /** 是否固定在标签页 */
   pinned?: boolean;
   /** 路径，同react-router */
@@ -38,8 +39,6 @@ export type RouteConfig = {
    * @example '/Home' -> '/home'
    */
   caseSensitive?: boolean;
-  /** 是否是外链 */
-  external?: boolean;
   /** 父路由 */
   parent?: RouteConfig;
   /** 排序 */

@@ -12,8 +12,10 @@ export type GlobalConfig = {
   defaultRoute: string;
   /** Base path for the application */
   basename: string;
-  /** Routing mode: frontend routing or backend routing */
-  routerMode: "frontend" | "backend";
+  /** Authentication route mode: frontend routing or backend routing */
+  authRouteMode: "frontend" | "backend";
+  /** Application route mode: history or hash */
+  routerMode: "history" | "hash";
   /** Whether to enable visualizer */
   visualizer: string;
   /** Whether to enable html plugin */
@@ -35,7 +37,8 @@ export const GLOBAL_CONFIG: GlobalConfig = {
   defaultRoute:
     import.meta.env.VITE_APP_DEFAULT_ROUTE || "/dashboard/workbench",
   basename: import.meta.env.VITE_APP_BASENAME || "/",
-  routerMode: import.meta.env.VITE_APP_ROUTER_MODE || "frontend",
+  authRouteMode: import.meta.env.VITE_AUTH_ROUTE_MODE || "frontend",
+  routerMode: import.meta.env.VITE_APP_ROUTER_MODE || "history",
   visualizer: import.meta.env.VITE_APP_VISUALIZER || "false",
   htmlPlugin: import.meta.env.VITE_APP_HTML_PLUGIN || "false",
   compressPlugin: import.meta.env.VITE_APP_COMPRESS_PLUGIN,

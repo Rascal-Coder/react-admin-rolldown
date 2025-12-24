@@ -1,5 +1,4 @@
 import { ChevronRight } from "lucide-react";
-import { useNavigate } from "react-router";
 import { Badge } from "@/components/base/badge";
 import DotBadge from "@/components/base/dot-badge";
 import {
@@ -8,6 +7,7 @@ import {
   HoverCardTrigger,
 } from "@/components/base/hover-card";
 import Icon from "@/components/ui/icon/icon";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { cn } from "@/utils";
 import type { MenuItemData } from "./types";
 
@@ -128,7 +128,7 @@ const renderSubMenuItem = (params: {
   level: number;
   parentPath: MenuItemData[];
   onSelectionChange?: (selectedIds: string[]) => void;
-  navigate: (to: string) => void;
+  navigate: ReturnType<typeof useRouterNavigation>;
 }) => {
   const {
     item,
@@ -156,7 +156,7 @@ const renderSubMenuItem = (params: {
       pathIds
     );
     if (!hasChildren) {
-      navigate(item.id);
+      navigate.push(item.id);
     }
   };
 
@@ -222,7 +222,7 @@ const renderMainMenuItem = (
   item: MenuItemData,
   selectedIds: string[],
   onSelectionChange: ((selectedIdsValue: string[]) => void) | undefined,
-  navigate: (to: string) => void
+  navigate: ReturnType<typeof useRouterNavigation>
 ) => {
   const currentPath = [item];
   const hasChildren = Boolean(item.children && item.children.length > 0);
@@ -241,7 +241,7 @@ const renderMainMenuItem = (
       pathIds
     );
     if (!hasChildren) {
-      navigate(item.id);
+      navigate.push(item.id);
     }
   };
 
@@ -311,7 +311,7 @@ const MiniTreeMenu = ({
   selectedIds: string[];
   onSelectionChange?: (selectedIds: string[]) => void;
 }) => {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
 
   return (
     <nav className="flex flex-col px-2 py-1">

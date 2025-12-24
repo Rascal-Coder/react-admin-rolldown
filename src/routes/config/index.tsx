@@ -1,6 +1,5 @@
-import LoginAuthGuard from "@/components/advanced/auth/login-auth-guard";
 import type { RouteConfig } from "@/lib/router-toolset/types";
-import { Component, LayoutBase, LayoutSimple } from "../utils";
+import { createLazyComponent } from "../utils";
 
 export const routesConfig: RouteConfig[] = [
   {
@@ -10,11 +9,19 @@ export const routesConfig: RouteConfig[] = [
   {
     path: "/",
     flatten: true,
-    component: (
-      <LoginAuthGuard>
-        <LayoutBase />
-      </LoginAuthGuard>
-    ),
+    lazy: async () => {
+      const LayoutBase = (await import("@/layouts/base")).default;
+      const LoginAuthGuard = (
+        await import("@/components/advanced/auth/login-auth-guard")
+      ).default;
+      return {
+        Component: () => (
+          <LoginAuthGuard>
+            <LayoutBase />
+          </LoginAuthGuard>
+        ),
+      };
+    },
     children: [
       {
         path: "dashboard",
@@ -24,14 +31,14 @@ export const routesConfig: RouteConfig[] = [
           { redirect: "workbench" },
           {
             path: "workbench",
-            component: Component("/pages/dashboard/workbench"),
+            lazy: createLazyComponent("/pages/dashboard/workbench"),
             name: "工作台",
             pinned: true,
             icon: "lucide:workflow",
           },
           {
             path: "analysis",
-            component: Component("/pages/dashboard/analysis"),
+            lazy: createLazyComponent("/pages/dashboard/analysis"),
             icon: "lucide:bar-chart-3",
             name: "分析",
           },
@@ -39,20 +46,20 @@ export const routesConfig: RouteConfig[] = [
       },
       {
         path: "menu_level",
-        component: Component("/pages/menu-level"),
+        lazy: createLazyComponent("/pages/menu-level"),
         name: "多级菜单",
         icon: "lucide:layers",
         children: [
           { redirect: "1a" },
           {
             path: "1a",
-            component: Component("/pages/menu-level/menu-level-1a"),
+            lazy: createLazyComponent("/pages/menu-level/menu-level-1a"),
             name: "多级菜单1a",
             icon: "lucide:menu",
           },
           {
             path: "1b",
-            component: Component("/pages/menu-level/menu-level-1b"),
+            lazy: createLazyComponent("/pages/menu-level/menu-level-1b"),
             name: "多级菜单1b",
             icon: "lucide:menu",
             children: [
@@ -61,7 +68,7 @@ export const routesConfig: RouteConfig[] = [
               },
               {
                 path: "2a",
-                component: Component(
+                lazy: createLazyComponent(
                   "/pages/menu-level/menu-level-1b/menu-level-1b-2a"
                 ),
                 name: "多级菜单2a",
@@ -69,7 +76,7 @@ export const routesConfig: RouteConfig[] = [
               },
               {
                 path: "2b",
-                component: Component(
+                lazy: createLazyComponent(
                   "/pages/menu-level/menu-level-1b/menu-level-1b-2b"
                 ),
                 name: "多级菜单2b",
@@ -80,7 +87,7 @@ export const routesConfig: RouteConfig[] = [
                   },
                   {
                     path: "3a",
-                    component: Component(
+                    lazy: createLazyComponent(
                       "/pages/menu-level/menu-level-1b/menu-level-1b-2b/menu-level-1b-2b-3a"
                     ),
                     name: "多级菜单3a",
@@ -88,7 +95,7 @@ export const routesConfig: RouteConfig[] = [
                   },
                   {
                     path: "3b",
-                    component: Component(
+                    lazy: createLazyComponent(
                       "/pages/menu-level/menu-level-1b/menu-level-1b-2b/menu-level-1b-2b-3b"
                     ),
                     name: "多级菜单3b",
@@ -104,7 +111,7 @@ export const routesConfig: RouteConfig[] = [
         path: "first_level",
         name: "一级菜单",
         icon: "local:file-ai",
-        component: Component("/pages/first-level"),
+        lazy: createLazyComponent("/pages/first-level"),
       },
       {
         path: "test_badge",
@@ -117,7 +124,7 @@ export const routesConfig: RouteConfig[] = [
           { redirect: "1" },
           {
             path: "1",
-            component: Component("/pages/test-badge/test-badge-1"),
+            lazy: createLazyComponent("/pages/test-badge/test-badge-1"),
             name: "测试徽章2222222",
             icon: "lucide:sparkles",
             badgeType: "normal",
@@ -127,7 +134,7 @@ export const routesConfig: RouteConfig[] = [
       },
       {
         path: "alive",
-        component: Component("/pages/alive"),
+        lazy: createLazyComponent("/pages/alive"),
         name: "KeepAlive",
         icon: "local:kun",
         keepAlive: true,
@@ -140,13 +147,13 @@ export const routesConfig: RouteConfig[] = [
           { redirect: "list" },
           {
             path: "list",
-            component: Component("/pages/user/list"),
+            lazy: createLazyComponent("/pages/user/list"),
             name: "用户列表",
             icon: "lucide:users",
           },
           {
             path: ":id",
-            component: Component("/pages/user/detail"),
+            lazy: createLazyComponent("/pages/user/detail"),
             name: "用户详情",
             icon: "lucide:user-circle",
             hidden: true, // 动态路由通常隐藏在菜单中
@@ -161,17 +168,17 @@ export const routesConfig: RouteConfig[] = [
           { redirect: "404" },
           {
             path: "403",
-            component: Component("/pages/_built/page-403"),
+            lazy: createLazyComponent("/pages/_built/page-403"),
             name: "403",
           },
           {
             path: "404",
-            component: Component("/pages/_built/page-404"),
+            lazy: createLazyComponent("/pages/_built/page-404"),
             name: "404",
           },
           {
             path: "500",
-            component: Component("/pages/_built/page-500"),
+            lazy: createLazyComponent("/pages/_built/page-500"),
             name: "500",
           },
         ],
@@ -186,25 +193,40 @@ export const routesConfig: RouteConfig[] = [
             name: "Ant Design (内嵌)",
             icon: "lucide:monitor",
             path: "ant-design-iframe",
-            component: Component("/pages/_built/link/iframe", {
-              src: "https://ant.design/index-cn",
-            }),
+            lazy: async () => {
+              const Iframe = (await import("@/pages/_built/link/iframe"))
+                .default;
+              return {
+                Component: () => <Iframe src="https://ant.design/index-cn" />,
+              };
+            },
           },
           {
             name: "Ant Design (外部链接)",
             icon: "lucide:external-link",
             path: "ant-design-external-link",
-            component: Component("/pages/_built/link/external-link", {
-              src: "https://ant.design/index-cn",
-            }),
+            lazy: async () => {
+              const ExternalLink = (
+                await import("@/pages/_built/link/external-link")
+              ).default;
+              return {
+                Component: () => (
+                  <ExternalLink src="https://ant.design/index-cn" />
+                ),
+              };
+            },
           },
           {
             name: "shadcn",
             icon: "lucide:monitor",
             path: "shadcn-iframe",
-            component: Component("/pages/_built/link/iframe", {
-              src: "https://ui.shadcn.com/docs",
-            }),
+            lazy: async () => {
+              const Iframe = (await import("@/pages/_built/link/iframe"))
+                .default;
+              return {
+                Component: () => <Iframe src="https://ui.shadcn.com/docs" />,
+              };
+            },
           },
         ],
       },
@@ -212,7 +234,10 @@ export const routesConfig: RouteConfig[] = [
   },
   {
     path: "/auth",
-    component: <LayoutSimple />,
+    lazy: async () => {
+      const LayoutSimple = (await import("@/layouts/simple")).default;
+      return { Component: LayoutSimple };
+    },
     name: "登录",
     icon: "lucide:lock",
     hidden: true,
@@ -221,41 +246,41 @@ export const routesConfig: RouteConfig[] = [
       { path: "", redirect: "sign-in" },
       {
         path: "sign-in",
-        component: Component("/pages/_built/auth/sign-in"),
+        lazy: createLazyComponent("/pages/_built/auth/sign-in"),
         hidden: true,
       },
       {
         path: "sign-up",
-        component: Component("/pages/_built/auth/sign-up"),
+        lazy: createLazyComponent("/pages/_built/auth/sign-up"),
         hidden: true,
       },
       {
         path: "forgot-password",
-        component: Component("/pages/_built/auth/forgot-password"),
+        lazy: createLazyComponent("/pages/_built/auth/forgot-password"),
         hidden: true,
       },
     ],
   },
   {
     path: "/separation",
-    component: Component("/pages/separation"),
+    lazy: createLazyComponent("/pages/separation"),
     name: "独立布局",
     icon: "lucide:square",
     flatten: true,
   },
   {
     path: "/403",
-    component: Component("/pages/_built/page-403"),
+    lazy: createLazyComponent("/pages/_built/page-403"),
     flatten: true,
   },
   {
     path: "/500",
-    component: Component("/pages/_built/page-500"),
+    lazy: createLazyComponent("/pages/_built/page-500"),
     flatten: true,
   },
   {
     path: "*",
-    component: Component("/pages/_built/page-404"),
+    lazy: createLazyComponent("/pages/_built/page-404"),
     flatten: true,
   },
 ];

@@ -12,7 +12,8 @@ import {
 } from "@/components/base/command";
 import { Text } from "@/components/base/typography";
 import Icon from "@/components/ui/icon/icon";
-import { routes } from "@/routes";
+import { useRouterNavigation } from "@/hooks/use-router";
+import { useRouter } from "@/lib/router-toolset/router-v2";
 
 interface SearchItem {
   key: string;
@@ -50,13 +51,15 @@ const HighlightText = ({ text, query }: { text: string; query: string }) => {
 const SearchBar = () => {
   const [open, { toggle, setFalse, setTrue, set: setOpen }] = useBoolean(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const { flattenRoutes } = useRouter();
+  const navigate = useRouterNavigation();
 
-  // 从 routes.flattenRoutes 提取可搜索的路由项
+  // 从 flattenRoutes 提取可搜索的路由项
   const flattenedItems = useMemo(() => {
     const items: SearchItem[] = [];
 
     // 遍历扁平化的路由 Map
-    routes.flattenRoutes.forEach((routeConfig, pathname) => {
+    flattenRoutes.forEach((routeConfig, pathname) => {
       // 过滤条件：必须有 name，不是隐藏路由，不是重定向路由
       if (routeConfig.name && !routeConfig.hidden && !routeConfig.redirect) {
         items.push({
@@ -69,7 +72,7 @@ const SearchBar = () => {
     });
 
     return items;
-  }, []);
+  }, [flattenRoutes]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -85,10 +88,10 @@ const SearchBar = () => {
 
   const handleSelect = useCallback(
     (path: string) => {
-      routes.replace(path);
+      navigate.replace(path);
       setFalse();
     },
-    [setFalse]
+    [navigate, setFalse]
   );
 
   return (

@@ -2,12 +2,7 @@ import { useMount, useUpdateEffect } from "ahooks";
 import { KeepAlive, useKeepAliveRef } from "keepalive-for-react";
 import { Home } from "lucide-react";
 import { useCallback } from "react";
-import {
-  useLocation,
-  useNavigate,
-  useOutlet,
-  useOutletContext,
-} from "react-router";
+import { useLocation, useOutlet, useOutletContext } from "react-router";
 import avatar from "@/assets/images/user/avatar.jpg";
 import "./page-transitions.css";
 import { AuthGuard } from "@/components/advanced/auth/auth-guard";
@@ -32,6 +27,7 @@ import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { useDirection } from "@/context/direction/direction-context";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { useElementHeight } from "@/hooks/use-element-height";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { useWatermark } from "@/hooks/use-watermark";
 import Page403 from "@/pages/_built/page-403";
 import {
@@ -44,7 +40,7 @@ import { useAppSettings } from "@/store/setting-store";
 import { cn } from "@/utils";
 
 const BaseLayout = () => {
-  const navigate = useNavigate();
+  const { goHome } = useRouterNavigation();
   const { dir } = useDirection();
   const {
     themeStretch,
@@ -158,7 +154,7 @@ const BaseLayout = () => {
                 className="size-7 shrink-0 max-md:scale-125"
                 onClick={() => {
                   if (pathname !== GLOBAL_CONFIG.defaultRoute) {
-                    navigate(GLOBAL_CONFIG.defaultRoute);
+                    goHome();
                   }
                 }}
                 size="icon"

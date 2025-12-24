@@ -3,10 +3,11 @@ import tailwindcss from "@tailwindcss/vite";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react from "@vitejs/plugin-react";
 import { visualizer as viteVisualizerPlugin } from "rollup-plugin-visualizer";
-import { defineConfig, loadEnv, type PluginOption } from "vite";
+import { defineConfig, type PluginOption } from "vite";
 import viteCompressPlugin from "vite-plugin-compression";
 import { createHtmlPlugin as viteHtmlPlugin } from "vite-plugin-html";
 import removeConsole from "vite-plugin-remove-console";
+import { GLOBAL_CONFIG } from "./src/global-config";
 import { viteArchiverPlugin } from "./src/vite-plugins/archiver";
 
 const vendorcoreReg =
@@ -36,12 +37,12 @@ export default defineConfig(({ mode }) => {
     "#": path.resolve(__dirname, "src/types"),
   };
 
-  const env = loadEnv(mode, process.cwd(), "");
-  const base = env.VITE_APP_BASENAME || "/";
+  // const env = loadEnv(mode, process.cwd(), "");
+  const base = GLOBAL_CONFIG.basename || "/";
   const isProduction = mode === "production";
-  const visualizer = isProduction && env.VITE_APP_VISUALIZER === "true";
-  const html = isProduction && env.VITE_APP_HTML_PLUGIN === "true";
-  const compressTypes = env.VITE_APP_COMPRESS_PLUGIN?.split(",") || [];
+  const visualizer = isProduction && GLOBAL_CONFIG.visualizer === "true";
+  const html = isProduction && GLOBAL_CONFIG.htmlPlugin === "true";
+  const compressTypes = GLOBAL_CONFIG.compressPlugin?.split(",") || [];
   return {
     plugins: [
       react({

@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, LogIn } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/base/button";
@@ -18,6 +18,7 @@ import { Input } from "@/components/base/input";
 import Icon from "@/components/ui/icon/icon";
 import { PasswordInput } from "@/components/ui/password-input";
 import { GLOBAL_CONFIG } from "@/global-config";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { useSignIn } from "@/store/user-store";
 import { cn, sleep } from "@/utils";
 import {
@@ -44,7 +45,7 @@ export function UserAuthForm({
 }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const signIn = useSignIn();
-  const navigatge = useNavigate();
+  const navigate = useRouterNavigation();
   const { setSignInState } = useSignInContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,7 +66,7 @@ export function UserAuthForm({
         await signIn({ username: "admin", password: "demo1234" });
         // Redirect to the stored location or default to dashboard
         const targetPath = redirectTo || GLOBAL_CONFIG.defaultRoute;
-        navigatge(targetPath, { replace: true });
+        navigate.replace(targetPath);
 
         return `Welcome back, ${data.username}!`;
       },

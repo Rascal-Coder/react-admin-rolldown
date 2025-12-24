@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { useNavigate } from "react-router";
 import { Badge } from "@/components/base/badge";
 import DotBadge from "@/components/base/dot-badge";
 import TreeExpander from "@/components/base/tree/tree-expander";
@@ -12,6 +11,7 @@ import TreeProvider from "@/components/base/tree/tree-provider";
 import TreeView from "@/components/base/tree/tree-view";
 import type { TreeProviderProps } from "@/components/base/tree/types";
 import Icon from "@/components/ui/icon/icon";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { cn } from "@/utils";
 import type { MenuItemData } from "./types";
 
@@ -24,7 +24,7 @@ const VerticalTreeMenu = ({
 }: Omit<TreeProviderProps, "children"> & {
   data: MenuItemData[];
 }) => {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
 
   // 递归渲染树节点
   const renderTreeNode = (
@@ -45,7 +45,7 @@ const VerticalTreeMenu = ({
         // 选中整个路径（包括所有父节点和当前叶子节点）
         const pathIds = currentPath.map((node) => node.id);
         onSelectionChange?.(pathIds);
-        navigate(item.id);
+        navigate.push(item.id);
       }
     };
 

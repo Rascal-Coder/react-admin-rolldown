@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/base/button";
@@ -15,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/base/form";
 import { Input } from "@/components/base/input";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { cn, sleep } from "@/utils";
 
 const formSchema = z.object({
@@ -27,7 +27,7 @@ export function ForgotPasswordForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLFormElement>) {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,7 +44,7 @@ export function ForgotPasswordForm({
       success: () => {
         setIsLoading(false);
         form.reset();
-        navigate("/otp");
+        navigate.push("/otp");
         return `Email sent to ${data.email}`;
       },
       error: "Error",

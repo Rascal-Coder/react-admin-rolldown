@@ -1,17 +1,19 @@
 import { useLayoutEffect } from "react";
-import { useNavigate } from "react-router";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { useUserToken } from "@/store/user-store";
 
 type Props = {
   children: React.ReactNode;
 };
 export default function LoginAuthGuard({ children }: Props) {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
   const { accessToken } = useUserToken();
 
   useLayoutEffect(() => {
     if (!accessToken) {
-      navigate("/auth/sign-in", { replace: true });
+      navigate.replace("/auth/sign-in", {
+        query: { redirect: location.pathname },
+      });
     }
   }, [navigate, accessToken]);
 

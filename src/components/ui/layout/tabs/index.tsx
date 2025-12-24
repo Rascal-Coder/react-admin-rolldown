@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter } from "@/lib/router-toolset/history-router";
-import { routes } from "@/routes";
+import { useLocation } from "react-router";
+import { useRouterNavigation } from "@/hooks/use-router";
+import { useRouter } from "@/lib/router-toolset/router-v2";
 import { TabType } from "@/types/enum";
 import { cn } from "@/utils";
 import { TabsContextMenu } from "./components/context-menu";
@@ -26,12 +27,14 @@ export function LayoutTabs({
   tabType = TabType.Vscode,
   defaultActiveTab,
 }: LayoutTabsProps) {
-  const { curRoute, flattenRoutes } = useRouter(routes);
-  // 使用 router.pathname 获取去除 basename 的路径
-  const pathname = routes.pathname;
+  const { curRoute, flattenRoutes } = useRouter();
+  const location = useLocation();
+  const navigate = useRouterNavigation();
+  // 获取当前路径（去除 basename 需要在配置中处理）
+  const pathname = location.pathname;
   // 处理导航
   const handleNavigate = (targetPathname: string) => {
-    routes.push(targetPathname);
+    navigate.push(targetPathname);
   };
 
   const {

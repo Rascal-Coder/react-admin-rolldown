@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router";
 import { Breadcrumb as BreadcrumbBase } from "@/components/base/breadcrumb";
 import Icon from "@/components/ui/icon/icon";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { AnimatedBreadcrumbItem } from "./animated-breadcrumb-item";
 import { AnimatedBreadcrumbList } from "./animated-breadcrumb-list";
 import type { BreadcrumbItem } from "./types";
@@ -14,7 +14,7 @@ export function ParallelogramBreadcrumb({
   currentPath: string;
   resolveFinalPath: (path: string) => string;
 }) {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
 
   const handleNavigate = (href: string) => {
     const finalPath = resolveFinalPath(href);
@@ -22,7 +22,7 @@ export function ParallelogramBreadcrumb({
     if (finalPath === currentPath) {
       return;
     }
-    navigate(href);
+    navigate.push(href);
   };
   return (
     <BreadcrumbBase className="p-1">

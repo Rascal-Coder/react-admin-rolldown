@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/base/card";
+import { GLOBAL_CONFIG } from "@/global-config";
 import { AuthLayout } from "../auth-layout";
 import { ForgotPasswordForm } from "./components/forgot-password-form";
 
@@ -15,7 +16,7 @@ export default function ForgotPassword() {
   return (
     <>
       <Helmet>
-        <title>Forgot Password - Bug Admin</title>
+        <title>Forgot Password - {GLOBAL_CONFIG.appName}</title>
       </Helmet>
       <AuthLayout>
         <Card className="gap-4">

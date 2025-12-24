@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router";
 import { Breadcrumb as BreadcrumbBase } from "@/components/base/breadcrumb";
 import Icon from "@/components/ui/icon/icon";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { cn } from "@/utils";
 import { AnimatedBreadcrumbItem } from "./animated-breadcrumb-item";
 import { AnimatedBreadcrumbList } from "./animated-breadcrumb-list";
@@ -15,7 +15,7 @@ export function RibbonBreadcrumb({
   currentPath: string;
   resolveFinalPath: (path: string) => string;
 }) {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
 
   const handleNavigate = (href: string) => {
     const finalPath = resolveFinalPath(href);
@@ -23,7 +23,7 @@ export function RibbonBreadcrumb({
     if (finalPath === currentPath) {
       return;
     }
-    navigate(href);
+    navigate.push(href);
   };
   return (
     <BreadcrumbBase className="p-1">

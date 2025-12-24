@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useRouter } from "@/lib/router-toolset/history-router";
-import { routes } from "@/routes";
+import { useRouter } from "@/lib/router-toolset/router-v2";
 import { useSidebar } from "../../resizable-sidebar";
 import MiniTreeMenu from "./mini";
 import type { MenuItemData } from "./types";
@@ -10,7 +9,7 @@ import VerticalTreeMenu from "./vertical";
 const Nav = ({ data }: { data: MenuItemData[] }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { state } = useSidebar();
-  const { curRoute } = useRouter(routes);
+  const { curRoute } = useRouter();
   const routeSelectedIds = useMemo(() => {
     const paths = curRoute?.collectedPathname ?? [];
     // 过滤掉空字符串，只保留有效路径（如 '/dashboard', '/dashboard/workbench'）

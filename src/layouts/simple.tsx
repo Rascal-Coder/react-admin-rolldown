@@ -1,5 +1,6 @@
 import { useOutlet } from "react-router";
 import { LogoSvg } from "@/components/ui/layout/logo";
+import { GLOBAL_CONFIG } from "@/global-config";
 
 function HeaderSimple() {
   return (
@@ -7,7 +8,7 @@ function HeaderSimple() {
       <div className="flex items-center gap-2">
         <LogoSvg />
         <span className="font-medium text-black text-lg dark:text-white">
-          Bug Admin
+          {GLOBAL_CONFIG.appName}
         </span>
       </div>
     </header>

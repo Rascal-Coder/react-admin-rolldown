@@ -1,4 +1,5 @@
 import { useSidebar } from "@/components/ui/layout/resizable-sidebar";
+import { GLOBAL_CONFIG } from "@/global-config";
 import { cn } from "@/utils";
 import type { LogoProps } from "./types";
 
@@ -18,7 +19,7 @@ export const LogoSvg = ({
     width={width}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <title>Bug Admin Logo</title>
+    <title>{GLOBAL_CONFIG.appName} Logo</title>
     <defs />
     <path
       d="M 220.62918571429 398.42074285714 C 216.72918571429 405.12074285714 208.12918571429 407.42074285714 201.42918571429 403.62074285714 L 115.62918571429 354.02074285714 L 115.62918571429 377.52074285714 C 115.62918571429 388.82074285714 123.62918571429 402.62074285714 133.42918571429 408.32074285714 L 266.02918571429 484.92074285714 C 275.82918571429 490.52074285714 291.82918571429 490.52074285714 301.52918571429 484.92074285714 L 348.02918571429 458.02074285714 L 220.72918571429 384.52074285714 C 223.02918571429 388.72074285714 223.22918571429 394.02074285714 220.62918571429 398.42074285714 Z"
@@ -52,7 +53,7 @@ const Logo = ({
   animate,
   className,
   url,
-  title = "Bug Admin",
+  title = GLOBAL_CONFIG.appName,
   showTitle = true,
   onClick,
   width = 35,

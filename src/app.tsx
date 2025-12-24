@@ -2,21 +2,19 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useRoutes } from "react-router";
+import { Outlet } from "react-router";
 import { DirectionProvider } from "@/context/direction/direction-provider";
 import { MotionLazy } from "./components/ui/animate/motion-lazy";
 import { CheckUpdate } from "./components/ui/check-update";
 import { ErrorFallback } from "./components/ui/error-fallback";
 import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
 import { GLOBAL_CONFIG } from "./global-config";
-import { useRouter } from "./lib/router-toolset/history-router";
-import { routes } from "./routes";
+import { useRouter } from "./lib/router-toolset/router-v2";
 import { useMenuActions } from "./store/menu-store";
 import { generateMenuItems } from "./utils/menu";
 
 function App() {
-  const { reactRoutes, curRoute, routes: routerRoutes } = useRouter(routes);
-  const element = useRoutes(reactRoutes);
+  const { curRoute, routes: routerRoutes } = useRouter();
   const { setMenuData } = useMenuActions();
   useEffect(() => {
     const menuData = generateMenuItems(routerRoutes);
@@ -38,7 +36,7 @@ function App() {
           <DirectionProvider>
             <MotionLazy>
               <CheckUpdate />
-              {element}
+              <Outlet />
             </MotionLazy>
           </DirectionProvider>
         </HelmetProvider>

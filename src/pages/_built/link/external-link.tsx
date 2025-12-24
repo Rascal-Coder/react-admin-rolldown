@@ -1,14 +1,14 @@
 import { useLayoutEffect } from "react";
-import { useNavigate } from "react-router";
+import { useRouterNavigation } from "@/hooks/use-router";
 
 type Props = {
   src: string;
 };
 export default function ExternalLink({ src }: Props) {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
   useLayoutEffect(() => {
     window.open(src, "_black");
-    navigate(-1);
+    navigate.back();
   });
   return <div />;
 }

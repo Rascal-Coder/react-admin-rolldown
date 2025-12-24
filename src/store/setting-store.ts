@@ -9,6 +9,7 @@ import {
   ThemeMode,
 } from "#/enum";
 import type { BreadcrumbVariant } from "@/components/ui/layout/breadcrumb/types";
+import { GLOBAL_CONFIG } from "@/global-config";
 import { FontFamilyPreset, typographyTokens } from "@/theme/tokens/typography";
 export type SidebarVariant = "inset" | "sidebar" | "floating";
 export type CollapsibleType = "icon" | "offcanvas";
@@ -93,11 +94,11 @@ const useSettingStore = create<SettingStore>()(
         icpLink: "",
         icp: "",
         copyrightDate: "",
-        companyName: "Bug Admin",
+        companyName: GLOBAL_CONFIG.appName,
         companySiteLink: "https://react-admin-rolldown.vercel.app/",
         pageTransition: "fadeInLeft",
         watermarkEnabled: false,
-        watermarkContent: "Bug Admin",
+        watermarkContent: GLOBAL_CONFIG.appName,
         watermarkColor: "#ec4899",
         checkUpdateEnabled: true,
       },

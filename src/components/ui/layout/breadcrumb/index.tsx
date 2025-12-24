@@ -1,6 +1,5 @@
 import { useLocation } from "react-router";
-import { useRouter } from "@/lib/router-toolset/history-router";
-import { routes } from "@/routes";
+import { useRouter } from "@/lib/router-toolset/router-v2";
 import { CapsuleBreadcrumb } from "./capsule-breadcrumb";
 import { ParallelogramBreadcrumb } from "./parallelogram-breadcrumb";
 import { RibbonBreadcrumb } from "./ribbon-breadcrumb";
@@ -11,7 +10,7 @@ export function Breadcrumb({
 }: {
   variant?: BreadcrumbVariant;
 }) {
-  const { curRoute, flattenRoutes } = useRouter(routes);
+  const { curRoute, flattenRoutes } = useRouter();
   const location = useLocation();
   const currentPath = location.pathname;
 

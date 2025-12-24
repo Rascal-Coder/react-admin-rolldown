@@ -9,8 +9,8 @@ export function isValidRouteForTab(route: RouteConfig): boolean {
   if (route.redirect) {
     return false;
   }
-  // 跳过没有组件的路由（通常是父路由）
-  if (!route.component) {
+  // 跳过没有 lazy 组件的路由（通常是父路由）
+  if (!route.lazy) {
     return false;
   }
   return true;

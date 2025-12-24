@@ -1,3 +1,4 @@
+import { GLOBAL_CONFIG } from "@/global-config";
 import { cn } from "@/utils";
 
 const LOADING_SQUARE_CLASSES = [
@@ -15,7 +16,7 @@ const GlobalLoading = ({ src }: { src?: string }) => (
       className="flex flex-col items-center"
     >
       <img
-        alt="Bug Admin logo"
+        alt={`${GLOBAL_CONFIG.appName} logo`}
         className="size-24 object-contain drop-shadow-sm md:size-32"
         height={128}
         src={src ?? "/logo.svg"}
@@ -35,12 +36,12 @@ const GlobalLoading = ({ src }: { src?: string }) => (
         </div>
       </div>
       <h2 className="font-600 text-lg text-primary tracking-wide md:text-xl">
-        Bug Admin
+        {GLOBAL_CONFIG.appName}
       </h2>
       <p className="mt-2 text-muted-foreground text-xs md:text-sm">
         首次加载中，请稍候…
       </p>
-      <span className="sr-only">Loading Bug Admin dashboard</span>
+      <span className="sr-only">Loading {GLOBAL_CONFIG.appName} dashboard</span>
     </output>
   </div>
 );

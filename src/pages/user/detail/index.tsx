@@ -1,4 +1,5 @@
-import { useParams } from "react-router";
+import { useEffect } from "react";
+import { useLocation, useParams } from "react-router";
 import {
   Card,
   CardContent,
@@ -6,9 +7,32 @@ import {
   CardTitle,
 } from "@/components/base/card";
 import { Text } from "@/components/base/typography";
+import { useTabsActions } from "@/store/tabs-store";
 
 export default function UserDetail() {
   const params = useParams<{ id: string }>();
+  const location = useLocation();
+  const { state } = location;
+  const { updateTabs } = useTabsActions();
+
+  // 动态更新 tab title
+  useEffect(() => {
+    if (!params.id) {
+      return;
+    }
+
+    const pathname = location.pathname;
+
+    // 如果已获取到用户名，使用用户名；否则使用用户 ID
+    const newTitle = state?.title;
+
+    updateTabs((draft) => {
+      const tabIndex = draft.findIndex((tab) => tab.key === pathname);
+      if (tabIndex !== -1) {
+        draft[tabIndex].title = newTitle;
+      }
+    });
+  }, [params.id, location.pathname, state, updateTabs]);
 
   return (
     <div>
@@ -24,6 +48,14 @@ export default function UserDetail() {
               </Text>{" "}
               {params.id}
             </Text>
+            {state?.username && (
+              <Text color="default" variant="body1">
+                <Text color="default" variant="subTitle1">
+                  用户名称:
+                </Text>{" "}
+                {state.username}
+              </Text>
+            )}
             <Text color="default" variant="body1">
               <Text color="default" variant="subTitle1">
                 完整路径:

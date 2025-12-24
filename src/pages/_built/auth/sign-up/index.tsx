@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/base/card";
+import { GLOBAL_CONFIG } from "@/global-config";
 import { AuthLayout } from "../auth-layout";
 import { SignUpForm } from "./components/sign-up-form";
 
@@ -15,7 +16,7 @@ export default function SignUp() {
   return (
     <>
       <Helmet>
-        <title>Sign Up - Bug Admin</title>
+        <title>Sign Up - {GLOBAL_CONFIG.appName}</title>
       </Helmet>
       <AuthLayout>
         <Card className="gap-4">

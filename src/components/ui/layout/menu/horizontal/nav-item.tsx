@@ -1,8 +1,8 @@
 import { cva } from "class-variance-authority";
-import { useNavigate } from "react-router";
 import { Badge } from "@/components/base/badge";
 import DotBadge from "@/components/base/dot-badge";
 import Icon from "@/components/ui/icon/icon";
+import { useRouterNavigation } from "@/hooks/use-router";
 import { cn } from "@/utils";
 import type { NavItemProps } from "./types";
 
@@ -69,7 +69,7 @@ export const NavItem = ({
   onClick,
   ...props
 }: NavItemProps & { className?: string }) => {
-  const navigate = useNavigate();
+  const navigate = useRouterNavigation();
 
   // Map depth to valid variant values (1 or 2)
   const depthVariant = (depth === 1 ? 1 : 2) as 1 | 2;
@@ -94,7 +94,7 @@ export const NavItem = ({
 
     // 处理内部路由跳转
     if (id && !hasChild) {
-      navigate(id);
+      navigate.push(id);
     }
   };
 

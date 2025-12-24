@@ -1,47 +1,46 @@
-import type { ReactNode } from "react";
 import type { RouteObject } from "react-router";
-import { Navigate, useParams } from "react-router";
+import { Navigate, Outlet, useParams } from "react-router";
 import type { RouteConfig } from "./types";
 
 const regPath = /\/$/;
+
 /**
  * 使用RouteConfig定义的路由数据，生成react-router需要的路由配置
  */
-export function generateReactRoutes(configs?: RouteConfig[]) {
-  const ret = (configs ?? [])
-    .filter((configItem) => !configItem.external)
-    .map((configItem) => {
-      const { redirect, component, children } = configItem;
-      let element: ReactNode | null;
+export function generateReactRoutes(configs?: RouteConfig[]): RouteObject[] {
+  const ret = (configs ?? []).map((configItem) => {
+    const { redirect, lazy: lazyFn, children } = configItem;
 
-      // 如果有 redirect 且没有 children，创建索引路由（不需要 path 和 caseSensitive）
-      if (redirect && !children) {
-        element = <Navigate replace to={redirect} />;
-        const routeObject: RouteObject = {
-          index: true,
-          element,
-        };
-        return routeObject;
-      }
-
-      // 普通路由（需要 path 和 caseSensitive）
-      // if (redirect) {
-      //   element = <Navigate replace to={redirect} />;
-      // } else if (component) {
-
-      // }
-      element = component;
+    // 如果有 redirect 且没有 children，创建索引路由（不需要 path 和 caseSensitive）
+    if (redirect && !children) {
       const routeObject: RouteObject = {
-        path: configItem.path,
-        element,
-        caseSensitive: configItem.caseSensitive ?? false,
+        index: true,
+        element: <Navigate replace to={redirect} />,
       };
-
-      if (children) {
-        routeObject.children = generateReactRoutes(children);
-      }
       return routeObject;
-    });
+    }
+
+    // 普通路由（需要 path 和 caseSensitive）
+    const routeObject: RouteObject = {
+      path: configItem.path,
+      caseSensitive: configItem.caseSensitive ?? false,
+    };
+
+    // 使用 lazy 加载组件
+    if (lazyFn) {
+      // React Router 的 lazy 函数接受返回 Component 或 default 的函数
+      routeObject.lazy = lazyFn as any;
+    } else if (children && children.length > 0) {
+      // 如果有 children 但没有 element/lazy，需要添加 Outlet 来渲染子路由
+      routeObject.element = <Outlet />;
+    }
+
+    if (children) {
+      routeObject.children = generateReactRoutes(children);
+    }
+
+    return routeObject;
+  });
   return ret;
 }
 

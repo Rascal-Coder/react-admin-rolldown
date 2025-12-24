@@ -11,8 +11,10 @@ interface ImportMetaEnv {
   readonly VITE_APP_DEFAULT_ROUTE: string;
   /** Public path for static assets */
   readonly VITE_APP_BASENAME: string;
-  /** Routing mode: frontend routing or backend routing */
-  readonly VITE_APP_ROUTER_MODE: "frontend" | "backend";
+  /** Authentication route mode: frontend routing or backend routing */
+  readonly VITE_AUTH_ROUTE_MODE: "frontend" | "backend";
+  /** Application route mode: history or hash */
+  readonly VITE_APP_ROUTER_MODE: "history" | "hash";
   /** Whether to enable visualizer */
   readonly VITE_APP_VISUALIZER: "true" | "false";
   /** Whether to enable html plugin */
