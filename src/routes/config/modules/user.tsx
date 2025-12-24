@@ -1,0 +1,31 @@
+import type { RouteConfig } from "@/lib/router-toolset/types";
+import { createLazyComponent } from "../../utils";
+
+/**
+ * 用户管理模块路由配置
+ */
+const userRoutes: RouteConfig[] = [
+  {
+    path: "user",
+    name: "用户管理",
+    icon: "lucide:user",
+    children: [
+      { redirect: "list" },
+      {
+        path: "list",
+        lazy: createLazyComponent("/pages/user/list"),
+        name: "用户列表",
+        icon: "lucide:users",
+      },
+      {
+        path: ":id",
+        lazy: createLazyComponent("/pages/user/detail"),
+        name: "用户详情",
+        icon: "lucide:user-circle",
+        hidden: true, // 动态路由通常隐藏在菜单中
+      },
+    ],
+  },
+];
+
+export default userRoutes;

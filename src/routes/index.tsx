@@ -1,5 +1,5 @@
 import { GLOBAL_CONFIG } from "@/global-config";
-import { createRouter } from "@/lib/router-toolset/router-v2";
+import { createRouter } from "@/lib/router-toolset/router";
 import { initCacheRoutesFromRouter } from "@/store/cache-store";
 import { routesConfig } from "./config";
 

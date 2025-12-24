@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocation } from "react-router";
 import { useRouterNavigation } from "@/hooks/use-router";
-import { useRouter } from "@/lib/router-toolset/router-v2";
+import { useRouter } from "@/lib/router-toolset/router";
 import { TabType } from "@/types/enum";
 import { cn } from "@/utils";
 import { TabsContextMenu } from "./components/context-menu";

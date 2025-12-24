@@ -10,9 +10,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/base/dropdown-menu";
+import { useRouterNavigation } from "@/hooks/use-router";
+import { useUserActions } from "@/store/user-store";
 import type { UserProps } from "@/types/user";
 
 export function ProfileDropdown({ user }: UserProps) {
+  const { clearUserInfoAndToken } = useUserActions();
+  const { replace, push } = useRouterNavigation();
+  const logout = () => {
+    try {
+      clearUserInfoAndToken();
+      push("/auth/login");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      replace("/auth/login");
+    }
+  };
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -61,7 +75,7 @@ export function ProfileDropdown({ user }: UserProps) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {}}>
+        <DropdownMenuItem onClick={logout}>
           <LogOut />
           退出登录
         </DropdownMenuItem>

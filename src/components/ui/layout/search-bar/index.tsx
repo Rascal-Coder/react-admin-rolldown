@@ -13,7 +13,7 @@ import {
 import { Text } from "@/components/base/typography";
 import Icon from "@/components/ui/icon/icon";
 import { useRouterNavigation } from "@/hooks/use-router";
-import { useRouter } from "@/lib/router-toolset/router-v2";
+import { useRouter } from "@/lib/router-toolset/router";
 
 interface SearchItem {
   key: string;

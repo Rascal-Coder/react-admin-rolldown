@@ -22,11 +22,24 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/layout/resizable-sidebar";
+import { useRouterNavigation } from "@/hooks/use-router";
+import { useUserActions } from "@/store/user-store";
 import type { UserProps } from "@/types/user";
 
 export function NavUser({ user }: UserProps) {
   const { isMobile } = useSidebar();
-
+  const { clearUserInfoAndToken } = useUserActions();
+  const { replace, push } = useRouterNavigation();
+  const logout = () => {
+    try {
+      clearUserInfoAndToken();
+      push("/auth/login");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      replace("/auth/login");
+    }
+  };
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -88,7 +101,7 @@ export function NavUser({ user }: UserProps) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => {}}>
+            <DropdownMenuItem onClick={logout}>
               <LogOut />
               退出登录
             </DropdownMenuItem>

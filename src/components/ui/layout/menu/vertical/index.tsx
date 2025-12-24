@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useRouter } from "@/lib/router-toolset/router-v2";
+import { useRouter } from "@/lib/router-toolset/router";
 import { useSidebar } from "../../resizable-sidebar";
 import MiniTreeMenu from "./mini";
 import type { MenuItemData } from "./types";

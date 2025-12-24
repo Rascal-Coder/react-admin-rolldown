@@ -1,5 +1,5 @@
 import { useLocation } from "react-router";
-import { useRouter } from "@/lib/router-toolset/router-v2";
+import { useRouter } from "@/lib/router-toolset/router";
 import { CapsuleBreadcrumb } from "./capsule-breadcrumb";
 import { ParallelogramBreadcrumb } from "./parallelogram-breadcrumb";
 import { RibbonBreadcrumb } from "./ribbon-breadcrumb";
