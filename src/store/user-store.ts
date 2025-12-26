@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { StorageEnum } from "#/enum";
-import userService, { type SignInReq } from "@/api/services/userService";
+import userService, { type SignInReq } from "@/api/services/user-service";
 import type { UserInfo, UserToken } from "@/types/user";
 
 const EMPTY_ROLES: UserInfo["roles"] = [];

@@ -32,6 +32,7 @@ function App() {
     const menuData = generateMenuItems(routesForMenu);
     setMenuData(menuData);
   }, [routerRoutes, roles, showAllMenuWith403, setMenuData]);
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <QueryClientProvider client={new QueryClient()}>

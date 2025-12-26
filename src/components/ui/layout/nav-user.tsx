@@ -22,22 +22,26 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/layout/resizable-sidebar";
+import { useAuthLogout } from "@/hooks/use-auth-logout";
 import { useRouterNavigation } from "@/hooks/use-router";
-import { useUserActions } from "@/store/user-store";
 import type { UserProps } from "@/types/user";
 
 export function NavUser({ user }: UserProps) {
   const { isMobile } = useSidebar();
-  const { clearUserInfoAndToken } = useUserActions();
-  const { replace, push } = useRouterNavigation();
-  const logout = () => {
+  const { logout: authLogout } = useAuthLogout();
+  const { replace } = useRouterNavigation();
+
+  // 使用 useAuthLogout 封装的登出逻辑
+  // Requirements: 4.1, 4.2, 4.3, 4.4
+  const handleLogout = () => {
     try {
-      clearUserInfoAndToken();
-      push("/auth/login");
+      // 执行登出：清除 token、动态路由、菜单数据
+      authLogout();
     } catch (error) {
       console.log(error);
     } finally {
-      replace("/auth/login");
+      // Requirements: 4.4 - 导航到登录页
+      replace("/auth/sign-in");
     }
   };
   return (
@@ -101,7 +105,7 @@ export function NavUser({ user }: UserProps) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout}>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               退出登录
             </DropdownMenuItem>

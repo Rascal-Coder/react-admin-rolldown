@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, LogIn } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { toast } from "sonner";
@@ -18,8 +17,8 @@ import { Input } from "@/components/base/input";
 import Icon from "@/components/ui/icon/icon";
 import { PasswordInput } from "@/components/ui/password-input";
 import { GLOBAL_CONFIG } from "@/global-config";
+import { useAuthLogin } from "@/hooks/use-auth-login";
 import { useRouterNavigation } from "@/hooks/use-router";
-import { useSignIn } from "@/store/user-store";
 import { cn, sleep } from "@/utils";
 import {
   SignInStateEnum,
@@ -43,8 +42,7 @@ export function UserAuthForm({
   redirectTo,
   ...props
 }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const signIn = useSignIn();
+  const { login, isLoading } = useAuthLogin();
   const navigate = useRouterNavigation();
   const { setSignInState } = useSignInContext();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,18 +54,15 @@ export function UserAuthForm({
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-
     toast.promise(sleep(2000), {
       loading: "Signing in...",
       success: async () => {
-        setIsLoading(false);
-
-        await signIn({
+        await login({
           username: form.getValues("username"),
           password: form.getValues("password"),
         });
         // Redirect to the stored location or default to dashboard
+        // Requirements: 2.5
         const targetPath = redirectTo || GLOBAL_CONFIG.defaultRoute;
         navigate.replace(targetPath);
 

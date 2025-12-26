@@ -1,6 +1,6 @@
-import type { BackendMenuItem } from "@/api/services/menuService";
+import type { BackendMenuItem } from "@/api/services/menu-service";
 import type { RouteConfig } from "@/lib/router-toolset/types";
-import { createLazyComponent } from "@/routes/utils";
+import { createLazyComponent } from "./utils";
 
 // 将单个后端菜单项转换为 RouteConfig（权限仍由前端路由配置自己控制）
 function backendMenuItemToRoute(item: BackendMenuItem): RouteConfig {
@@ -23,9 +23,20 @@ function backendMenuItemToRoute(item: BackendMenuItem): RouteConfig {
 
   // 根据后端返回的 component 字段创建懒加载组件
   if (item.component) {
-    // 这里假设后端返回的 component 为如 "/pages/user/list" 这样的路径
-    // Source: 后端菜单路由设计约定
     route.lazy = createLazyComponent(item.component);
+  } else if (item.externalUrl) {
+    // 有 externalUrl 时，根据 isIframe 决定使用 iframe 还是新窗口打开
+    const url = item.externalUrl;
+    const useIframe = item.isIframe ?? false;
+    route.lazy = async () => {
+      const module = useIframe
+        ? await import("@/pages/_built/link/iframe")
+        : await import("@/pages/_built/link/external-link");
+      const Component = module.default;
+      return {
+        Component: () => <Component src={url} />,
+      };
+    };
   }
 
   if (item.redirect) {

@@ -26,10 +26,9 @@ export function generateReactRoutes(configs?: RouteConfig[]): RouteObject[] {
       caseSensitive: configItem.caseSensitive ?? false,
     };
 
-    // 使用 lazy 加载组件
+    // 使用 lazy 加载组件（支持 Component 和 HydrateFallback）
     if (lazyFn) {
-      // React Router 的 lazy 函数接受返回 Component 或 default 的函数
-      routeObject.lazy = lazyFn as any;
+      routeObject.lazy = lazyFn;
     } else if (children && children.length > 0) {
       // 如果有 children 但没有 element/lazy，需要添加 Outlet 来渲染子路由
       routeObject.element = <Outlet />;

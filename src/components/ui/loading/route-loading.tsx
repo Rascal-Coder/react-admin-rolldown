@@ -1,62 +1,36 @@
 import { useEffect, useState } from "react";
+import { useNavigation } from "react-router";
 import { Progress } from "@/components/base/progress";
 
 export function RouteLoadingProgress() {
+  const navigation = useNavigation();
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    let lastHref = window.location.href;
     let timer: NodeJS.Timeout;
+    let interval: NodeJS.Timeout;
 
-    const handleRouteChange = () => {
+    if (navigation.state === "loading") {
+      // 开始加载时，启动进度条
       setProgress(0);
       let currentProgress = 0;
 
-      const interval = setInterval(() => {
-        currentProgress += 2;
-        setProgress(currentProgress);
-      }, 5);
+      interval = setInterval(() => {
+        // 进度条缓慢增长，但不会到达 100%
+        currentProgress += Math.max(1, (90 - currentProgress) * 0.1);
+        setProgress(Math.min(currentProgress, 90));
+      }, 50);
+    } else if (navigation.state === "idle") {
+      // 加载完成时，快速完成进度条
+      setProgress(100);
+      timer = setTimeout(() => setProgress(0), 200);
+    }
 
-      timer = setTimeout(() => {
-        clearInterval(interval);
-        setProgress(100);
-        setTimeout(() => setProgress(0), 100);
-      }, 500);
-
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timer);
-      };
-    };
-
-    // 监听 href 变化
-    const observer = new MutationObserver(() => {
-      const currentHref = window.location.href;
-      if (currentHref !== lastHref) {
-        lastHref = currentHref;
-        handleRouteChange();
-      }
-    });
-
-    // 观察整个文档的变化
-    observer.observe(document, {
-      subtree: true,
-      childList: true,
-    });
-
-    // 监听 popstate 事件（处理浏览器前进后退）
-    window.addEventListener("popstate", handleRouteChange);
-
-    // 初始加载时触发一次
-    handleRouteChange();
-
-    // 清理监听器
     return () => {
-      observer.disconnect();
-      window.removeEventListener("popstate", handleRouteChange);
+      clearInterval(interval);
       clearTimeout(timer);
     };
-  }, []);
+  }, [navigation.state]);
 
   return progress > 0 ? (
     <div className="fixed top-0 right-0 left-0 z-tooltip w-screen">

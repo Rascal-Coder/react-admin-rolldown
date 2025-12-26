@@ -16,6 +16,8 @@ export function generateMenuItems(routes: RouteConfig[]): MenuItemsData {
   function createMenuItem(route: RouteConfig): MenuItemData {
     const {
       collectedPathname = [],
+      pathname,
+      path,
       icon,
       name,
       children,
@@ -24,12 +26,15 @@ export function generateMenuItems(routes: RouteConfig[]): MenuItemsData {
       badgeVariant,
     } = route;
 
+    // 优先使用 collectedPathname，其次 pathname，最后 path
+    const id = collectedPathname.at(-1) || pathname || path || "";
+
     return {
-      id: collectedPathname.at(-1) ?? "",
+      id,
       label: name ?? "",
       icon,
       children: children?.map((child) => ({
-        id: child.pathname ?? "",
+        id: child.pathname || child.path || "",
         label: child.name ?? "",
         icon: child.icon,
         badgeType: child.badgeType,

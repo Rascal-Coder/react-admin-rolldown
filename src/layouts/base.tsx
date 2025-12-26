@@ -44,6 +44,7 @@ const BaseLayout = () => {
   const { curRoute } = useRouter();
   const { goHome } = useRouterNavigation();
   const { dir } = useDirection();
+
   const {
     themeStretch,
     multiTab,

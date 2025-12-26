@@ -73,6 +73,7 @@ export const staticRoutes: RouteConfig[] = [
   // 错误页面路由
   {
     path: "/403",
+    hidden: true,
     lazy: async () => {
       const SimpleLayout = (await import("@/layouts/simple")).default;
       const Page403 = (await import("@/pages/_built/page-403")).default;
@@ -84,10 +85,11 @@ export const staticRoutes: RouteConfig[] = [
         ),
       };
     },
-    flatten: true,
+    // flatten: true,
   },
   {
     path: "/500",
+    hidden: true,
     lazy: async () => {
       const SimpleLayout = (await import("@/layouts/simple")).default;
       const Page500 = (await import("@/pages/_built/page-500")).default;
@@ -99,10 +101,11 @@ export const staticRoutes: RouteConfig[] = [
         ),
       };
     },
-    flatten: true,
+    // flatten: true,
   },
   {
     path: "*",
+    hidden: true,
     lazy: async () => {
       const SimpleLayout = (await import("@/layouts/simple")).default;
       const Page404 = (await import("@/pages/_built/page-404")).default;
@@ -114,6 +117,6 @@ export const staticRoutes: RouteConfig[] = [
         ),
       };
     },
-    flatten: true,
+    // flatten: true,
   },
 ];

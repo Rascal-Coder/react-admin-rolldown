@@ -37,6 +37,10 @@ export interface BackendMenuItem {
   badgeText?: string;
   /** 徽章变体 */
   badgeVariant?: BadgeProps["variant"];
+  /** 外部链接URL（用于 external-link 或 iframe 组件） */
+  externalUrl?: string;
+  /** 是否使用 iframe 内嵌显示外部链接，默认 false 则新窗口打开 */
+  isIframe?: boolean;
 }
 
 // 菜单相关接口枚举

@@ -1,38 +1,51 @@
-import menuService from "@/api/services/menuService";
 import { GLOBAL_CONFIG } from "@/global-config";
-import { createRouter } from "@/lib/router-toolset/router";
 import type { RouteConfig } from "@/lib/router-toolset/types";
+import { formatRoutes, generateReactRoutes } from "@/lib/router-toolset/utils";
 import { initCacheRoutesFromRouter } from "@/store/cache-store";
-import { backendMenuToDynamicRoutes } from "./backend-menu-adapter";
-import { buildRoutesWithDynamic, getRoutesConfig } from "./config";
+import { getRoutesConfig } from "./config";
+import { staticRoutes } from "./config/static";
 
 const basename = GLOBAL_CONFIG.basename;
 
 /**
+ * 获取静态路由配置（仅包含认证页面、错误页面等基础路由）
+ * 用于后端路由模式下的初始化
+ */
+export function getStaticRoutesConfig(): RouteConfig[] {
+  return staticRoutes;
+}
+
+/**
  * 根据 authRouteMode 创建路由实例
  * - frontend: 使用本地 dynamicRoutes（前端路由模式）
- * - backend:  调用后端 getMenuList，转换为 RouteConfig 作为动态路由
+ * - backend:  只加载静态路由，动态路由在登录后加载
  */
-export async function createAppRouter() {
+export function createAppRouter() {
   let routesConfig: RouteConfig[];
+  let isRoutesLoaded: boolean;
 
   if (GLOBAL_CONFIG.authRouteMode === "backend") {
-    // 后端路由模式：从后端获取菜单并转换为动态路由
-    const menuList = await menuService.getMenuList();
-    const backendDynamicRoutes = backendMenuToDynamicRoutes(menuList);
-    routesConfig = buildRoutesWithDynamic(backendDynamicRoutes);
+    routesConfig = getStaticRoutesConfig();
+    isRoutesLoaded = false;
   } else {
-    // 前端路由模式：沿用原有本地 dynamicRoutes
     routesConfig = getRoutesConfig();
+    isRoutesLoaded = true;
   }
 
-  // 创建路由实例
-  const routerInstance = createRouter(routesConfig, {
-    basename,
-  });
+  // 生成 React Router 格式的路由
+  const reactRoutes = generateReactRoutes(routesConfig);
+
+  // 格式化路由，生成 pathname 和扁平化映射
+  const { routes, flattenRoutes } = formatRoutes(routesConfig);
 
   // 初始化 keepAlive 路由的缓存键
-  initCacheRoutesFromRouter(routerInstance.flattenRoutes);
+  initCacheRoutesFromRouter(flattenRoutes);
 
-  return routerInstance;
+  return {
+    reactRoutes,
+    routes,
+    flattenRoutes,
+    basename,
+    isRoutesLoaded,
+  };
 }

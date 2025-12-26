@@ -1,5 +1,5 @@
 import { HttpResponse, http } from "msw";
-import type { BackendMenuItem } from "@/api/services/menuService";
+import type { BackendMenuItem } from "@/api/services/menu-service";
 import { ResultStatus } from "@/types/enum";
 
 /**
@@ -14,13 +14,13 @@ const getMenuList = http.get("/api/menu/list", () => {
       icon: "lucide:layout-dashboard",
       order: 1,
       children: [
+        { redirect: "workbench" },
         {
           path: "workbench",
           name: "工作台",
           icon: "lucide:workflow",
           component: "/pages/dashboard/workbench",
           pinned: true,
-          keepAlive: true,
           order: 1,
         },
         {
@@ -28,7 +28,6 @@ const getMenuList = http.get("/api/menu/list", () => {
           name: "分析",
           icon: "lucide:bar-chart-3",
           component: "/pages/dashboard/analysis",
-          keepAlive: true,
           order: 2,
         },
       ],
@@ -50,7 +49,6 @@ const getMenuList = http.get("/api/menu/list", () => {
           name: "用户列表",
           icon: "lucide:users",
           component: "/pages/user/list",
-          keepAlive: true,
           order: 1,
         },
         {
@@ -165,10 +163,21 @@ const getMenuList = http.get("/api/menu/list", () => {
       order: 6,
       children: [
         {
+          redirect: "github",
+        },
+        {
           path: "github",
           name: "GitHub",
           icon: "lucide:github",
-          component: "/pages/_built/link/external-link",
+          externalUrl: "https://github.com",
+          isIframe: false, // 新窗口打开
+        },
+        {
+          path: "docs",
+          name: "文档(内嵌)",
+          icon: "lucide:book-open",
+          externalUrl: "https://react.dev",
+          isIframe: true, // iframe 内嵌显示
         },
       ],
     },
