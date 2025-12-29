@@ -12,8 +12,7 @@ import {
 } from "@/components/base/command";
 import { Text } from "@/components/base/typography";
 import Icon from "@/components/ui/icon/icon";
-import { useRouterNavigation } from "@/hooks/use-router";
-import { useRouter } from "@/lib/router-toolset/router";
+import { useRouter, useRouterNavigation } from "@/hooks/use-router";
 
 interface SearchItem {
   key: string;

@@ -10,7 +10,7 @@ import { CheckUpdate } from "./components/ui/check-update";
 import { ErrorFallback } from "./components/ui/error-fallback";
 import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
 import { GLOBAL_CONFIG } from "./global-config";
-import { useRouter } from "./lib/router-toolset/router";
+import { useRouter } from "./hooks/use-router";
 import { useMenuActions } from "./store/menu-store";
 import { useAppSettings } from "./store/setting-store";
 import { useUserRoles } from "./store/user-store";

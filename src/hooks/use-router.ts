@@ -1,6 +1,17 @@
 import { useMemo } from "react";
-import { type NavigateOptions, type To, useNavigate } from "react-router";
+import {
+  type NavigateOptions,
+  type To,
+  useLocation,
+  useNavigate,
+} from "react-router";
 import { GLOBAL_CONFIG } from "@/global-config";
+import { getRoutePathFromPathname } from "@/lib/router-toolset/router";
+import {
+  useFlattenRoutes,
+  useReactRoutes,
+  useRoutes,
+} from "@/store/router-store";
 import { type LocationQueryRaw, stringifyQuery } from "./query";
 
 /** 扩展的导航选项，支持 query 参数 */
@@ -67,4 +78,35 @@ export function useRouterNavigation() {
   );
 
   return router;
+}
+
+/**
+ * 在 React 组件中获取路由信息的 Hook
+ * 从 router-store 中获取路由实例信息
+ * @returns 路由信息对象
+ */
+export function useRouter() {
+  const reactRoutes = useReactRoutes();
+  const flattenRoutes = useFlattenRoutes();
+  const routes = useRoutes();
+  const location = useLocation();
+
+  // 计算当前路由路径
+  const routePath = useMemo(
+    () => getRoutePathFromPathname(reactRoutes, location.pathname),
+    [reactRoutes, location.pathname]
+  );
+
+  // 获取当前路由配置
+  const curRoute = useMemo(
+    () => flattenRoutes.get(routePath),
+    [flattenRoutes, routePath]
+  );
+
+  return {
+    reactRoutes,
+    routes,
+    flattenRoutes,
+    curRoute,
+  };
 }

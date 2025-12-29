@@ -27,9 +27,8 @@ import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { useDirection } from "@/context/direction/direction-context";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { useElementHeight } from "@/hooks/use-element-height";
-import { useRouterNavigation } from "@/hooks/use-router";
+import { useRouter, useRouterNavigation } from "@/hooks/use-router";
 import { useWatermark } from "@/hooks/use-watermark";
-import { useRouter } from "@/lib/router-toolset/router";
 import Page403 from "@/pages/_built/page-403";
 import {
   useCacheActions,

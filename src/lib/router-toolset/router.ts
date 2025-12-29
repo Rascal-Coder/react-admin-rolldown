@@ -1,17 +1,11 @@
-import { useMemo } from "react";
 import {
   createBrowserRouter,
   createHashRouter,
   matchRoutes,
   type RouteObject,
-  useLocation,
 } from "react-router";
 import { GLOBAL_CONFIG } from "@/global-config";
-import {
-  useFlattenRoutes,
-  useReactRoutes,
-  useRoutes,
-} from "@/store/router-store";
+
 import type { RouteConfig } from "./types";
 import { formatRoutes, generateReactRoutes } from "./utils";
 
@@ -93,36 +87,4 @@ export function getRoutePathFromPathname(
       .join("/")
       .replace(regPath, "") ?? "";
   return routePath;
-}
-
-/**
- * 在 React 组件中获取路由信息的 Hook
- * 从 RouterContext 中获取路由实例信息
- * @returns 路由信息对象
- */
-export function useRouter() {
-  // const routerContext = useRouterContext();
-  const reactRoutes = useReactRoutes();
-  const flattenRoutes = useFlattenRoutes();
-  const routes = useRoutes();
-  const location = useLocation();
-
-  // 计算当前路由路径
-  const routePath = useMemo(
-    () => getRoutePathFromPathname(reactRoutes, location.pathname),
-    [reactRoutes, location.pathname]
-  );
-
-  // 获取当前路由配置
-  const curRoute = useMemo(
-    () => flattenRoutes.get(routePath),
-    [flattenRoutes, routePath]
-  );
-
-  return {
-    reactRoutes,
-    routes,
-    flattenRoutes,
-    curRoute,
-  };
 }
