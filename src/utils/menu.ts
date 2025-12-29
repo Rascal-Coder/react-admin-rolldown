@@ -1,5 +1,5 @@
 import type { MenuItemData } from "@/components/ui/layout/menu/vertical/types";
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 
 export type MenuItemsData = {
   menuItems: MenuItemData[];

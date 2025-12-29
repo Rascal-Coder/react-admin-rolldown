@@ -1,5 +1,5 @@
 import type { Role } from "@/_mock/assets";
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 
 /**
  * 根据用户角色过滤路由配置

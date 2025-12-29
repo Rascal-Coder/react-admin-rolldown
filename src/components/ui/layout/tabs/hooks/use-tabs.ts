@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 import { useCacheActions } from "@/store/cache-store";
 import { useActiveTab, useTabsActions, useTabsData } from "@/store/tabs-store";
 import type { LayoutTabItem } from "../types";

@@ -1,6 +1,6 @@
 import type { BadgeProps } from "@/components/base/dot-badge/types";
 import type { MenuItemData } from "@/components/ui/layout/menu/vertical/types";
-import apiClient from "../apiClient";
+import apiClient from "../api-client";
 
 // 后端菜单项类型定义
 // 包含 RouteConfig 中后端可以返回的所有字段（排除前端计算的字段）

@@ -1,5 +1,5 @@
-import type { RouteConfig } from "@/lib/router-toolset/types";
-import { createLazyComponent } from "../../utils";
+import type { RouteConfig } from "@/routes/types";
+import { createLazyComponent } from "../../utils/create-router";
 
 /**
  * 一级菜单模块路由配置

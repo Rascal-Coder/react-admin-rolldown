@@ -1,11 +1,11 @@
 import { GLOBAL_CONFIG } from "@/global-config";
-import type { RouteConfig } from "@/lib/router-toolset/types";
-import { formatRoutes, generateReactRoutes } from "@/lib/router-toolset/utils";
+import type { RouteConfig } from "@/routes/types";
 import { initCacheRoutesFromRouter } from "@/store/cache-store";
 import routerStore from "@/store/router-store";
 import { getRoutesConfig } from "./config";
 import { staticRoutes } from "./config/static";
-import { createDataRouter } from "./utils";
+import { formatRoutes, generateReactRoutes } from "./utils";
+import { createDataRouter } from "./utils/create-router";
 
 const basename = GLOBAL_CONFIG.basename;
 const authRouteMode = GLOBAL_CONFIG.authRouteMode;

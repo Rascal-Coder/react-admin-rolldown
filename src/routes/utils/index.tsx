@@ -1,6 +1,6 @@
 import type { RouteObject } from "react-router";
 import { Navigate, Outlet, useParams } from "react-router";
-import type { RouteConfig } from "./types";
+import type { RouteConfig } from "@/routes/types";
 
 const regPath = /\/$/;
 

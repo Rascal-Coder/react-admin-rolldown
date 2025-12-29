@@ -1,5 +1,5 @@
 import type { UserInfo, UserToken } from "@/types/user";
-import apiClient from "../apiClient";
+import apiClient from "../api-client";
 
 export interface SignInReq {
   username: string;

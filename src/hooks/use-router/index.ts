@@ -6,13 +6,13 @@ import {
   useNavigate,
 } from "react-router";
 import { GLOBAL_CONFIG } from "@/global-config";
-import { getRoutePathFromPathname } from "@/lib/router-toolset/router";
+import { getRoutePathFromPathname } from "@/routes/utils/get-route-path";
 import {
   useFlattenRoutes,
   useReactRoutes,
   useRoutes,
 } from "@/store/router-store";
-import { type LocationQueryRaw, stringifyQuery } from "./query";
+import { type LocationQueryRaw, stringifyQuery } from "./utils";
 
 /** 扩展的导航选项，支持 query 参数 */
 type ExtendedNavigateOptions = NavigateOptions & {

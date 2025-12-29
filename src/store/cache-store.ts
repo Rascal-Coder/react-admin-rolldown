@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 
 export type CacheStore = {
   /** keepAlive 路由的 pathname 列表 */

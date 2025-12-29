@@ -1,6 +1,6 @@
 import type { RouteObject } from "react-router";
 import { create } from "zustand";
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 
 export type RouterStore = {
   routes: RouteConfig[];

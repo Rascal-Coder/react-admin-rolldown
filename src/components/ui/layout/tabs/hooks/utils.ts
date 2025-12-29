@@ -1,4 +1,4 @@
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 import type { LayoutTabItem } from "../types";
 
 /**

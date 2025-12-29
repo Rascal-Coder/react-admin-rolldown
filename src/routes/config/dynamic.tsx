@@ -1,4 +1,4 @@
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 
 /**
  * 动态路由配置（前端路由模式）

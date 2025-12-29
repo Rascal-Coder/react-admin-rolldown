@@ -1,6 +1,6 @@
 import type { BackendMenuItem } from "@/api/services/menu-service";
-import type { RouteConfig } from "@/lib/router-toolset/types";
-import { createLazyComponent } from "./utils";
+import type { RouteConfig } from "@/routes/types";
+import { createLazyComponent } from "./create-router";
 
 // 按 order 字段排序
 function sortByOrder<T extends { order?: number }>(items: T[]): T[] {

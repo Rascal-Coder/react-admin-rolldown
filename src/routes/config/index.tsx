@@ -1,4 +1,4 @@
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 import { dynamicRoutes } from "./dynamic";
 import { staticRoutes } from "./static";
 

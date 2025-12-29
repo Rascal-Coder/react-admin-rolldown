@@ -1,4 +1,4 @@
-import type { RouteConfig } from "@/lib/router-toolset/types";
+import type { RouteConfig } from "@/routes/types";
 
 /**
  * 链接模块路由配置

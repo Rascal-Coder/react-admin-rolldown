@@ -1,10 +1,10 @@
 import type { RouteObject } from "react-router";
-import { formatRoutes, generateReactRoutes } from "@/lib/router-toolset/utils";
 import { initCacheRoutesFromRouter } from "@/store/cache-store";
 import menuStore from "@/store/menu-store";
 import routerStore from "@/store/router-store";
 import { generateMenuItems } from "@/utils/menu";
 import { backendMenuToDynamicRoutes } from "./backend-menu-adapter";
+import { formatRoutes, generateReactRoutes } from "./index";
 
 /**
  * 初始化后端路由模式下的动态路由
