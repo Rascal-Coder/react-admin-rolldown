@@ -7,11 +7,13 @@ import type { LayoutTabItem } from "@/components/ui/layout/tabs/types";
 export type TabsStore = {
   tabs: LayoutTabItem[];
   activeTab: string;
+  reloadFlag: boolean;
   actions: {
     setTabs: (tabs: LayoutTabItem[]) => void;
     setActiveTab: (activeTab: string) => void;
     updateTabs: (fn: (draft: LayoutTabItem[]) => void) => void;
     clearTabs: () => void;
+    setReloadFlag: (reloadFlag: boolean) => void;
   };
 };
 
@@ -20,6 +22,7 @@ const useTabsStore = create<TabsStore>()(
     (set) => ({
       tabs: [],
       activeTab: "",
+      reloadFlag: false,
       actions: {
         setTabs: (tabs) => {
           set({ tabs });
@@ -33,6 +36,9 @@ const useTabsStore = create<TabsStore>()(
               fn(state.tabs);
             })
           );
+        },
+        setReloadFlag: (reloadFlag) => {
+          set({ reloadFlag });
         },
         clearTabs: () => {
           useTabsStore.persist.clearStorage();
@@ -53,4 +59,5 @@ const useTabsStore = create<TabsStore>()(
 
 export const useTabsData = () => useTabsStore((state) => state.tabs);
 export const useActiveTab = () => useTabsStore((state) => state.activeTab);
+export const useReloadFlag = () => useTabsStore((state) => state.reloadFlag);
 export const useTabsActions = () => useTabsStore((state) => state.actions);

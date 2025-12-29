@@ -4,7 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Outlet } from "react-router";
 import { DirectionProvider } from "@/context/direction/direction-provider";
-import { filterRoutesByRole } from "@/routes/config/utils/permission-filter";
+import { filterRoutesByRole } from "@/routes/utils/permission-filter";
 import { MotionLazy } from "./components/ui/animate/motion-lazy";
 import { CheckUpdate } from "./components/ui/check-update";
 import { ErrorFallback } from "./components/ui/error-fallback";

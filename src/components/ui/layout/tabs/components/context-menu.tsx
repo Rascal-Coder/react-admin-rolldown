@@ -130,7 +130,7 @@ export function TabsContextMenu({
           className="flex items-center gap-2"
           disabled={!isActiveTab}
           onSelect={() => {
-            handleReloadTab(tab.key);
+            handleReloadTab();
           }}
         >
           <RefreshCw className="size-4" />

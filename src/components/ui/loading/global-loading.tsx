@@ -1,5 +1,6 @@
 import { GLOBAL_CONFIG } from "@/global-config";
 import { cn } from "@/utils";
+import { LogoSvg } from "../layout/logo";
 
 const LOADING_SQUARE_CLASSES = [
   "left-0 top-0",
@@ -15,13 +16,17 @@ const GlobalLoading = ({ src }: { src?: string }) => (
       aria-live="polite"
       className="flex flex-col items-center"
     >
-      <img
-        alt={`${GLOBAL_CONFIG.appName} logo`}
-        className="size-24 object-contain drop-shadow-sm md:size-32"
-        height={128}
-        src={src ?? "/logo.svg"}
-        width={128}
-      />
+      {src ? (
+        <img
+          alt={`${GLOBAL_CONFIG.appName} logo`}
+          className="size-24 object-contain drop-shadow-sm md:size-32"
+          height={128}
+          src={src}
+          width={128}
+        />
+      ) : (
+        <LogoSvg height={128} width={128} />
+      )}
       <div aria-hidden="true" className="my-9 h-14 w-14">
         <div className="relative h-full animate-spin">
           {LOADING_SQUARE_CLASSES.map((positionClass) => (

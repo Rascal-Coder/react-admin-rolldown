@@ -1,4 +1,6 @@
 import { useCacheActions } from "@/store/cache-store";
+import { useTabsActions } from "@/store/tabs-store";
+import { sleep } from "@/utils";
 import type { LayoutTabItem, UseTabsContextMenuProps } from "../types";
 
 export function useTabsContextMenu({
@@ -8,6 +10,7 @@ export function useTabsContextMenu({
   onNavigate,
 }: UseTabsContextMenuProps) {
   const { setRemoveCacheKey } = useCacheActions();
+  const { setReloadFlag } = useTabsActions();
   // 导航到指定的tab
   const navigateToTab = (tabKey: string) => {
     setActiveTab(tabKey);
@@ -195,9 +198,10 @@ export function useTabsContextMenu({
   };
 
   // 重新加载标签页
-  const handleReloadTab = (tabKey: string) => {
-    console.log(`重新加载标签页: ${tabKey}`);
-    // 实际项目中可以在这里添加重新加载的逻辑
+  const handleReloadTab = async () => {
+    setReloadFlag(true);
+    await sleep(300);
+    setReloadFlag(false);
   };
 
   // 在新标签页中打开

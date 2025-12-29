@@ -62,6 +62,10 @@ export type SettingsType = {
    * true: 菜单展示所有路由，权限由布局 AuthGuard 控制并显示 403
    */
   showAllMenuWith403: boolean;
+  /**
+   * 内容区域全屏模式，隐藏侧边栏、头部、底部，只保留 main 区域
+   */
+  contentFullscreen: boolean;
 };
 type SettingStore = {
   appSettings: SettingsType;
@@ -108,6 +112,7 @@ const useSettingStore = create<SettingStore>()(
         watermarkColor: "#ec4899",
         checkUpdateEnabled: true,
         showAllMenuWith403: false,
+        contentFullscreen: false,
       },
       actions: {
         setAppSettings: (appSettings) => {
