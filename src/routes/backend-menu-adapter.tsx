@@ -2,17 +2,20 @@ import type { BackendMenuItem } from "@/api/services/menu-service";
 import type { RouteConfig } from "@/lib/router-toolset/types";
 import { createLazyComponent } from "./utils";
 
-// 将单个后端菜单项转换为 RouteConfig（权限仍由前端路由配置自己控制）
+// 按 order 字段排序
+function sortByOrder<T extends { order?: number }>(items: T[]): T[] {
+  return [...items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+}
+
+// 将单个后端菜单项转换为 RouteConfig
 function backendMenuItemToRoute(item: BackendMenuItem): RouteConfig {
   const route: RouteConfig = {
     path: item.path,
     name: item.name,
     icon: item.icon,
     hidden: item.hidden,
-    // 支持所有后端可返回的 RouteConfig 字段
     keepAlive: item.keepAlive,
     pinned: item.pinned,
-    progress: item.progress,
     flatten: item.flatten,
     caseSensitive: item.caseSensitive,
     order: item.order,
@@ -39,12 +42,15 @@ function backendMenuItemToRoute(item: BackendMenuItem): RouteConfig {
     };
   }
 
-  if (item.redirect) {
-    route.redirect = item.redirect;
-  }
-
+  // 处理子路由
   if (item.children && item.children.length > 0) {
-    route.children = item.children.map(backendMenuItemToRoute);
+    const sortedChildren = sortByOrder(item.children);
+    route.children = sortedChildren.map(backendMenuItemToRoute);
+
+    // 如果有 redirect，在 children 开头插入索引重定向路由
+    if (item.redirect) {
+      route.children.unshift({ redirect: item.redirect });
+    }
   }
 
   return route;
@@ -54,5 +60,6 @@ function backendMenuItemToRoute(item: BackendMenuItem): RouteConfig {
 export function backendMenuToDynamicRoutes(
   menuList: BackendMenuItem[]
 ): RouteConfig[] {
-  return menuList.map(backendMenuItemToRoute);
+  const sortedList = sortByOrder(menuList);
+  return sortedList.map(backendMenuItemToRoute);
 }

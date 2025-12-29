@@ -5,6 +5,11 @@ import apiClient from "../apiClient";
 // 后端菜单项类型定义
 // 包含 RouteConfig 中后端可以返回的所有字段（排除前端计算的字段）
 export interface BackendMenuItem {
+  /** 菜单id */
+  id: string;
+  /** 父菜单id */
+  parentId: string | null;
+  /** 菜单创建时间 */
   /** 路径，同react-router（redirect 项可能没有 path） */
   path?: string;
   /** 菜单名称 */
@@ -23,8 +28,8 @@ export interface BackendMenuItem {
   keepAlive?: boolean;
   /** 是否固定在标签页 */
   pinned?: boolean;
-  /** 进度条 */
-  progress?: boolean;
+  // /** 进度条 */
+  // progress?: boolean;
   /** 将子路由的菜单层级提升到本级 */
   flatten?: boolean;
   /** 路径匹配是否不区分大小写，默认false */

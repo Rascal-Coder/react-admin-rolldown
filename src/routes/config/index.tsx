@@ -45,8 +45,4 @@ export function buildRoutesWithDynamic(dynamic: RouteConfig[]): RouteConfig[] {
   return mergeStaticAndDynamic(dynamic);
 }
 
-/**
- * 默认路由配置（不进行权限过滤，用于向后兼容）
- * 注意：在生产环境中，应该使用 getRoutesConfig(permissions) 来获取过滤后的路由
- */
 export const routesConfig: RouteConfig[] = getRoutesConfig();

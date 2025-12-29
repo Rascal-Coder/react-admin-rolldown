@@ -16,6 +16,7 @@ export const staticRoutes: RouteConfig[] = [
   {
     path: "/",
     flatten: true,
+    // id: "base-layout",
     lazy: async () => {
       const LayoutBase = (await import("@/layouts/base")).default;
       const LoginAuthGuard = (
@@ -44,7 +45,7 @@ export const staticRoutes: RouteConfig[] = [
     hidden: true,
     flatten: true,
     children: [
-      { path: "", redirect: "sign-in" },
+      { redirect: "sign-in" },
       {
         path: "sign-in",
         lazy: createLazyComponent("/pages/_built/auth/sign-in"),
@@ -68,7 +69,7 @@ export const staticRoutes: RouteConfig[] = [
     lazy: createLazyComponent("/pages/separation"),
     name: "独立布局",
     icon: "lucide:square",
-    flatten: true,
+    // flatten: true,
   },
   // 错误页面路由
   {
@@ -85,7 +86,6 @@ export const staticRoutes: RouteConfig[] = [
         ),
       };
     },
-    // flatten: true,
   },
   {
     path: "/500",
@@ -101,7 +101,6 @@ export const staticRoutes: RouteConfig[] = [
         ),
       };
     },
-    // flatten: true,
   },
   {
     path: "*",
@@ -117,6 +116,5 @@ export const staticRoutes: RouteConfig[] = [
         ),
       };
     },
-    // flatten: true,
   },
 ];

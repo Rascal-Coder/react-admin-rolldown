@@ -13,9 +13,13 @@ const getMenuList = http.get("/api/menu/list", () => {
       name: "仪表盘",
       icon: "lucide:layout-dashboard",
       order: 1,
+      id: "1",
+      parentId: null,
+      redirect: "workbench",
       children: [
-        { redirect: "workbench" },
         {
+          id: "1-1",
+          parentId: "1",
           path: "workbench",
           name: "工作台",
           icon: "lucide:workflow",
@@ -24,6 +28,8 @@ const getMenuList = http.get("/api/menu/list", () => {
           order: 1,
         },
         {
+          id: "1-2",
+          parentId: "1",
           path: "analysis",
           name: "分析",
           icon: "lucide:bar-chart-3",
@@ -33,6 +39,8 @@ const getMenuList = http.get("/api/menu/list", () => {
       ],
     },
     {
+      id: "2",
+      parentId: null,
       path: "user",
       name: "用户管理",
       icon: "lucide:user",
@@ -40,16 +48,16 @@ const getMenuList = http.get("/api/menu/list", () => {
       badgeType: "text",
       badgeText: "New",
       badgeVariant: "error",
+      redirect: "list",
       children: [
-        {
-          redirect: "list",
-        },
         {
           path: "list",
           name: "用户列表",
           icon: "lucide:users",
           component: "/pages/user/list",
           order: 1,
+          id: "2-1",
+          parentId: "2",
         },
         {
           path: ":id",
@@ -57,6 +65,8 @@ const getMenuList = http.get("/api/menu/list", () => {
           icon: "lucide:user-circle",
           component: "/pages/user/detail",
           hidden: true,
+          id: "2-2",
+          parentId: "2",
         },
       ],
     },
@@ -67,6 +77,9 @@ const getMenuList = http.get("/api/menu/list", () => {
       order: 3,
       flatten: false,
       component: "/pages/menu-level",
+      id: "3",
+      parentId: null,
+      redirect: "1a",
       children: [
         {
           path: "1a",
@@ -74,6 +87,8 @@ const getMenuList = http.get("/api/menu/list", () => {
           icon: "lucide:menu",
           component: "/pages/menu-level/menu-level-1a",
           order: 1,
+          id: "3-1",
+          parentId: "3",
         },
         {
           path: "1b",
@@ -81,16 +96,21 @@ const getMenuList = http.get("/api/menu/list", () => {
           icon: "lucide:menu",
           component: "/pages/menu-level/menu-level-1b",
           order: 2,
+          id: "3-2",
+          parentId: "3",
+          redirect: "2a",
           children: [
-            {
-              redirect: "2a",
-            },
+            // {
+            //   redirect: "2a",
+            // },
             {
               path: "2a",
               name: "多级菜单2a",
               icon: "lucide:file-text",
               component: "/pages/menu-level/menu-level-1b/menu-level-1b-2a",
               order: 1,
+              id: "3-2-1",
+              parentId: "3-2",
             },
             {
               path: "2b",
@@ -98,10 +118,10 @@ const getMenuList = http.get("/api/menu/list", () => {
               icon: "lucide:menu",
               component: "/pages/menu-level/menu-level-1b/menu-level-1b-2b",
               order: 2,
+              id: "3-2-2",
+              parentId: "3-2",
+              redirect: "3a",
               children: [
-                {
-                  redirect: "3a",
-                },
                 {
                   path: "3a",
                   name: "多级菜单3a",
@@ -109,6 +129,8 @@ const getMenuList = http.get("/api/menu/list", () => {
                   component:
                     "/pages/menu-level/menu-level-1b/menu-level-1b-2b/menu-level-1b-2b-3a",
                   order: 1,
+                  id: "3-2-2-1",
+                  parentId: "3-2-2",
                 },
                 {
                   path: "3b",
@@ -117,6 +139,8 @@ const getMenuList = http.get("/api/menu/list", () => {
                   component:
                     "/pages/menu-level/menu-level-1b/menu-level-1b-2b/menu-level-1b-2b-3b",
                   order: 2,
+                  id: "3-2-2-2",
+                  parentId: "3-2-2",
                 },
               ],
             },
@@ -132,12 +156,16 @@ const getMenuList = http.get("/api/menu/list", () => {
       badgeType: "text",
       badgeText: "99+",
       badgeVariant: "error",
+      id: "4",
+      parentId: null,
+      redirect: "badge-demo",
       children: [
         {
           path: "badge-demo",
           name: "徽章演示",
           component: "/pages/test-badge/test-badge-1",
-          keepAlive: false,
+          id: "4-1",
+          parentId: "4",
         },
       ],
     },
@@ -146,13 +174,17 @@ const getMenuList = http.get("/api/menu/list", () => {
       name: "缓存测试",
       icon: "lucide:refresh-cw",
       order: 5,
-      progress: true,
+      id: "5",
+      parentId: null,
+      redirect: "alive-demo",
       children: [
         {
           path: "alive-demo",
           name: "缓存演示",
           component: "/pages/alive",
           keepAlive: true,
+          id: "5-1",
+          parentId: "5",
         },
       ],
     },
@@ -161,16 +193,21 @@ const getMenuList = http.get("/api/menu/list", () => {
       name: "外部链接",
       icon: "lucide:external-link",
       order: 6,
+      id: "6",
+      parentId: null,
+      redirect: "github",
       children: [
-        {
-          redirect: "github",
-        },
+        // {
+        //   redirect: "github",
+        // },
         {
           path: "github",
           name: "GitHub",
           icon: "lucide:github",
           externalUrl: "https://github.com",
           isIframe: false, // 新窗口打开
+          id: "6-1",
+          parentId: "6",
         },
         {
           path: "docs",
@@ -178,6 +215,8 @@ const getMenuList = http.get("/api/menu/list", () => {
           icon: "lucide:book-open",
           externalUrl: "https://react.dev",
           isIframe: true, // iframe 内嵌显示
+          id: "6-2",
+          parentId: "6",
         },
       ],
     },

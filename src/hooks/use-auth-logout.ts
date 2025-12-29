@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { GLOBAL_CONFIG } from "@/global-config";
-import { useRouterContext } from "@/lib/router-toolset/router-context";
 import { useMenuActions } from "@/store/menu-store";
+import { useRouterStore } from "@/store/router-store";
 import { useUserActions } from "@/store/user-store";
 
 export interface UseAuthLogoutReturn {
@@ -14,18 +14,18 @@ export interface UseAuthLogoutReturn {
 export function useAuthLogout(): UseAuthLogoutReturn {
   const { clearUserInfoAndToken } = useUserActions();
   const { clearMenuData } = useMenuActions();
-  const { updateRoutes } = useRouterContext();
+  const { actions } = useRouterStore();
 
   const logout = useCallback(() => {
     clearUserInfoAndToken();
 
     if (GLOBAL_CONFIG.authRouteMode === "backend") {
       // 传入空数组清除所有动态路由，只保留静态路由
-      updateRoutes([]);
+      actions.setRouterState([], [], new Map());
     }
 
     clearMenuData();
-  }, [clearUserInfoAndToken, clearMenuData, updateRoutes]);
+  }, [clearUserInfoAndToken, clearMenuData, actions]);
 
   return {
     logout,

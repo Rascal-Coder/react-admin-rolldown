@@ -13,7 +13,6 @@ const dynamicRouteFiles = import.meta.glob("./modules/**/*.tsx", {
 
 /**
  * 从模块中提取路由配置
- * 每个模块文件应导出一个 RouteConfig[] 数组（支持 default 导出或命名导出）
  */
 export const dynamicRoutes: RouteConfig[] = Object.values(dynamicRouteFiles)
   .flatMap((module: any) => module.default)
