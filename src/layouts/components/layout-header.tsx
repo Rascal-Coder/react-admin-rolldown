@@ -6,7 +6,6 @@ import { Button } from "@/components/base/button";
 import { Breadcrumb } from "@/components/ui/layout/breadcrumb";
 import type { BreadcrumbVariant } from "@/components/ui/layout/breadcrumb/types";
 import ContentFullscreenButton from "@/components/ui/layout/content-fullscreen-button";
-import FullscreenButton from "@/components/ui/layout/fullscreen-button";
 import { Header } from "@/components/ui/layout/header";
 import HorizontalMenu from "@/components/ui/layout/menu/horizontal";
 import type { MenuItemData } from "@/components/ui/layout/menu/vertical/types";
@@ -101,7 +100,7 @@ export function LayoutHeader({
             <SearchBar />
             <ThemeSwitch />
             <ContentFullscreenButton />
-            <FullscreenButton />
+            {/* <FullscreenButton /> */}
             <NoticeButton />
             <ProfileDropdown
               user={{ name: "Bug", email: "bug@bug.com", avatar }}

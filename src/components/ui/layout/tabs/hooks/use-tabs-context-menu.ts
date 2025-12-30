@@ -212,11 +212,11 @@ export function useTabsContextMenu({
     window.open(url, "_blank");
   };
 
-  // 最大化标签页
-  const handleMaximize = (tabKey: string) => {
-    console.log(`最大化标签页: ${tabKey}`);
-    // 实际项目中可以在这里添加最大化的逻辑
-  };
+  // // 最大化标签页
+  // const handleMaximize = (tabKey: string) => {
+  //   console.log(`最大化标签页: ${tabKey}`);
+  //   // 实际项目中可以在这里添加最大化的逻辑
+  // };
 
   return {
     handleCloseTab,
@@ -226,6 +226,6 @@ export function useTabsContextMenu({
     handleCloseOtherTabs,
     handleReloadTab,
     handleOpenInNewTab,
-    handleMaximize,
+    // handleMaximize,
   };
 }

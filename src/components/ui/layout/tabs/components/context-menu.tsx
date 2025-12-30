@@ -1,4 +1,4 @@
-import { ExternalLink, Maximize2, Pin, RefreshCw, X } from "lucide-react";
+import { ExternalLink, Pin, RefreshCw, X } from "lucide-react";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -27,7 +27,6 @@ export function TabsContextMenu({
     handleCloseOtherTabs,
     handleReloadTab,
     handleOpenInNewTab,
-    handleMaximize,
   } = useTabsContextMenu({
     updateTabs,
     setActiveTab,
@@ -38,16 +37,16 @@ export function TabsContextMenu({
   // 查找当前tab在数组中的索引
   const currentIndex = tabs.findIndex((t) => t.key === tab.key);
 
-  // 检查是否有左侧/右侧的tab可以关闭
-  const hasTabsToLeft = currentIndex > 0;
-  const hasTabsToRight = currentIndex < tabs.length - 1;
-  const hasOtherTabs = tabs.length > 1;
+  // 检查是否有左侧/右侧的tab可以关闭（排除pinned的标签页）
+  const hasTabsToLeft = tabs.slice(0, currentIndex).some((t) => !t.pinned);
+  const hasTabsToRight = tabs.slice(currentIndex + 1).some((t) => !t.pinned);
+  const hasOtherTabs = tabs.some((t) => t.key !== tab.key && !t.pinned);
 
   // 检查当前标签页是否为激活状态
   const isActiveTab = activeTab === tab.key;
 
-  // 检查是否可以关闭（只有激活的标签页才能使用关闭左侧/右侧/其他功能，且不能是 pinned 状态）
-  const canUseCloseActions = isActiveTab && !tab.pinned;
+  // 检查是否可以关闭（只有激活的标签页才能使用关闭左侧/右侧/其他功能）
+  const canUseCloseActions = isActiveTab;
   const canCloseCurrent = tab.closable !== false && !tab.pinned;
 
   return (
@@ -135,18 +134,6 @@ export function TabsContextMenu({
         >
           <RefreshCw className="size-4" />
           <span>重新加载</span>
-        </ContextMenuItem>
-
-        {/* 最大化 */}
-        <ContextMenuItem
-          className="flex items-center gap-2"
-          disabled={!isActiveTab}
-          onSelect={() => {
-            handleMaximize(tab.key);
-          }}
-        >
-          <Maximize2 className="size-4" />
-          <span>最大化</span>
         </ContextMenuItem>
 
         {/* 在新标签页中打开 */}

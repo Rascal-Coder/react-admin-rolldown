@@ -1,5 +1,5 @@
 import { KeepAlive, type useKeepAliveRef } from "keepalive-for-react";
-import { Shrink } from "lucide-react";
+import { Minimize } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/base/button";
 import { LineLoading } from "@/components/ui/loading/line-loading";
@@ -68,7 +68,8 @@ export function LayoutMain({
           title="退出内容全屏"
           variant="secondary"
         >
-          <Shrink className="h-5 w-5" />
+          {/* <Shrink className="h-5 w-5" /> */}
+          <Minimize className="h-4 w-4" />
         </Button>
       )}
       <KeepAlive

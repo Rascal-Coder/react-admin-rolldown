@@ -25,6 +25,7 @@ export function LayoutTabs({
   sortable = true,
   tabType = TabType.Vscode,
   defaultActiveTab,
+  className,
 }: LayoutTabsProps) {
   const { curRoute, flattenRoutes } = useRouter();
   const location = useLocation();
@@ -104,6 +105,7 @@ export function LayoutTabs({
     <div
       className={cn("relative flex h-10 bg-muted", {
         "border-b border-b-border": tabType === "card",
+        className,
       })}
     >
       <ScrollButton

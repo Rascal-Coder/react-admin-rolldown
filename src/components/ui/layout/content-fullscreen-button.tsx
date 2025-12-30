@@ -1,4 +1,4 @@
-import { Expand, Shrink } from "lucide-react";
+import { Maximize, Minimize } from "lucide-react";
 import { Button } from "@/components/base/button";
 import { useAppSettings, useSettingsActions } from "@/store/setting-store";
 
@@ -23,9 +23,9 @@ export default function ContentFullscreenButton() {
       variant="ghost"
     >
       {contentFullscreen ? (
-        <Shrink className="h-4 w-4" />
+        <Minimize className="h-4 w-4" />
       ) : (
-        <Expand className="h-4 w-4" />
+        <Maximize className="h-4 w-4" />
       )}
     </Button>
   );

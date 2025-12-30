@@ -74,4 +74,5 @@ export type LayoutTabsProps = {
   activeTab?: string;
   defaultActiveTab?: string;
   tabType?: TabType;
+  className?: string;
 };
