@@ -6,6 +6,17 @@ import {
   LogOut,
   User,
 } from "lucide-react";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/base/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/base/avatar";
 import {
   DropdownMenu,
@@ -27,6 +38,7 @@ import { useRouterNavigation } from "@/hooks/use-router";
 import type { UserProps } from "@/types/user";
 
 export function NavUser({ user }: UserProps) {
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const { isMobile } = useSidebar();
   const { logout: authLogout } = useAuthLogout();
   const { replace } = useRouterNavigation();
@@ -105,13 +117,25 @@ export function NavUser({ user }: UserProps) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
+            <DropdownMenuItem onClick={() => setLogoutDialogOpen(true)}>
               <LogOut />
               退出登录
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+      <AlertDialog onOpenChange={setLogoutDialogOpen} open={logoutDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>提示</AlertDialogTitle>
+            <AlertDialogDescription>是否退出登录？</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogAction onClick={handleLogout}>确认</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </SidebarMenu>
   );
 }
