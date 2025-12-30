@@ -56,13 +56,13 @@ export function UserAuthForm({
   function onSubmit(data: z.infer<typeof formSchema>) {
     toast.promise(sleep(2000), {
       loading: "Signing in...",
+      closeButton: true,
       success: async () => {
         await login({
           username: form.getValues("username"),
           password: form.getValues("password"),
         });
-        // Redirect to the stored location or default to dashboard
-        // Requirements: 2.5
+
         const targetPath = redirectTo || GLOBAL_CONFIG.defaultRoute;
         navigate.replace(targetPath);
 

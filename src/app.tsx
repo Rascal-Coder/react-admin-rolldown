@@ -9,6 +9,7 @@ import { MotionLazy } from "./components/ui/animate/motion-lazy";
 import { CheckUpdate } from "./components/ui/check-update";
 import { ErrorFallback } from "./components/ui/error-fallback";
 import { RouteLoadingProgress } from "./components/ui/loading/route-loading";
+import Toast from "./components/ui/toast";
 import { GLOBAL_CONFIG } from "./global-config";
 import { useRouter } from "./hooks/use-router";
 import { useMenuActions } from "./store/menu-store";
@@ -45,6 +46,7 @@ function App() {
             </title>
             <link href={"/logo.svg"} rel="icon" />
           </Helmet>
+          <Toast />
           <RouteLoadingProgress />
           <DirectionProvider>
             <MotionLazy>
