@@ -8,6 +8,7 @@ pre-commit:
         - "*.tsx"
         - "*.json"
         - "*.jsonc"
+        - "*.css"
       stage_fixed: true
     - run: npx tsc --noEmit
       glob: "*.{ts,tsx}"
