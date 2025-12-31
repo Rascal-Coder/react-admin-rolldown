@@ -74,18 +74,15 @@ const BaseLayout = () => {
   return (
     <SidebarProvider>
       {/* 侧边栏 - 全屏时隐藏 */}
-      <div
+      <Sidebar
         className={cn(
           "transition-all duration-300 ease-in-out",
           contentFullscreen && "pointer-events-none w-0 opacity-0"
         )}
-      >
-        <Sidebar
-          collapsible={collapsibleType}
-          side={dir === "ltr" ? "left" : "right"}
-          variant={sidebarVariant}
-        />
-      </div>
+        collapsible={collapsibleType}
+        side={dir === "ltr" ? "left" : "right"}
+        variant={sidebarVariant}
+      />
       <SidebarInset
         className={cn(
           "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(5)))]",
