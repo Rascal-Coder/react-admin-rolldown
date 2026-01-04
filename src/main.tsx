@@ -25,7 +25,6 @@ function setupApp() {
     return;
   }
 
-  // 前端路由模式：使用 data router
   createRoot(container).render(
     <ThemeProvider>
       <RouterProvider router={router} />

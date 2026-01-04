@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router";
 import { useRouterNavigation } from "@/hooks/use-router";
 import { useUserToken } from "@/store/user-store";
 
@@ -8,14 +9,12 @@ type Props = {
 export default function LoginAuthGuard({ children }: Props) {
   const navigate = useRouterNavigation();
   const { accessToken } = useUserToken();
-  const check = useCallback(() => {
-    if (!accessToken) {
-      navigate.replace("/auth/sign-in");
-    }
-  }, [navigate, accessToken]);
+  const { pathname } = useLocation();
   useEffect(() => {
-    check();
-  }, [check]);
+    if (!accessToken) {
+      navigate.replace(`/auth/sign-in?redirect=${pathname}`);
+    }
+  }, [accessToken, pathname, navigate]);
 
   return <>{children}</>;
 }
