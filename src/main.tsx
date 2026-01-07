@@ -8,6 +8,7 @@ import { initCopyRight, urlJoin } from "@/utils";
 import { worker } from "./_mock";
 import { GLOBAL_CONFIG } from "./global-config";
 import { router } from "./routes";
+import { AntdAdapter } from "./theme/adapter/antd.adapter";
 
 const container = document.getElementById("root");
 
@@ -26,7 +27,7 @@ function setupApp() {
   }
 
   createRoot(container).render(
-    <ThemeProvider>
+    <ThemeProvider adapters={[AntdAdapter]}>
       <RouterProvider router={router} />
     </ThemeProvider>
   );
