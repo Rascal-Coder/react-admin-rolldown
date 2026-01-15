@@ -23,6 +23,7 @@ export const AntdAdapter: UILibraryAdapter = ({ mode, children }) => {
   const primaryColorToken = presetsColors[themeColorPresets];
 
   const token: ThemeConfig["token"] = {
+    colorLink: colorTokens.text.primary,
     colorPrimary: primaryColorToken.default,
     colorSuccess: colorTokens.palette.success.default,
     colorWarning: colorTokens.palette.warning.default,
