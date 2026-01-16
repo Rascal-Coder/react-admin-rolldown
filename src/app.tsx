@@ -14,7 +14,7 @@ import { GLOBAL_CONFIG } from "./global-config";
 import { useRouter } from "./hooks/use-router";
 import { useMenuActions } from "./store/menu-store";
 import { useAppSettings } from "./store/setting-store";
-import { useUserRoles } from "./store/user-store";
+import { useUserRoles, useUserToken } from "./store/user-store";
 import { generateMenuItems } from "./utils/menu";
 
 function App() {
@@ -22,17 +22,20 @@ function App() {
   const { setMenuData } = useMenuActions();
   const { showAllMenuWith403 } = useAppSettings();
   const roles = useUserRoles();
-
+  const { accessToken } = useUserToken();
   useEffect(() => {
     // 根据偏好设置决定菜单生成策略：
     // - showAllMenuWith403 为 true：菜单展示所有路由，无权限时由布局 AuthGuard 控制并显示 403
     // - showAllMenuWith403 为 false：按角色过滤路由，只有有权限的路由会出现在菜单中
+    if (!accessToken) {
+      return;
+    }
     const routesForMenu = showAllMenuWith403
       ? routerRoutes
       : filterRoutesByRole(routerRoutes, roles);
     const menuData = generateMenuItems(routesForMenu);
     setMenuData(menuData);
-  }, [routerRoutes, roles, showAllMenuWith403, setMenuData]);
+  }, [accessToken, routerRoutes, roles, showAllMenuWith403, setMenuData]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>

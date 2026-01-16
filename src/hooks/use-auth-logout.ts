@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import authService from "@/api/services/auth-service";
 import { GLOBAL_CONFIG } from "@/global-config";
 import { useMenuActions } from "@/store/menu-store";
 import { useRouterStore } from "@/store/router-store";
@@ -16,7 +17,8 @@ export function useAuthLogout(): UseAuthLogoutReturn {
   const { clearMenuData } = useMenuActions();
   const { actions } = useRouterStore();
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await authService.logout();
     clearUserInfoAndToken();
 
     if (GLOBAL_CONFIG.authRouteMode === "backend") {

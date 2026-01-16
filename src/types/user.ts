@@ -10,6 +10,8 @@ type UserProps = {
 };
 
 interface UserToken {
+  expire?: number;
+  refreshExpire?: number;
   accessToken?: string;
   refreshToken?: string;
 }

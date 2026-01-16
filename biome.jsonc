@@ -7,6 +7,7 @@
   "linter": {
     "rules": {
       "style": {
+        "useConsistentMemberAccessibility": "off",
         "useConsistentTypeDefinitions": "off",
         "noEnum": "off"
       },

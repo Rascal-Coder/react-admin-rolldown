@@ -77,6 +77,14 @@ export default defineConfig(({ mode }) => {
       open: true,
       host: true,
       port: 9527,
+      proxy: {
+        "/api": {
+          target: "http://localhost:7001",
+          changeOrigin: true,
+          // biome-ignore lint/performance/useTopLevelRegex: no need topLevelRegex
+          rewrite: (proxyPath) => proxyPath.replace(/^\/api/, ""),
+        },
+      },
     },
     build: {
       target: "esnext",

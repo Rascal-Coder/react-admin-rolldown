@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
+import { createDefu } from "defu";
 import { twMerge } from "tailwind-merge";
-
 /**
  * merge classnames
  */
@@ -44,3 +44,52 @@ export const urlJoin = (...parts: string[]) => {
     .filter(Boolean);
   return `/${result.join("/")}`;
 };
+
+/**
+ * bind methods to instance
+ * @param instance 实例
+ * @returns void
+ * @example
+ * bindMethods(new class {
+ *   method() {
+ *     console.log("method");
+ *   }
+ * })
+ */
+export function bindMethods<T extends object>(instance: T): void {
+  const prototype = Object.getPrototypeOf(instance);
+  const propertyNames = Object.getOwnPropertyNames(prototype);
+
+  for (const propertyName of propertyNames) {
+    const descriptor = Object.getOwnPropertyDescriptor(prototype, propertyName);
+    const propertyValue = instance[propertyName as keyof T];
+
+    if (
+      typeof propertyValue === "function" &&
+      propertyName !== "constructor" &&
+      descriptor &&
+      !descriptor.get &&
+      !descriptor.set
+    ) {
+      instance[propertyName as keyof T] = propertyValue.bind(instance);
+    }
+  }
+}
+
+/**
+ * check if value is string
+ * @param value 值
+ * @returns 是否是字符串
+ * @example
+ * isString("123") // true
+ * isString(123) // false
+ */
+export const isString = (val: unknown): val is string =>
+  typeof val === "string";
+
+export const mergeWithArrayOverride = createDefu((originObj, key, updates) => {
+  if (Array.isArray(originObj[key]) && Array.isArray(updates)) {
+    originObj[key] = updates;
+    return true;
+  }
+});
