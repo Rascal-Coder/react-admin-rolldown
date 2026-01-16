@@ -69,6 +69,7 @@ export function UserAuthForm({
     try {
       setCaptchaLoading(true);
       const res = await authService.getCaptcha();
+
       setCaptchaId(res.id);
       setCaptchaImg(res.imageBase64);
       form.setValue("captcha", "");

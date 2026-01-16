@@ -1,5 +1,5 @@
 import type { UserToken } from "@/types/user";
-import apiClient from "../api-client";
+import { requestClient } from "../request";
 
 export interface SignInReq {
   accountNumber: string;
@@ -14,13 +14,13 @@ export interface SignUpReq extends SignInReq {
 }
 export type SignInRes = UserToken;
 
-export enum UserApi {
-  SignIn = "/auth/login",
-  User = "/user",
-}
+// export enum UserApi {
+//   SignIn = "/auth/login",
+//   User = "/user",
+// }
 
 const signin = (data: SignInReq) =>
-  apiClient.post<SignInRes>({ url: UserApi.SignIn, data });
+  requestClient.post<SignInRes>("/auth/login", data);
 // const findById = (id: string) =>
 //   apiClient.get<UserInfo[]>({ url: `${UserApi.User}/${id}` });
 

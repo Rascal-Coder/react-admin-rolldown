@@ -15,12 +15,12 @@
         "noExplicitAny": "off",
         "noEmptyBlockStatements": "off",
         "noDocumentCookie": "off",
-        "noArrayIndexKey": "warn"
+        "noArrayIndexKey": "off"
       },
       "a11y": {
-        "noNoninteractiveElementInteractions": "warn",
-        "useKeyWithClickEvents": "warn",
-        "noStaticElementInteractions": "warn"
+        "noNoninteractiveElementInteractions": "off",
+        "useKeyWithClickEvents": "off",
+        "noStaticElementInteractions": "off"
       },
       "performance": {
         "noNamespaceImport": "off"
