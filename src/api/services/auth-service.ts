@@ -10,12 +10,6 @@ const getPublicKey = () => requestClient.get<string>("/auth/publicKey");
 const getCaptcha = () => requestClient.get<CaptchaResult>("/auth/captcha");
 
 const logout = () => requestClient.post<void>("/auth/logout");
-export default {
-  getPublicKey,
-  getCaptcha,
-  logout,
-  refreshTokenApi,
-};
 
 function refreshTokenApi() {
   return baseRequestClient.post<{
@@ -27,3 +21,13 @@ function refreshTokenApi() {
     withCredentials: true,
   });
 }
+
+const getCurrentUser = () => requestClient.get("/auth/current/user");
+
+export default {
+  getPublicKey,
+  getCaptcha,
+  logout,
+  refreshTokenApi,
+  getCurrentUser,
+};

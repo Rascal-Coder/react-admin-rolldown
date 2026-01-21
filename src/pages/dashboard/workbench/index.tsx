@@ -1,4 +1,6 @@
+import authService from "@/api/services/auth-service";
 import { Badge } from "@/components/base/badge";
+import { Button } from "@/components/base/button";
 import {
   Card,
   CardAction,
@@ -17,6 +19,9 @@ import { RecentSales } from "./modules/recent-sales";
 export default function Workbench() {
   return (
     <div className="flex flex-1 flex-col space-y-2">
+      <Button onClick={() => authService.getCurrentUser()}>
+        Get Current User
+      </Button>
       <div className="flex items-center justify-between space-y-2">
         <h2 className="font-bold text-2xl tracking-tight">
           Hi, Welcome back 👋
