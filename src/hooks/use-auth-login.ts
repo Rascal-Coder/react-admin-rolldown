@@ -58,19 +58,19 @@ export function useAuthLogin(): UseAuthLoginReturn {
 
     try {
       const publicKey = await authService.getPublicKey();
-      console.log("publicKey", publicKey);
+      // console.log("publicKey", publicKey);
       // 使用 Web Crypto API 加密（OAEP 填充）
       const encryptedPassword = await encryptWithPublicKey(
         publicKey,
         credentials.password
       );
-      console.log("encryptedPassword", encryptedPassword);
+      // console.log("encryptedPassword", encryptedPassword);
       const signInRes = await userService.signin({
         ...credentials,
         password: encryptedPassword,
         publicKey,
       });
-      console.log("signInRes", signInRes);
+      // console.log("signInRes", signInRes);
       const { accessToken, refreshToken } = signInRes;
       setUserToken({ accessToken, refreshToken });
       // // 保存 token 和用户信息

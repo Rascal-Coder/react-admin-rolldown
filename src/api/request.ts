@@ -53,12 +53,14 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
    * 刷新token逻辑
    */
   async function doRefreshToken() {
-    // const accessStore = useAccessStore();
     const { setUserToken } = userStore.getState().actions;
     const resp = await authService.refreshTokenApi();
-    const newToken = resp.accessToken;
+
+    const newToken = resp.data.accessToken;
+
     setUserToken({
       accessToken: newToken,
+      refreshToken: resp.data.refreshToken,
     });
     return newToken;
   }
@@ -94,6 +96,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       doRefreshToken,
       enableRefreshToken: true,
       formatToken,
+      // getRefreshToken: () => userStore.getState().userToken.refreshToken,
     })
   );
 

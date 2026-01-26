@@ -10,14 +10,6 @@ import { AntdAdapter } from "./theme/adapter/antd.adapter";
 
 const container = document.getElementById("root");
 
-// 移除mock
-// await worker.start({
-//   onUnhandledRequest: "bypass",
-//   serviceWorker: {
-//     url: urlJoin(GLOBAL_CONFIG.basename, "mockServiceWorker.js"),
-//   },
-// });
-
 function setupApp() {
   registerLocalIcons();
   initCopyRight();

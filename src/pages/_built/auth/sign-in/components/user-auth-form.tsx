@@ -58,7 +58,7 @@ export function UserAuthForm({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "admin1",
+      username: "admin",
       password: "123456",
       captcha: "",
     },

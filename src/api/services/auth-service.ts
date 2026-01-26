@@ -1,4 +1,5 @@
 import { baseRequestClient } from "@/api/request";
+import userStore from "@/store/user-store";
 import type { UserInfo } from "@/types/user";
 import { requestClient } from "../request";
 
@@ -14,14 +15,23 @@ const getCaptcha = () => requestClient.get<CaptchaResult>("/auth/captcha");
 const logout = () => requestClient.post<void>("/auth/logout");
 
 function refreshTokenApi() {
+  const refreshToken = userStore.getState().userToken.refreshToken;
+  console.log("refreshToken", refreshToken);
+
   return baseRequestClient.post<{
-    expire: number;
-    accessToken: string;
-    refreshExpire: number;
-    refreshToken: string;
-  }>("/auth/refresh/token", {
-    withCredentials: true,
-  });
+    data: {
+      expire: number;
+      accessToken: string;
+      refreshExpire: number;
+      refreshToken: string;
+    };
+  }>(
+    "/auth/refresh/token",
+    { refreshToken },
+    {
+      withCredentials: true,
+    }
+  );
 }
 
 /** 获取当前登录用户信息 */

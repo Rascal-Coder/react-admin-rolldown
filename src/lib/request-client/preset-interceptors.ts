@@ -55,12 +55,14 @@ export const authenticateResponseInterceptor = ({
   doRefreshToken,
   enableRefreshToken,
   formatToken,
+  // getRefreshToken,
 }: {
   client: RequestClient;
   doReAuthenticate: () => Promise<void>;
   doRefreshToken: () => Promise<string>;
   enableRefreshToken: boolean;
   formatToken: (token: string) => undefined | string;
+  // getRefreshToken: () => string | undefined;
 }): ResponseInterceptorConfig => {
   return {
     rejected: async (error) => {
@@ -71,10 +73,13 @@ export const authenticateResponseInterceptor = ({
       }
       // 判断是否启用了 refreshToken 功能
       // 如果没有启用或者已经是重试请求了，直接跳转到重新登录
+
       if (!enableRefreshToken || config.__isRetryRequest) {
         await doReAuthenticate();
+
         throw error;
       }
+
       // 如果正在刷新 token，则将请求加入队列，等待刷新完成
       if (client.isRefreshing) {
         return new Promise((resolve) => {
@@ -91,8 +96,11 @@ export const authenticateResponseInterceptor = ({
       config.__isRetryRequest = true;
 
       try {
+        // if (!refreshToken) {
+        //   await doReAuthenticate();
+        //   throw new Error("Refresh token is missing");
+        // }
         const newToken = await doRefreshToken();
-
         // 处理队列中的请求
         for (const callback of client.refreshTokenQueue) {
           callback(newToken);
@@ -138,6 +146,17 @@ export const errorMessageResponseInterceptor = (
       return Promise.reject(error);
     }
 
+    // 检查是否是业务错误（code不为0的情况）
+    // const responseData = error?.response?.data;
+    // if (responseData && typeof responseData === "object") {
+    //   const businessError = responseData?.error ?? responseData?.message;
+    //   if (businessError) {
+    //     console.log("[错误拦截器] 业务错误:", businessError);
+    //     makeErrorMessage?.(businessError, error);
+    //     return Promise.reject(error);
+    //   }
+    // }
+
     let errorMessage = "";
     const status = error?.response?.status;
 
@@ -164,7 +183,36 @@ export const errorMessageResponseInterceptor = (
       }
       default: {
         errorMessage = "服务器内部错误";
+        break;
       }
+      // case 500:
+      // case 502:
+      // case 503:
+
+      // default: {
+      //   // 如果没有status，可能是业务逻辑错误（如code不为0）
+      //   // 尝试从错误信息中提取
+      //   if (error?.message) {
+      //     try {
+      //       const parsedError = JSON.parse(error.message);
+      //       if (parsedError?.data) {
+      //         const businessError =
+      //           parsedError.data?.error ?? parsedError.data?.message;
+      //         if (businessError) {
+      //           errorMessage = businessError;
+      //         } else {
+      //           errorMessage = "请求失败";
+      //         }
+      //       } else {
+      //         errorMessage = error.message || "请求失败";
+      //       }
+      //     } catch {
+      //       errorMessage = error.message || "请求失败";
+      //     }
+      //   } else {
+      //     errorMessage = "请求失败";
+      //   }
+      // }
     }
     makeErrorMessage?.(errorMessage, error);
     return Promise.reject(error);
