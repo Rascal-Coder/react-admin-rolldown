@@ -66,7 +66,6 @@ export function RecentSales() {
       <CardContent>
         <div className="space-y-8">
           {salesData.map((sale, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: false
             <div className="flex items-center" key={index}>
               <Avatar className="h-9 w-9">
                 <AvatarImage alt="Avatar" src={sale.avatar} />
@@ -95,7 +94,6 @@ function RecentSalesSkeleton() {
       <CardContent>
         <div className="space-y-8">
           {Array.from({ length: 5 }).map((_, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: false
             <div className="flex items-center" key={i}>
               <Skeleton className="h-9 w-9 rounded-full" /> {/* Avatar */}
               <div className="ml-4 space-y-1">

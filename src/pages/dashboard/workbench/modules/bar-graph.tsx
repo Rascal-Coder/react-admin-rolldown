@@ -199,7 +199,6 @@ export function BarGraphSkeleton() {
           {Array.from({ length: 12 }).map((_, i) => (
             <Skeleton
               className="w-full"
-              // biome-ignore lint/suspicious/noArrayIndexKey: false
               key={i}
               style={{
                 height: `${Math.max(20, Math.random() * 100)}%`,

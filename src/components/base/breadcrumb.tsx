@@ -1,5 +1,3 @@
-/** biome-ignore-all lint:a11y/useFocusableInteractive */
-/** biome-ignore-all lint:a11y/useSemanticElements */
 import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 import type * as React from "react";
@@ -13,7 +11,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
   return (
     <ol
       className={cn(
-        "text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm wrap-break-word sm:gap-2.5",
+        "wrap-break-word flex flex-wrap items-center gap-1.5 text-muted-foreground text-sm sm:gap-2.5",
         className
       )}
       data-slot="breadcrumb-list"
@@ -43,7 +41,7 @@ function BreadcrumbLink({
 
   return (
     <Comp
-      className={cn("hover:text-foreground transition-colors", className)}
+      className={cn("transition-colors hover:text-foreground", className)}
       data-slot="breadcrumb-link"
       {...props}
     />
@@ -55,7 +53,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
     <span
       aria-current="page"
       aria-disabled="true"
-      className={cn("text-foreground font-normal", className)}
+      className={cn("font-normal text-foreground", className)}
       data-slot="breadcrumb-page"
       role="link"
       {...props}

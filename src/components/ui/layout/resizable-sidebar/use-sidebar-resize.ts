@@ -249,7 +249,6 @@ export function useSidebarResize({
 
   // Handle mouse movement and resizing
   React.useEffect(() => {
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: we need to keep this complex for the logic
     const handleMouseMove = (e: MouseEvent) => {
       if (!isInteractingWithRail.current) {
         return;

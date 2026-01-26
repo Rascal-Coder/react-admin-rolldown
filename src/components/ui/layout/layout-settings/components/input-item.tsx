@@ -48,7 +48,6 @@ export function InputItem({
   };
 
   return (
-    // biome-ignore lint/a11y/useSemanticElements: no need to semantic element
     <div
       aria-disabled={disabled}
       className={cn(

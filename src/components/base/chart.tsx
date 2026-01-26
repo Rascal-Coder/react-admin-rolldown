@@ -191,7 +191,6 @@ const ChartTooltipContent: React.FC<ChartTooltipContentProps> = ({
       <div className="grid gap-1.5">
         {payload
           .filter((item: any) => item.type !== "none")
-          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: false
           .map((item: any, index: number) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);

@@ -1,5 +1,3 @@
-/** biome-ignore-all lint:a11y/noSvgWithoutTitle */
-
 import { cn } from "@/utils";
 import type { LayoutTabItemProps } from "../../types";
 import "./chrome-like-tab-item.css";
@@ -9,7 +7,7 @@ import TabActionButton from "../tab-action-button";
 function ChromeTabBackground() {
   return (
     <svg
-      className="w-full h-full"
+      className="h-full w-full"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -62,20 +60,20 @@ export function ChromeLikeTabItem({
     >
       <div
         className={cn(
-          "absolute top-1/2 left-0 w-px h-3.5 -translate-y-1/2 bg-border",
+          "-translate-y-1/2 absolute top-1/2 left-0 h-3.5 w-px bg-border",
           {
             "layout-tabs-chrome-tab-item-divider": true,
           }
         )}
       />
-      <div className="absolute top-1 -left-2.5 -right-2.5 bottom-0 text-transparent group-[.active]:text-background opacity-0 group-[.active]:opacity-100 overflow-hidden pointer-events-none transition-[opacity,color] duration-20">
+      <div className="-left-2.5 -right-2.5 pointer-events-none absolute top-1 bottom-0 overflow-hidden text-transparent opacity-0 transition-[opacity,color] duration-20 group-[.active]:text-background group-[.active]:opacity-100">
         <ChromeTabBackground />
       </div>
-      <div className="relative w-full h-full px-1 pt-2 pb-1">
-        <div className="flex-y-center h-full px-1 text-foreground hover:text-foreground/70 hover:bg-background group-[.active]:text-primary group-[.active]:hover:text-primary group-[.active]:hover:bg-background leading-none overflow-hidden rounded-md">
-          <div className="flex-1 truncate text-sm flex-y-center gap-1.5">
+      <div className="relative h-full w-full px-1 pt-2 pb-1">
+        <div className="h-full flex-y-center overflow-hidden rounded-md px-1 text-foreground leading-none hover:bg-background hover:text-foreground/70 group-[.active]:text-primary group-[.active]:hover:bg-background group-[.active]:hover:text-primary">
+          <div className="flex-1 flex-y-center gap-1.5 truncate text-sm">
             {tab.icon && <Icon icon={tab.icon} size={16} />}
-            <span className="truncate text-sm flex-1" title={tab.title || ""}>
+            <span className="flex-1 truncate text-sm" title={tab.title || ""}>
               {tab.title}
             </span>
           </div>

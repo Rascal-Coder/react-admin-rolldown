@@ -57,7 +57,6 @@ function Slider({
         />
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: use index as key
         <Tooltip key={index} open={tooltipMode === "always" ? true : undefined}>
           <TooltipTrigger asChild>
             <SliderPrimitive.Thumb
