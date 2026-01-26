@@ -102,7 +102,7 @@ export function InputItem({
         {value && !disabled && (
           <button
             aria-label="清除输入"
-            className="absolute top-1/2 right-2 flex size-3 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-muted"
+            className="-translate-y-1/2 absolute top-1/2 right-2 flex size-3 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-muted"
             onClick={handleClear}
             type="button"
           >

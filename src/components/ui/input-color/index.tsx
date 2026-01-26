@@ -573,7 +573,7 @@ export default function InputColor({
             <div className="color-picker space-y-3">
               <div className="relative">
                 <Button
-                  className="absolute -top-1.5 -left-1 z-10 flex h-7 w-7 items-center gap-1 bg-transparent hover:bg-transparent"
+                  className="-top-1.5 -left-1 absolute z-10 flex h-7 w-7 items-center gap-1 bg-transparent hover:bg-transparent"
                   disabled={!isEyeDropperAvailable()}
                   onClick={handleEyeDropper}
                   size="icon"

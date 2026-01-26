@@ -72,7 +72,7 @@ export default function ThemePresets() {
               label: preset,
               content: (
                 <svg
-                  className="h-8 w-full transition-transform duration-500 ease-out group-data-[state=checked]:rotate-0 group-data-[state=unchecked]:-rotate-45"
+                  className="group-data-[state=unchecked]:-rotate-45 h-8 w-full transition-transform duration-500 ease-out group-data-[state=checked]:rotate-0"
                   viewBox="0 0 100 100"
                   xmlns="http://www.w3.org/2000/svg"
                 >

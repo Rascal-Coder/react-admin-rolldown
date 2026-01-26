@@ -28,7 +28,7 @@ export function PasswordInput({
         {...props}
       />
       <Button
-        className="absolute end-1 top-1/2 h-6 w-6 -translate-y-1/2 rounded-md text-muted-foreground"
+        className="-translate-y-1/2 absolute end-1 top-1/2 h-6 w-6 rounded-md text-muted-foreground"
         disabled={disabled}
         onClick={() => setShowPassword((prev) => !prev)}
         size="icon"

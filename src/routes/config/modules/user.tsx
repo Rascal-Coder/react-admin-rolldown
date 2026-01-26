@@ -26,6 +26,12 @@ const userRoutes: RouteConfig[] = [
         icon: "lucide:user-circle",
         hidden: true, // 动态路由通常隐藏在菜单中
       },
+      {
+        path: "profile",
+        lazy: createLazyComponent("/pages/user/profile"),
+        name: "个人资料",
+        icon: "lucide:user-pen",
+      },
     ],
   },
 ];

@@ -55,7 +55,7 @@ export function LayoutHeader({
       className={cn(
         "transition-all duration-300 ease-in-out",
         contentFullscreen &&
-          "pointer-events-none h-0 -translate-y-full opacity-0"
+          "-translate-y-full pointer-events-none h-0 opacity-0"
       )}
     >
       <Header

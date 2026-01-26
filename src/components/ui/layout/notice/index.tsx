@@ -77,7 +77,7 @@ export default function NoticeButton() {
           <Bell />
         </Button>
         <Badge
-          className="absolute -top-2 -right-2"
+          className="-top-2 -right-2 absolute"
           shape="circle"
           variant="destructive"
         >
@@ -164,7 +164,7 @@ function NotificationAvatar({ notification }: { notification: Notification }) {
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-bg-neutral font-medium text-sm">
           CH
         </div>
-        <div className="absolute -right-1 bottom-1 h-2 w-2 rounded-full border-2 bg-green-500" />
+        <div className="-right-1 absolute bottom-1 h-2 w-2 rounded-full border-2 bg-green-500" />
       </div>
     );
   }
@@ -358,7 +358,7 @@ function NotificationTask({
             ))}
           </div>
         </div>
-        <div className="flex -space-x-2">
+        <div className="-space-x-2 flex">
           {Array.from({ length: notification.assignees }).map((_, i) => (
             <div
               className="h-6 w-6 rounded-full border-2 bg-bg-neutral"

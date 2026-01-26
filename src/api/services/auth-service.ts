@@ -1,5 +1,7 @@
 import { baseRequestClient } from "@/api/request";
+import type { UserInfo } from "@/types/user";
 import { requestClient } from "../request";
+
 export interface CaptchaResult {
   id: string;
   imageBase64: string;
@@ -22,7 +24,8 @@ function refreshTokenApi() {
   });
 }
 
-const getCurrentUser = () => requestClient.get("/auth/current/user");
+/** 获取当前登录用户信息 */
+const getCurrentUser = () => requestClient.get<UserInfo>("/auth/current/user");
 
 export default {
   getPublicKey,

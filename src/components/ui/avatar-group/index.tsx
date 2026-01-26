@@ -65,7 +65,7 @@ export function AvatarGroup({ children, max, size }: AvatarGroupProps) {
   };
 
   return (
-    <div className="flex -space-x-3">
+    <div className="-space-x-3 flex">
       {displayAvatars.map((child, idx) => (
         <div key={idx}>{cloneAvatarWithSize(child)}</div>
       ))}
