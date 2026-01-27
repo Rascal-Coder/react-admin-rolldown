@@ -11,6 +11,23 @@ declare namespace API {
     bucket: string;
   };
 
+  type FileVO = {
+    /** 主键ID */
+    id?: string;
+    /** 文件名 */
+    fileName?: string;
+    /** 文件路径 */
+    filePath?: string;
+    /** 外键名称 */
+    pkName?: string;
+    /** 外键值 */
+    pkValue?: string;
+    /** 创建时间 */
+    createDate?: string;
+    /** 更新时间 */
+    updateDate?: string;
+  };
+
   type LoginDTO = {
     /** 登录账号 */
     accountNumber?: string;
@@ -98,8 +115,8 @@ declare namespace API {
     email?: string;
     /** 性别（0:女，1:男） */
     sex?: number;
-    /** 头像路径 */
-    avatarPath?: string;
+    /** 头像文件信息 */
+    avatarEntity?: FileVO;
     /** 创建时间 */
     createDate?: string;
     /** 更新时间 */
