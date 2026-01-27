@@ -31,11 +31,6 @@ export interface UpdateUserInfoReq {
   avatar?: number;
 }
 
-// export enum UserApi {
-//   SignIn = "/auth/login",
-//   User = "/user",
-// }
-
 const signin = (data: SignInReq) =>
   requestClient.post<SignInRes>("/auth/login", data);
 

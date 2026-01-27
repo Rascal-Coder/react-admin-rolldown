@@ -116,5 +116,5 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 }
 
 export const requestClient = createRequestClient("/api", {
-  responseReturn: "body",
+  responseReturn: "data",
 });

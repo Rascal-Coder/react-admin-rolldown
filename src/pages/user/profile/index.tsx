@@ -156,14 +156,14 @@ export default function UserProfile() {
     try {
       const result = await fileService.uploadAvatar(file);
 
-      if (!userInfo.id) {
-        toast.error("用户信息不完整，请重新登录");
-        return;
-      }
+      // if (!userInfo.id) {
+      //   toast.error("用户信息不完整，请重新登录");
+      //   return;
+      // }
 
       // 更新用户头像
       await userService.updateUserInfo({
-        id: userInfo.id,
+        id: userInfo.id || "",
         userName: userInfo.userName,
         nickName: userInfo.nickName,
         email: userInfo.email,
@@ -495,42 +495,6 @@ export default function UserProfile() {
                   </FormItem>
                 )}
               />
-
-              {/* 只读信息展示 */}
-              {userInfo.id && (
-                <div className="rounded-lg bg-muted/50 p-4">
-                  <Text className="mb-2" color="secondary" variant="caption">
-                    账户信息
-                  </Text>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Text color="secondary" variant="caption">
-                        用户 ID
-                      </Text>
-                      <Text color="default" variant="body2">
-                        {userInfo.id}
-                      </Text>
-                    </div>
-                    {userInfo.roles && userInfo.roles.length > 0 && (
-                      <div>
-                        <Text color="secondary" variant="caption">
-                          角色
-                        </Text>
-                        <div className="flex flex-wrap gap-1">
-                          {userInfo.roles.map((role) => (
-                            <span
-                              className="rounded-full bg-primary/10 px-2 py-0.5 text-primary text-xs"
-                              key={role.id}
-                            >
-                              {role.name}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
 
               {/* 提交按钮 */}
               <div className="flex justify-end gap-3">
