@@ -57,18 +57,18 @@ export function useAuthLogin(): UseAuthLoginReturn {
     setIsLoading(true);
 
     try {
-      const publicKey = await authService.getPublicKey();
+      const res = await authService.getPublicKey();
       // console.log("publicKey", publicKey);
       // 使用 Web Crypto API 加密（OAEP 填充）
       const encryptedPassword = await encryptWithPublicKey(
-        publicKey,
+        res.publicKey,
         credentials.password
       );
       // console.log("encryptedPassword", encryptedPassword);
       const signInRes = await userService.signin({
         ...credentials,
         password: encryptedPassword,
-        publicKey,
+        publicKey: res.publicKey,
       });
       // console.log("signInRes", signInRes);
       const { accessToken, refreshToken } = signInRes;

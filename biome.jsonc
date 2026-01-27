@@ -2,20 +2,22 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite/core", "ultracite/react"],
   "files": {
-    "includes": ["!public"]
+    "includes": ["!public", "!scripts"]
   },
   "linter": {
     "rules": {
       "style": {
         "useConsistentMemberAccessibility": "off",
         "useConsistentTypeDefinitions": "off",
-        "noEnum": "off"
+        "noEnum": "off",
+        "noNamespace": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",
         "noEmptyBlockStatements": "off",
         "noDocumentCookie": "off",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "useAwait": "off"
       },
       "a11y": {
         "noNoninteractiveElementInteractions": "off",

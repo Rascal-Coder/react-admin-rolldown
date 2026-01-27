@@ -8,7 +8,11 @@ export interface CaptchaResult {
   imageBase64: string;
 }
 
-const getPublicKey = () => requestClient.get<string>("/auth/publicKey");
+export interface PublicKeyResult {
+  publicKey: string;
+}
+const getPublicKey = () =>
+  requestClient.get<PublicKeyResult>("/auth/publicKey");
 
 const getCaptcha = () => requestClient.get<CaptchaResult>("/auth/captcha");
 
