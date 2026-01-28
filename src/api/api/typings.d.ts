@@ -37,6 +37,29 @@ declare namespace API {
     captchaId?: string;
     /** 验证码 */
     captcha?: string;
+    /** 公钥 */
+    publicKey?: string;
+  };
+
+  type MenuDTO = {
+    id?: string;
+  };
+
+  type menuMenucontrollerChildrenParams = {
+    parentId?: string;
+  };
+
+  type menuMenucontrollerGetallocinterfacebymenuParams = {
+    menuId?: string;
+  };
+
+  type menuMenucontrollerPageParams = {
+    size?: number;
+    page?: number;
+  };
+
+  type menuMenucontrollerRemoveParams = {
+    id: string;
   };
 
   type PublicKeyVO = {
@@ -56,6 +79,43 @@ declare namespace API {
     email?: string;
     /** 邮箱验证码 */
     emailCaptcha?: string;
+  };
+
+  type RoleDTO = {
+    id?: string;
+  };
+
+  type RoleMenuDTO = {
+    /** 角色id */
+    roleId?: string;
+    /** 菜单id列表 */
+    menuIds?: any;
+  };
+
+  type RolePageDTO = {
+    /** page */
+    page?: number;
+    /** pageSize */
+    size?: number;
+    code?: string;
+    name?: string;
+  };
+
+  type roleRolecontrollerGetmenusbyroleidParams = {
+    id?: string;
+  };
+
+  type roleRolecontrollerPageParams = {
+    /** page */
+    page?: number;
+    /** pageSize */
+    size?: number;
+    code?: string;
+    name?: string;
+  };
+
+  type roleRolecontrollerRemoveParams = {
+    id: string;
   };
 
   type TokenVO = {

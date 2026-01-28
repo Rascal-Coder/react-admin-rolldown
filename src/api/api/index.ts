@@ -2,9 +2,13 @@
 // API 唯一标识：
 import * as auth from "./auth";
 import * as file from "./file";
+import * as menu from "./menu";
+import * as role from "./role";
 import * as user from "./user";
 export default {
   auth,
   file,
+  menu,
+  role,
   user,
 };

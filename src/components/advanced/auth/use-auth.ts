@@ -1,4 +1,4 @@
-import { useUserInfo, useUserToken } from "@/store/user-store";
+import { useUserToken } from "@/store/user-store";
 
 /**
  * permission/role check hook
@@ -20,10 +20,10 @@ import { useUserInfo, useUserToken } from "@/store/user-store";
  */
 export const useAuthCheck = (baseOn: "role" | "permission" = "permission") => {
   const { accessToken } = useUserToken();
-  const { permissions = [], roles = [] } = useUserInfo();
+  // const { permissions = [], roles = [] } = useUserInfo();
 
   // depends on baseOn to select resource pool
-  const resourcePool = baseOn === "role" ? roles : permissions;
+  const resourcePool = baseOn === "role" ? [] : [];
 
   // check if item exists
   const check = (item: string): boolean => {
@@ -31,7 +31,7 @@ export const useAuthCheck = (baseOn: "role" | "permission" = "permission") => {
     if (!accessToken) {
       return false;
     }
-    return resourcePool.some((p) => p.code === item);
+    return resourcePool.some((p: any) => p.code === item);
   };
 
   // check if any item exists

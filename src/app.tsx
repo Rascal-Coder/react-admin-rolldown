@@ -4,7 +4,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Outlet } from "react-router";
 import { DirectionProvider } from "@/context/direction/direction-provider";
-import { filterRoutesByRole } from "@/routes/utils/permission-filter";
 import { MotionLazy } from "./components/ui/animate/motion-lazy";
 import { CheckUpdate } from "./components/ui/check-update";
 import { ErrorFallback } from "./components/ui/error-fallback";
@@ -13,15 +12,14 @@ import Toast from "./components/ui/toast";
 import { GLOBAL_CONFIG } from "./global-config";
 import { useRouter } from "./hooks/use-router";
 import { useMenuActions } from "./store/menu-store";
-import { useAppSettings } from "./store/setting-store";
-import { useUserRoles, useUserToken } from "./store/user-store";
+import { useUserToken } from "./store/user-store";
 import { generateMenuItems } from "./utils/menu";
 
 function App() {
   const { curRoute, routes: routerRoutes } = useRouter();
   const { setMenuData } = useMenuActions();
-  const { showAllMenuWith403 } = useAppSettings();
-  const roles = useUserRoles();
+  // const { showAllMenuWith403 } = useAppSettings();
+  // const roles = useUserRoles();
   const { accessToken } = useUserToken();
   useEffect(() => {
     // 根据偏好设置决定菜单生成策略：
@@ -30,12 +28,12 @@ function App() {
     if (!accessToken) {
       return;
     }
-    const routesForMenu = showAllMenuWith403
-      ? routerRoutes
-      : filterRoutesByRole(routerRoutes, roles);
-    const menuData = generateMenuItems(routesForMenu);
+    // const routesForMenu = showAllMenuWith403
+    //   ? routerRoutes
+    //   : filterRoutesByRole(routerRoutes, roles);
+    const menuData = generateMenuItems(routerRoutes);
     setMenuData(menuData);
-  }, [accessToken, routerRoutes, roles, showAllMenuWith403, setMenuData]);
+  }, [accessToken, routerRoutes, setMenuData]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>

@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { auth_authcontroller_login } from "@/api/api/auth";
 import authService from "@/api/services/auth-service";
 import type { SignInReq } from "@/api/services/user-service";
-import userService from "@/api/services/user-service";
 import { useUserActions } from "@/store/user-store";
 export interface UseAuthLoginReturn {
   /**
@@ -65,7 +65,7 @@ export function useAuthLogin(): UseAuthLoginReturn {
         credentials.password
       );
       // console.log("encryptedPassword", encryptedPassword);
-      const signInRes = await userService.signin({
+      const signInRes = await auth_authcontroller_login({
         ...credentials,
         password: encryptedPassword,
         publicKey: res.publicKey,

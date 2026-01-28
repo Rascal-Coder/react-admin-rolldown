@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { auth_authcontroller_getcurrentuser } from "@/api/api/auth";
 import authService from "@/api/services/auth-service";
 import fileService, { getAvatarUrl } from "@/api/services/file-service";
 import userService from "@/api/services/user-service";
@@ -88,7 +89,7 @@ export default function UserProfile() {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const currentUser = await authService.getCurrentUser();
+        const currentUser = await auth_authcontroller_getcurrentuser();
         // 更新 store
         setUserInfo(currentUser);
         // 更新表单默认值
@@ -101,9 +102,6 @@ export default function UserProfile() {
         });
         // 更新头像预览
         setAvatarPreview(getAvatarUrl(currentUser));
-      } catch (error) {
-        console.error("获取用户信息失败:", error);
-        toast.error("获取用户信息失败");
       } finally {
         setIsFetching(false);
       }
