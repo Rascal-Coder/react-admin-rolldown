@@ -22,7 +22,7 @@ export function CapsuleBreadcrumb({
     if (finalPath === currentPath) {
       return;
     }
-    navigate.push(href);
+    navigate.push(finalPath);
   };
 
   return (

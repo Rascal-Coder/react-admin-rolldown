@@ -23,7 +23,7 @@ export function RibbonBreadcrumb({
     if (finalPath === currentPath) {
       return;
     }
-    navigate.push(href);
+    navigate.push(finalPath);
   };
   return (
     <BreadcrumbBase className="p-1">
