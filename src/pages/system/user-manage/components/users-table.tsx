@@ -73,18 +73,10 @@ export default function UsersTable({ data }: DataTableProps) {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-  // const columnVisibilityState = table.getState().columnVisibility;
 
-  const filterColumns = table
-    .getAllColumns()
-    .filter(
-      (column) =>
-        typeof column.accessorFn !== "undefined" && column.getCanHide()
-    );
   return (
     <div className='space-y-4 max-sm:has-[div[role="toolbar"]]:mb-16'>
       <DataTableToolbar
-        filterColumns={filterColumns}
         filters={[
           {
             columnId: "status",
@@ -169,7 +161,7 @@ export default function UsersTable({ data }: DataTableProps) {
         </Table>
       </div>
       <DataTablePagination table={table} />
-      <DataTableBulkActions rowSelection={rowSelection} table={table} />
+      <DataTableBulkActions table={table} />
     </div>
   );
 }

@@ -15,12 +15,6 @@ type DataTableBulkActionsProps<TData> = {
   table: Table<TData>;
   entityName: string;
   children: React.ReactNode;
-  /**
-   * The number of selected rows. When this is 0 the toolbar will not render.
-   * This is calculated by the caller to avoid any issues with internal
-   * react-table selection models.
-   */
-  selectedCount: number;
 };
 
 /**
@@ -37,8 +31,9 @@ export function DataTableBulkActions<TData>({
   table,
   entityName,
   children,
-  selectedCount,
 }: DataTableBulkActionsProps<TData>): React.ReactNode | null {
+  const selectedRows = table.getFilteredSelectedRowModel().rows;
+  const selectedCount = selectedRows.length;
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [announcement, setAnnouncement] = useState("");
 

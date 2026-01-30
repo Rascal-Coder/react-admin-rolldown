@@ -1,4 +1,4 @@
-import type { RowSelectionState, Table } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/base/button";
@@ -12,27 +12,16 @@ import { UsersMultiDeleteDialog } from "./users-multi-delete-dialog";
 
 type DataTableBulkActionsProps<TData> = {
   table: Table<TData>;
-  rowSelection: RowSelectionState;
 };
 
 export function DataTableBulkActions<TData>({
   table,
-  rowSelection,
 }: DataTableBulkActionsProps<TData>) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const selectedRowIds = Object.keys(rowSelection ?? {});
-  const selectedCount = selectedRowIds.length;
-
-  // Derive selected rows from current row model to avoid issues with
-  // filtered selection APIs and ensure it always reflects latest state.
 
   return (
     <>
-      <BulkActionsToolbar
-        entityName="user"
-        selectedCount={selectedCount}
-        table={table}
-      >
+      <BulkActionsToolbar entityName="user" table={table}>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

@@ -1,5 +1,5 @@
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import type { Column } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
 import { Button } from "@/components/base/button";
 import {
   DropdownMenu,
@@ -11,11 +11,11 @@ import {
 import Icon from "../icon/icon";
 
 type DataTableViewOptionsProps<TData> = {
-  filterColumns: Column<TData>[];
+  table: Table<TData>;
 };
 
 export function DataTableViewOptions<TData>({
-  filterColumns,
+  table,
 }: DataTableViewOptionsProps<TData>) {
   return (
     <DropdownMenu modal={false}>
@@ -32,16 +32,22 @@ export function DataTableViewOptions<TData>({
       <DropdownMenuContent align="end" className="w-[150px]">
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {filterColumns.map((column) => (
-          <DropdownMenuCheckboxItem
-            checked={column.getIsVisible()}
-            className="capitalize"
-            key={column.id}
-            onCheckedChange={(value) => column.toggleVisibility(!!value)}
-          >
-            {column.id}
-          </DropdownMenuCheckboxItem>
-        ))}
+        {table
+          .getAllColumns()
+          .filter(
+            (column) =>
+              typeof column.accessorFn !== "undefined" && column.getCanHide()
+          )
+          .map((column) => (
+            <DropdownMenuCheckboxItem
+              checked={column.getIsVisible()}
+              className="capitalize"
+              key={column.id}
+              onCheckedChange={(value) => column.toggleVisibility(!!value)}
+            >
+              {column.id}
+            </DropdownMenuCheckboxItem>
+          ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
