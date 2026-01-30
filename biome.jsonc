@@ -10,7 +10,8 @@
         "useConsistentMemberAccessibility": "off",
         "useConsistentTypeDefinitions": "off",
         "noEnum": "off",
-        "noNamespace": "off"
+        "noNamespace": "off",
+        "useDefaultSwitchClause": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",
