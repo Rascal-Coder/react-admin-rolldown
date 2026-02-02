@@ -1,10 +1,10 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/base/badge";
+import dayjs from "dayjs";
 import { Checkbox } from "@/components/base/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table/column-header";
 import { LongText } from "@/components/ui/long-text";
+import { UserSex } from "@/types/user";
 import { cn } from "@/utils";
-import { callTypes, roles } from "../data/data";
 import type { User } from "../data/schema";
 import { DataTableRowActions } from "./data-table-row-actions";
 
@@ -37,95 +37,110 @@ export const usersColumns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "username",
+    accessorKey: "userName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Username" />
+      <DataTableColumnHeader column={column} title="用户名称" />
     ),
     cell: ({ row }) => (
-      <LongText className="max-w-36 ps-3">{row.getValue("username")}</LongText>
+      <LongText className="max-w-36 ps-3">{row.getValue("userName")}</LongText>
     ),
     meta: {
       className: cn(
         "drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)]",
-        "sticky start-6 @4xl/content:table-cell @4xl/content:drop-shadow-none"
+        "sticky start-6 @4xl/content:table-cell @4xl/content:drop-shadow-none",
+        "w-36 min-w-36"
       ),
+      title: "用户名称",
     },
     enableHiding: false,
   },
   {
-    id: "fullName",
+    accessorKey: "avatarEntity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="头像" />
     ),
     cell: ({ row }) => {
-      const { firstName, lastName } = row.original;
-      const fullName = `${firstName} ${lastName}`;
-      return <LongText className="max-w-36">{fullName}</LongText>;
+      const avatar = row.getValue("avatarEntity") as API.FileVO;
+      if (!avatar) {
+        return <div>-</div>;
+      }
+      return <div className="text-nowrap">{avatar.fileName}</div>;
     },
-    meta: { className: "w-36" },
+    meta: {
+      title: "头像",
+    },
+    enableSorting: false,
+  },
+  {
+    accessorKey: "nickName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="昵称" />
+    ),
+    cell: ({ row }) => (
+      <LongText className="max-w-36">{row.getValue("nickName")}</LongText>
+    ),
+    meta: {
+      title: "昵称",
+    },
   },
   {
     accessorKey: "email",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
+      <DataTableColumnHeader column={column} title="邮箱" />
     ),
     cell: ({ row }) => (
       <div className="w-fit text-nowrap">{row.getValue("email")}</div>
     ),
+    meta: {
+      title: "邮箱",
+    },
   },
   {
     accessorKey: "phoneNumber",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phone Number" />
+      <DataTableColumnHeader column={column} title="手机号" />
     ),
     cell: ({ row }) => <div>{row.getValue("phoneNumber")}</div>,
-    enableSorting: false,
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => {
-      const { status } = row.original;
-      const badgeColor = callTypes.get(status);
-      return (
-        <div className="flex space-x-2">
-          <Badge className={cn("capitalize", badgeColor)} variant="outline">
-            {row.getValue("status")}
-          </Badge>
-        </div>
-      );
+    meta: {
+      title: "手机号",
     },
-    filterFn: (row, id, value) => value.includes(row.getValue(id)),
-    enableHiding: false,
-    enableSorting: false,
   },
   {
-    accessorKey: "role",
+    accessorKey: "sex",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Role" />
+      <DataTableColumnHeader column={column} title="性别" />
     ),
     cell: ({ row }) => {
-      const { role } = row.original;
-      const userType = roles.find(({ value }) => value === role);
-
-      if (!userType) {
-        return null;
+      const sex = row.getValue("sex") as number;
+      let sexText = "-";
+      if (sex === UserSex.Male) {
+        sexText = "男";
+      } else if (sex === UserSex.Female) {
+        sexText = "女";
       }
-
-      return (
-        <div className="flex items-center gap-x-2">
-          {userType.icon && (
-            <userType.icon className="text-muted-foreground" size={16} />
-          )}
-          <span className="text-sm capitalize">{row.getValue("role")}</span>
-        </div>
-      );
+      return <div>{sexText}</div>;
     },
-    filterFn: (row, id, value) => value.includes(row.getValue(id)),
+    meta: {
+      title: "性别",
+    },
     enableSorting: false,
-    enableHiding: false,
+  },
+  {
+    accessorKey: "createDate",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="创建时间" />
+    ),
+    cell: ({ row }) => {
+      const date = row.getValue("createDate") as Date;
+      if (!date) {
+        return <div>-</div>;
+      }
+      const formattedDate = dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+      return <div className="text-nowrap">{formattedDate}</div>;
+    },
+    meta: {
+      title: "创建时间",
+    },
   },
   {
     id: "actions",

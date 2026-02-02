@@ -24,7 +24,6 @@ import {
 import { DataTablePagination } from "@/components/ui/data-table/pagination";
 import { DataTableToolbar } from "@/components/ui/data-table/toolbar";
 import { cn } from "@/utils";
-import { roles } from "../data/data";
 import type { User } from "../data/schema";
 import { DataTableBulkActions } from "./data-table-bulk-actions";
 import { usersColumns as columns } from "./users-columns";
@@ -32,7 +31,8 @@ import { usersColumns as columns } from "./users-columns";
 declare module "@tanstack/react-table" {
   // biome-ignore lint/correctness/noUnusedVariables: only for type declaration
   interface ColumnMeta<TData, TValue> {
-    className: string;
+    className?: string;
+    title?: string;
   }
 }
 
@@ -77,24 +77,24 @@ export default function UsersTable({ data }: DataTableProps) {
   return (
     <div className='space-y-4 max-sm:has-[div[role="toolbar"]]:mb-16'>
       <DataTableToolbar
-        filters={[
-          {
-            columnId: "status",
-            title: "Status",
-            options: [
-              { label: "Active", value: "active" },
-              { label: "Inactive", value: "inactive" },
-              { label: "Invited", value: "invited" },
-              { label: "Suspended", value: "suspended" },
-            ],
-          },
-          {
-            columnId: "role",
-            title: "Role",
-            options: roles.map((role) => ({ ...role })),
-          },
-        ]}
-        searchKey="username"
+        // filters={[
+        //   {
+        //     columnId: "status",
+        //     title: "Status",
+        //     options: [
+        //       { label: "Active", value: "active" },
+        //       { label: "Inactive", value: "inactive" },
+        //       { label: "Invited", value: "invited" },
+        //       { label: "Suspended", value: "suspended" },
+        //     ],
+        //   },
+        //   {
+        //     columnId: "role",
+        //     title: "Role",
+        //     options: roles.map((role) => ({ ...role })),
+        //   },
+        // ]}
+        searchKey="userName"
         searchPlaceholder="Filter users..."
         table={table}
       />
