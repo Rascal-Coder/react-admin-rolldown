@@ -39,7 +39,8 @@
         "noReactForwardRef": "warn"
       },
       "correctness": {
-        "useExhaustiveDependencies": "warn"
+        "useExhaustiveDependencies": "warn",
+        "noUnknownTypeSelector": "off"
       }
     }
   }

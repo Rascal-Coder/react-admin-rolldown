@@ -113,3 +113,9 @@
   );
   --sidebar-ring: var(--colors-palette-primary-default);
 }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}

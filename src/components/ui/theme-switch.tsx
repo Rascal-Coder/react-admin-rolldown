@@ -1,4 +1,5 @@
 import { Check, Moon, Sun } from "lucide-react";
+import { flushSync } from "react-dom";
 import { useAppSettings, useSettingsActions } from "@/store/setting-store";
 import { ThemeMode } from "@/types/enum";
 // import { ThemeMode } from "@/theme/type";
@@ -10,6 +11,67 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../base/dropdown-menu";
+
+type Direction = "btt" | "ttb" | "ltr" | "rtl";
+
+function getClipKeyframes(direction: Direction): [string, string] {
+  switch (direction) {
+    case "ltr":
+      return ["inset(0 100% 0 0)", "inset(0 0 0 0)"];
+    case "rtl":
+      return ["inset(0 0 0 100%)", "inset(0 0 0 0)"];
+    case "ttb":
+      return ["inset(0 0 100% 0)", "inset(0 0 0 0)"];
+    case "btt":
+      return ["inset(100% 0 0 0)", "inset(0 0 0 0)"];
+    default:
+      return ["inset(0 100% 0 0)", "inset(0 0 0 0)"];
+  }
+}
+
+function getSystemEffective(): "light" | "dark" {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
+
+async function toggleThemeWithTransition(
+  next: ThemeMode,
+  update: (mode: ThemeMode) => void,
+  direction: Direction = "ttb"
+) {
+  const resolvedFn = () => {
+    if (next === ThemeMode.System) {
+      return getSystemEffective();
+    }
+    return next === ThemeMode.Dark ? ThemeMode.Dark : ThemeMode.Light;
+  };
+  const resolved = resolvedFn();
+  const [fromClip, toClip] = getClipKeyframes(direction);
+
+  if (!document.startViewTransition) {
+    document.documentElement.dataset.themeMode = resolved;
+    update(next);
+    return;
+  }
+
+  await document.startViewTransition(() => {
+    flushSync(() => {
+      document.documentElement.dataset.themeMode = resolved;
+    });
+  }).ready;
+
+  await document.documentElement.animate(
+    { clipPath: [fromClip, toClip] },
+    {
+      duration: 700,
+      easing: "ease-in-out",
+      pseudoElement: "::view-transition-new(root)",
+    }
+  ).finished;
+
+  update(next);
+}
 
 export function ThemeSwitch() {
   const settings = useAppSettings();
@@ -28,12 +90,14 @@ export function ThemeSwitch() {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() =>
-            updateAppSettings({
-              themeMode: ThemeMode.Light,
-            })
+            toggleThemeWithTransition(ThemeMode.Light, (mode) =>
+              updateAppSettings({
+                themeMode: mode,
+              })
+            )
           }
         >
-          Light{" "}
+          Light
           <Check
             className={cn("ms-auto", themeMode !== ThemeMode.Light && "hidden")}
             size={14}
@@ -41,9 +105,11 @@ export function ThemeSwitch() {
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
-            updateAppSettings({
-              themeMode: ThemeMode.Dark,
-            })
+            toggleThemeWithTransition(ThemeMode.Dark, (mode) =>
+              updateAppSettings({
+                themeMode: mode,
+              })
+            )
           }
         >
           Dark
@@ -53,10 +119,16 @@ export function ThemeSwitch() {
           />
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() =>
-            updateAppSettings({
-              themeMode: ThemeMode.System,
-            })
+          onClick={
+            () =>
+              toggleThemeWithTransition(ThemeMode.System, (mode) =>
+                updateAppSettings({
+                  themeMode: mode,
+                })
+              )
+            // updateAppSettings({
+            //   themeMode: ThemeMode.System,
+            // })
           }
         >
           System
