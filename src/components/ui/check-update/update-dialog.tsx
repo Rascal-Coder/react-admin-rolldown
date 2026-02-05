@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/base/dialog";
+} from "@/components/ui/dialog";
 
 interface UpdateDialogProps {
   open: boolean;

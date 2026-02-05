@@ -3,14 +3,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/base/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/base/dialog";
-import {
   Form,
   FormControl,
   FormField,
@@ -19,6 +11,14 @@ import {
   FormMessage,
 } from "@/components/base/form";
 import { Input } from "@/components/base/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { PasswordInput } from "@/components/ui/password-input";
 import { SelectDropdown } from "@/components/ui/select-dropdown";
 import { showSubmittedData } from "@/lib/show-submitted-data";
@@ -153,7 +153,7 @@ export function UsersActionDialog({
       }}
       open={open}
     >
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="flex flex-col gap-4 px-6 sm:max-w-lg">
         <DialogHeader className="text-start">
           <DialogTitle>{isEdit ? "Edit User" : "Add New User"}</DialogTitle>
           <DialogDescription>
@@ -161,7 +161,7 @@ export function UsersActionDialog({
             Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <div className="h-[26.25rem] w-[calc(100%+0.75rem)] overflow-y-auto py-1 pe-3">
+        <div className="w-[calc(100%+0.75rem)] overflow-y-auto py-1 pe-3">
           <Form {...form}>
             <form
               className="space-y-4 px-0.5"

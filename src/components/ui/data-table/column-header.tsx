@@ -22,7 +22,7 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>;
+    return <div className={cn("px-2.5", className)}>{title}</div>;
   }
 
   const sortedState = column.getIsSorted() as false | "asc" | "desc";

@@ -82,8 +82,9 @@ const SearchBar = () => {
     };
 
     document.addEventListener("keydown", down);
+    console.log("open", open);
     return () => document.removeEventListener("keydown", down);
-  }, [toggle]);
+  }, [open, toggle]);
 
   const handleSelect = useCallback(
     (path: string) => {

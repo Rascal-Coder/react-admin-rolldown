@@ -42,7 +42,7 @@ export const usersColumns: ColumnDef<User>[] = [
       <DataTableColumnHeader column={column} title="用户名称" />
     ),
     cell: ({ row }) => (
-      <LongText className="max-w-36 ps-3">{row.getValue("userName")}</LongText>
+      <LongText className="max-w-36">{row.getValue("userName")}</LongText>
     ),
     meta: {
       className: cn(
