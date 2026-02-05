@@ -10,6 +10,7 @@ import type { RequestClientOptions } from "@/lib/request-client/types";
 import { useMenuStore } from "@/store/menu-store";
 import { useRouterStore } from "@/store/router-store";
 import userStore from "@/store/user-store";
+import { auth_authcontroller_refreshtoken } from "./api/auth";
 import authService from "./services/auth-service";
 // 基础请求客户端，不带拦截器，用于登出等特殊场景
 export const baseRequestClient = new RequestClient({ baseURL: "/api" });
@@ -54,13 +55,14 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
    */
   async function doRefreshToken() {
     const { setUserToken } = userStore.getState().actions;
-    const resp = await authService.refreshTokenApi();
+    const { refreshToken } = userStore.getState().userToken;
+    const resp = await auth_authcontroller_refreshtoken({ refreshToken });
 
-    const newToken = resp.data.accessToken;
+    const newToken = resp.accessToken ?? "";
 
     setUserToken({
       accessToken: newToken,
-      refreshToken: resp.data.refreshToken,
+      refreshToken: resp.refreshToken,
     });
     return newToken;
   }
